@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title></title>
+		<link></link>
+		<description></description>
+		<atom:link href="/rss.xml" rel="self" type="application/rss+xml" />
+
+		<item>
+			<title>前Airbnb工程师：如何零基础猥琐发育成区块链开发者？</title>
+			<link>/blockchain-guide</link>
+			<guid>/blockchain-guide</guid>
+			<pubDate>Wed, 31 Jan 2018 14:12:10 +0000</pubDate>
+			<description>&lt;p&gt;加密货币、ICO、互联网催生的金钱产物——所有些东西可真太他妈的让人兴奋了，而你这个开发者是不是也坐不住了，也想拥抱这场疯狂的盛宴？但你应该从哪里开始做起呢？&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>The authoritative guide to blockchain development</title>
+			<link>/guide-to-blockchain</link>
+			<guid>/guide-to-blockchain</guid>
+			<pubDate>Wed, 31 Jan 2018 10:04:18 +0000</pubDate>
+			<description>&lt;p&gt;Cryptocurrencies, ICOs, magic internet money—it’s all so damn exciting, and you, the eager developer, want to get in on the madness. Where do you start?&lt;/p&gt;</description>
+		</item>
+	</channel>
+</rss>
