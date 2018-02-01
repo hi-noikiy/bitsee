@@ -1,0 +1,23 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    source:
+        label: adrenth.rssfetcher::lang.source.source
+        searchable: true
+        relation: source
+        select: name
+    title:
+        label: adrenth.rssfetcher::lang.source.title
+        searchable: true
+        type: text
+    is_published:
+        label:  adrenth.rssfetcher::lang.source.is_published
+        type: switch
+    pub_date:
+        label: adrenth.rssfetcher::lang.source.published_at
+        type: datetime
+    item_id:
+        label: ID
+        type: text

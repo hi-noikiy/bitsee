@@ -1,0 +1,27 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: adrenth.rssfetcher::lang.source.source
+
+# Model Form Field configuration
+form: $/adrenth/rssfetcher/models/source/fields.yaml
+
+# Model Class name
+modelClass: Adrenth\RssFetcher\Models\Source
+
+# Default redirect location
+defaultRedirect: adrenth/rssfetcher/sources
+
+# Create page
+create:
+    title: adrenth.rssfetcher::lang.source.create_source
+    redirect: adrenth/rssfetcher/sources/update/:id
+    redirectClose: adrenth/rssfetcher/sources
+
+# Update page
+update:
+    title: adrenth.rssfetcher::lang.source.edit_source
+    redirect: adrenth/rssfetcher/sources
+    redirectClose: adrenth/rssfetcher/sources

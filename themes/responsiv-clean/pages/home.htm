@@ -1,0 +1,42 @@
+title = "Welcome"
+url = "/"
+layout = "default"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+
+[blogPosts]
+pageNumber = "{{ :page }}"
+postsPerPage = 10
+noPostsMessage = "No posts found"
+sortOrder = "published_at desc"
+categoryPage = "blog/category"
+postPage = "blog/post"
+
+[resources]
+js[] = "controls/auto-pager.js"
+js[] = "../vendor/isotope/imagesloaded.js"
+js[] = "../vendor/isotope/isotope.js"
+js[] = "pages/home.js"
+less[] = "pages/home.less"
+==
+<?php
+public function onPagePosts()
+{
+    $this->blogPosts->setProperty('pageNumber', post('page'));
+    $this->pageCycle();
+}
+?>
+==
+<div class="post-list home-posts" id="homePosts">{% partial 'home/posts' %}</div>
+
+<p>
+	<br>
+</p>
+<div class="text-center" data-control="auto-pager" data-current-page="1" data-last-page="{{ posts.lastPage }}" data-request="onPagePosts" data-request-update="'home/posts': '@#homePosts'">
+	<br>
+</div>
+<div class="text-center" data-control="auto-pager" data-current-page="1" data-last-page="{{ posts.lastPage }}" data-request="onPagePosts" data-request-update="'home/posts': '@#homePosts'">
+	<br>
+</div>
+<div class="text-center" data-control="auto-pager" data-current-page="1" data-last-page="{{ posts.lastPage }}" data-request="onPagePosts" data-request-update="'home/posts': '@#homePosts'"><a class="text-muted oc-loading">Fetching posts..</a></div>

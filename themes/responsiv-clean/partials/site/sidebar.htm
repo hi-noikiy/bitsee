@@ -1,0 +1,34 @@
+[viewBag]
+==
+<div class="sidebar-close visible-sm visible-xs"><a class="close" href="/">×</a></div>
+<div class="sidebar-segment hidden-sm hidden-xs">
+
+	<h1 class="site-name"><a href="home/page">{{ this.theme.site_name }}</a></h1>
+
+	<p class="site-motto">{{ this.theme.site_motto }}</p>
+</div>
+<div class="sidebar-segment">
+
+	<h2 class="segment-title">Recent posts</h2>
+
+	<ul class="segment-list">
+		<li>{% for post in blogPosts.posts %}</li>
+		<li><a href="{{post.url}}">{{ post.title }}</a></li>
+		<li>{% endfor %}</li>
+	</ul>
+</div>
+<div class="sidebar-segment">
+
+	<h2 class="segment-title"><a href="http://bitsee.cc/rss/posts">Rss</a></h2>
+
+	<h2 class="segment-title">Follow me</h2>
+
+	<ul class="segment-list">
+		<li>{% if this.theme.twitter_url %}</li>
+		<li><a href="{{this.theme.twitter_url}}" target="_blank">Twitter</a></li>
+		<li>{% endif %} {% if this.theme.facebook_url %}</li>
+		<li><a href="{{this.theme.facebook_url}}" target="_blank">Facebook</a></li>
+		<li>{% endif %}</li>
+		<li><a href="blog/rss/page">RSS Feed</a></li>
+	</ul>
+</div>

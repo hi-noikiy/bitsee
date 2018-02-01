@@ -1,0 +1,38 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    title:
+        label: adrenth.rssfetcher::lang.source.title
+        type: text
+        span: left
+    link:
+        label: adrenth.rssfetcher::lang.source.link
+        type: text
+        span: right
+    description:
+        label: adrenth.rssfetcher::lang.source.description
+        type: textarea
+        size: small
+    author:
+        label: adrenth.rssfetcher::lang.source.author
+        type: text
+        span: left
+    category:
+        label: adrenth.rssfetcher::lang.source.category
+        type: text
+        span: right
+    comments:
+        label: adrenth.rssfetcher::lang.source.comments
+        type: text
+    pub_date:
+        label: adrenth.rssfetcher::lang.source.published_at
+        type: datepicker
+        mode: datetime
+        span: left
+    is_published:
+        label: adrenth.rssfetcher::lang.source.is_published
+        type: switch
+        comment: adrenth.rssfetcher::lang.source.is_published_comment
+        span: left
