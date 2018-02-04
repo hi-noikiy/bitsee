@@ -62,6 +62,6 @@ class DataCenter extends ComponentBase
 
     public function onRun() 
     {
-        $this->data = $this->onMarketData('BTC/USD');
+        $this->ticker = $this->onMarketData('BTC/USD');
     }
 }

@@ -7,11 +7,14 @@ hidden = "0"
 [marketdata]
 ==
 ==
-{% set datas = marketdata.data %}
+{% set ticker = marketdata.ticker %}
 <div class="post-list">
-    {% for data in datas %}
-        {{ data }}
-    {% endfor %}
+        {{ ticker['datetime'] }}
+        {{ ticker['high']}}
+        {{ ticker['low']}}
+        {{ ticker['bid']}}
+        {{ ticker['ask']}}
+        {{ ticker['quoteVolume']}}
 </div>
 
 
