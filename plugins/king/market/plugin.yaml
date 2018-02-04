@@ -1,0 +1,6 @@
+plugin:
+    name: 'king.market::lang.plugin.name'
+    description: 'king.market::lang.plugin.description'
+    author: king
+    icon: oc-icon-area-chart
+    homepage: ''
