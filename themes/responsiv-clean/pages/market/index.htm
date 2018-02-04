@@ -7,9 +7,11 @@ hidden = "0"
 [marketdata]
 ==
 ==
-{% set data = marketdata.data %}
+{% set datas = marketdata.data %}
 <div class="post-list">
-    {{ data }}
+    {% for data in datas %}
+        {{ data }}
+    {% endfor %}
 </div>
 
 
