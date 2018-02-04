@@ -41,7 +41,7 @@ class DataCenter extends ComponentBase
 
         date_default_timezone_set ('UTC');
 
-        $exchange = new \ccxt\okcoincny (array (
+        $exchange = new \ccxt\okcoinusd (array (
             'apiKey' => 'cee877fc-94ea-4c9e-bd84-7fdff9d1a770',
             'secret' => 'D43A8C426064C18B75923E8123C73560',
             'verbose' => true,
