@@ -1,0 +1,15 @@
+title = "market"
+url = "/market/data"
+layout = "default"
+description = "market data"
+hidden = "0"
+
+[marketdata]
+==
+==
+{% set data = marketdata.data %}
+<div class="post-list">
+    {{ data }}
+</div>
+
+
