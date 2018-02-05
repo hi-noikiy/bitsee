@@ -14,6 +14,9 @@ use Cms\Classes\ComponentBase;
  */
 class DataCenter extends ComponentBase
 {
+	
+	  public $ticker;
+	
     public function componentDetails()
     {
         return [
@@ -35,7 +38,7 @@ class DataCenter extends ComponentBase
     /**
      * Trigger the password reset email
      */
-    public function onMarketData($symbol)
+    protected function marketData($symbol)
     {
         include '/var/www/html/vendor/ccxt/' . '/ccxt.php';
 
@@ -44,7 +47,7 @@ class DataCenter extends ComponentBase
         $exchange = new \ccxt\okcoinusd (array (
             'apiKey' => 'cee877fc-94ea-4c9e-bd84-7fdff9d1a770',
             'secret' => 'D43A8C426064C18B75923E8123C73560',
-            'verbose' => true,
+            'verbose' => false,
         ));
 
         try {
@@ -62,6 +65,6 @@ class DataCenter extends ComponentBase
 
     public function onRun() 
     {
-        $this->ticker = $this->onMarketData('BTC/USD');
+        $this->ticker = $this->marketData('BTC/USD');
     }
 }
