@@ -1,4 +1,4 @@
 1.0.1:
     - Initialize plugin.
 1.0.2:
-    - create_ticker_data.php
+    - create_ticker_table.php

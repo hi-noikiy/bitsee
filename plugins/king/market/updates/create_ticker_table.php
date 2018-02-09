@@ -3,7 +3,7 @@
 use Schema;
 use October\Rain\Database\Updates\Migration;
 
-class CreateTickerData extends Migration
+class CreateTickerTable extends Migration
 {
 
     public function up()
