@@ -7,6 +7,526 @@
 		<atom:link href="/rss.xml" rel="self" type="application/rss+xml" />
 
 		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-10</link>
+			<guid>/2018-2-10</guid>
+			<pubDate>Sat, 10 Feb 2018 15:30:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-9</link>
+			<guid>/2018-2-9</guid>
+			<pubDate>Fri, 09 Feb 2018 15:55:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>美国前总统助理及国家安全副顾问：区块链技术可能会被武器化</title>
+			<link>/arms</link>
+			<guid>/arms</guid>
+			<pubDate>Fri, 09 Feb 2018 15:00:00 +0000</pubDate>
+			<description>&lt;p&gt;美国前总统布什的前副助理、负责打击恐怖主义的前国家安全事务副顾问Juan Zarate曾帮助政府创建了对敌对国家的金融制裁手段，向敌国施加了压力。但是随着区块链技术开始打破边界，并赋予人们绕过银行等中心化机构进行交易的能力，Zarate越来越担心区块链技术可能会成为不法分子的武器。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>超越EOS，这个分叉币BBC可能最先突破比特币性能瓶颈</title>
+			<link>/eos</link>
+			<guid>/eos</guid>
+			<pubDate>Fri, 09 Feb 2018 14:50:00 +0000</pubDate>
+			<description>&lt;p&gt;刚刚过去的2017年，是比特币价格突破新高的一年，也是比特币分叉大放异彩的一年。自2017年8月，比特币的第一个分叉币BCH成功分叉开始，各类致力于不同目标的比特币分叉层出不穷：BCH致力于拓展区块大小，实现轻松支付；BTG想解决BTC挖矿算力集中和难度调整机制问题；SBTC强调安全和匿名……不过，大部分分叉币只专注于解决一种性能瓶颈，距离真正应用落地的技术要求还有很大距离。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>麒麟链打通人才市场壁垒 立志构建人才经济区块链生态体系</title>
+			<link>/personnel</link>
+			<guid>/personnel</guid>
+			<pubDate>Fri, 09 Feb 2018 14:40:00 +0000</pubDate>
+			<description>&lt;p&gt;麒麟链GiftChain团队锁定区块链+人才市场行业，希望基于区块链技术数据透明、不可篡改的特性，构建颠覆式的全球首个人才经济生态体系。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>孟岩：我反对将Token翻译成“代币”</title>
+			<link>/token</link>
+			<guid>/token</guid>
+			<pubDate>Fri, 09 Feb 2018 14:00:00 +0000</pubDate>
+			<description>&lt;p&gt;2017年以来，全球数字货币资产暴涨140倍，财富效应引发各阶层跑步进入区块链世界，躁动、争议、妖魔化也随之而来。这一切的核心在于Token（普遍译为“代币”）。近日，CSDN副总裁孟岩应邀与蓝港互动集团创始人、极客邦创投合伙人王峰进行了一场对话。 他们指出Token不应该是“代币”——这看起来仅仅是一个翻译名字的问题，却事关整个区块链发展的根本。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>中国法定数字货币真的要来了吗？</title>
+			<link>/1</link>
+			<guid>/1</guid>
+			<pubDate>Fri, 09 Feb 2018 13:50:00 +0000</pubDate>
+			<description>&lt;p&gt;这一次的打压浪潮中，央行的数字货币发行已经进入了日程。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>新加坡副总理：不打算禁止加密货币交易</title>
+			<link>/xinjiapo</link>
+			<guid>/xinjiapo</guid>
+			<pubDate>Fri, 09 Feb 2018 13:00:00 +0000</pubDate>
+			<description>&lt;p&gt;新加坡金管局之前就曾发布报告称不会对加密货币进行监管，目前，新加坡副总理尚达曼也发表了类似的观点，表示不打算禁止当地的加密货币交易。其理由是，新加坡的加密货币交易在其整个金融系统中只占很小一部分，不会对整个体系构成威胁。但他也表明MAS会采取行动解决加密货币被用于非法活动的问题。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链高端对话（上）——流动性本身就是价值</title>
+			<link>/part1</link>
+			<guid>/part1</guid>
+			<pubDate>Fri, 09 Feb 2018 12:50:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链的应用价值体现在哪几个方面？对商业场景产生哪些变革？本文基于Leo Wang的部分分享，就区块链落地中最核心的商业思维变革进行探讨。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链项目Dfinity得到A16Z、Polychain等千万美元投资</title>
+			<link>/dfinity</link>
+			<guid>/dfinity</guid>
+			<pubDate>Fri, 09 Feb 2018 12:35:00 +0000</pubDate>
+			<description>&lt;p&gt;Amino资本长期支持的Dfinity项目昨天宣布，其基金会获得Andreessen Horowitz和Polychain领投的6100万美元，在项目上线时该笔投资会转化成一定数量的代币。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>深度解析区块链架构、跨链和演进</title>
+			<link>/Deep</link>
+			<guid>/Deep</guid>
+			<pubDate>Fri, 09 Feb 2018 10:10:00 +0000</pubDate>
+			<description>&lt;p&gt;笔者希望通过整体的区块链架构描述，读者能够读懂区块链，认识到区块链的本质是共识，以及基于共识形成的公认价值，认识到区块链跨链的本质是价值的等价交换和交易市场；能够读会区块链，知道区块链的高阶架构模型，区块链不同类型划分和功能性要求，以及发展趋势和实用的部署架构模型，读者可以以高阶架构为蓝本，实际设计和开发实用区块链；相信凭借中国互联网发展在技术和受众上的积累，我们可以更早感受到区块链带给整个社会生产关系和生产力变革的力量。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-8</link>
+			<guid>/2018-2-8</guid>
+			<pubDate>Thu, 08 Feb 2018 15:50:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>重庆市区块链</title>
+			<link>/chongqing</link>
+			<guid>/chongqing</guid>
+			<pubDate>Thu, 08 Feb 2018 15:20:00 +0000</pubDate>
+			<description>&lt;p&gt;重庆市、区政府对于区块链的态度到底是怎样的，当地区块链产业的发展现状如何，又有哪些相关扶持政策呢？&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链的炒作&amp;现实</title>
+			<link>/reality</link>
+			<guid>/reality</guid>
+			<pubDate>Thu, 08 Feb 2018 14:50:00 +0000</pubDate>
+			<description>&lt;p&gt;“区块链技术作出了一些承诺，但它远非完美无缺。它是笨重的，极客化的和用户不友好的。对环境来说，这是一场灾难。有一种应用——比特币——消耗的电力比爱尔兰消耗的电力加起来还要多。
+也许区块链会发展成有益的、实用的和对环境友好的。但是我们还远未看到它的真正好处。我们现在所看到的大多是炒作。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>美国虚拟货币参议院听证会摘要</title>
+			<link>/senate</link>
+			<guid>/senate</guid>
+			<pubDate>Thu, 08 Feb 2018 14:45:00 +0000</pubDate>
+			<description>&lt;p&gt;加密货币受到监管的时代即将到来。天下没有免费的午餐， 法律的漏洞总有一天会被完善。如果SEC和CFTC能够清除欺诈和庞氏骗局，消费者将会得到更好的保护。清晰有效的监管将有助于初创公司更好地把握ICO的流程。从长远来看，监管将有助于把区块链与主流市场整合在一起。参议院已经认识到，加密货币是一个巨大的市场并正在以难以想象的速度扩张。而区块链需要与核心金融市场整合以获取利益。他们采取的方式和互联网一样。而到目前为止，互联网的发展还不错，所以我们的对加密货币的前景还是充满信心的。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>前搜狐高级副总裁方刚谈关于区块链的分叉、全球化、平行世界、公私链之争</title>
+			<link>/sohu</link>
+			<guid>/sohu</guid>
+			<pubDate>Thu, 08 Feb 2018 14:30:00 +0000</pubDate>
+			<description>&lt;p&gt;前搜狐高级副总裁方刚谈关于区块链的分叉、全球化、平行世界、公私链之争&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>2017年第四季度比特币和区块链行业报告</title>
+			<link>/CoinDesk</link>
+			<guid>/CoinDesk</guid>
+			<pubDate>Thu, 08 Feb 2018 12:15:00 +0000</pubDate>
+			<description>&lt;p&gt;CoinDesk发布2017年第四季度比特币和区块链行业报告&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>高盛逻辑：大多数字货币将跌到一文不值</title>
+			<link>/GS</link>
+			<guid>/GS</guid>
+			<pubDate>Thu, 08 Feb 2018 11:55:00 +0000</pubDate>
+			<description>&lt;p&gt;高盛全球投资研究部门主管Steve Strongin对数字货币的观点较为悲观，认为数字货币缺乏内在价值，大多数在未来终将无法继续存在，价格终会跌到零。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>什么是公链、私链、联盟链、侧链</title>
+			<link>/What</link>
+			<guid>/What</guid>
+			<pubDate>Thu, 08 Feb 2018 11:40:00 +0000</pubDate>
+			<description>&lt;p&gt;“区块链技术被认为是继蒸汽机、电力、互联网之后，下一代颠覆性的核心技术。 如果说蒸汽机释放了人们的生产力，电力解决了人们基本的生活需求，互联网彻底改变了信息传递的方式，那么区块链作为构造信任的机器，将可能彻底改变整个人类社会价值传递的方式。”&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>世行行长发声：加密货币极像庞氏骗局</title>
+			<link>/Bank</link>
+			<guid>/Bank</guid>
+			<pubDate>Thu, 08 Feb 2018 11:30:00 +0000</pubDate>
+			<description>&lt;p&gt;世界银行行长金墉在周三华盛顿的一场活动中指出，多数加密货币犹如庞氏骗局：“在比特币或其他加密货币的应用方面，我们也正在进行研究。不过，据我所知，大多数加密货币基本上都是庞氏骗局，目前并不清楚它们将如何运作。”&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>DAG也许是真正的区块链3.0</title>
+			<link>/DAG</link>
+			<guid>/DAG</guid>
+			<pubDate>Thu, 08 Feb 2018 11:15:00 +0000</pubDate>
+			<description>&lt;p&gt;作为国内首个基于DAG结构的区块链项目，ITC的发展已经引起了很多关注，目前已吸引FBG、连接资本、ChainFunder等众多专注区块链技术的专业投资机构，相信接下来对DAG的技术讨论也会变多。从技术角度来看，DAG给我们提供了完全不一样的区块链实现，高性能和无手续费这些点确实引人注目。随着社区对DAG技术的进一步完善和发展，也许，DAG会是真正的区块链3.0呢。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯（二）</title>
+			<link>/2018-2-7-2</link>
+			<guid>/2018-2-7-2</guid>
+			<pubDate>Wed, 07 Feb 2018 16:40:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>点亮资本郭峰关于2018区块链的采访</title>
+			<link>/2018</link>
+			<guid>/2018</guid>
+			<pubDate>Wed, 07 Feb 2018 16:10:00 +0000</pubDate>
+			<description>&lt;p&gt;2018年，想要靠忽悠概念成功的团队将会越来越少，2018年将是区块链真正与实体经济结合、爆发的一年。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>比特币会不会跌到0？比特币还买不买？</title>
+			<link>/0</link>
+			<guid>/0</guid>
+			<pubDate>Wed, 07 Feb 2018 15:55:00 +0000</pubDate>
+			<description>&lt;p&gt;Roubini最后还再次强调，尽管财政刺激、低税率和去监管仍能在短期内提振市场和经济，但金融市场的动荡正在证明，特朗普的“前后矛盾、反复无常以及破坏性的政策”终将对美国乃至全球的经济增长造成重大影响。末日博士的悲观情绪满溢而出。在美国参议院周二举行加密货币相关的听证会前，他还发推称，比特币能跌到0。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>人人网遭遇监管约谈,社交网络是否需要区块链？</title>
+			<link>/Renren</link>
+			<guid>/Renren</guid>
+			<pubDate>Wed, 07 Feb 2018 15:30:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链技术从来没有像今日一般受人关注。热衷于追逐风口的人人公司当然也没有错过，尤其是这次还有币圈核心人物李笑来的加持。只不过，1月2日发布白皮书的人人公司，不到一周就遭遇监管约谈，项目宣告失败。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>iCube将使每个个体享受服务于自己的智能经济服务</title>
+			<link>/Finance</link>
+			<guid>/Finance</guid>
+			<pubDate>Wed, 07 Feb 2018 15:19:00 +0000</pubDate>
+			<description>&lt;p&gt;iCube在区块链发展时代，完全有可能将金融智能赋能给每个个体，使得每个个体都可以没有门槛的享受服务自己的智能经济服务。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链项目ICO评估模型</title>
+			<link>/ico</link>
+			<guid>/ico</guid>
+			<pubDate>Wed, 07 Feb 2018 12:30:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链项目ICO评估模型&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>亦来云想打造区块链驱动的智能万维网</title>
+			<link>/Internet</link>
+			<guid>/Internet</guid>
+			<pubDate>Wed, 07 Feb 2018 12:05:00 +0000</pubDate>
+			<description>&lt;p&gt;亦来云：可信记账+可信计算+可信应用环境。陈榕把区块链的发展归为三个阶段：比特币是第一代区块链项目，让诚信在互联网上成为可能；以太坊是第二代区块链，特点是可编程，更像excel；而亦来云的目标是做一个互联网的操作系统，三者的进化就像帐本，到excel再到windows的演变过程。如果说，比特币是可信记账，以太坊是可信记账+可信计算，那么亦来云就是可信记账+可信计算+可信应用环境。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>阿里被评为2017区块链专利最多的中国企业</title>
+			<link>/2017</link>
+			<guid>/2017</guid>
+			<pubDate>Wed, 07 Feb 2018 11:50:00 +0000</pubDate>
+			<description>&lt;p&gt;近日，知识产权产业媒体 IPRdaily 联合 incoPat 创新指数研究中心于发布“2017全球区块链企业专利排行榜（前100名）”，在前 100 名中，中国入榜的企业最高，有 49 个，前三名分别为阿里巴巴、中国人民银行数字货币研究所和瑞卓喜投。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>中国平安首创“壹账链”</title>
+			<link>/peace</link>
+			<guid>/peace</guid>
+			<pubDate>Wed, 07 Feb 2018 10:45:00 +0000</pubDate>
+			<description>&lt;p&gt;2月6日，中国平安旗下科技公司金融壹账通正式推出区块链的突破性解决方案——壹账链。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>中国区块链前景</title>
+			<link>/china</link>
+			<guid>/china</guid>
+			<pubDate>Wed, 07 Feb 2018 10:25:00 +0000</pubDate>
+			<description>&lt;p&gt;中国区块链前景是否积极乐观？&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-7</link>
+			<guid>/2018-2-7</guid>
+			<pubDate>Wed, 07 Feb 2018 10:00:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>Qtum首个太空区块链节点已“升空”</title>
+			<link>/Node</link>
+			<guid>/Node</guid>
+			<pubDate>Tue, 06 Feb 2018 14:10:00 +0000</pubDate>
+			<description>&lt;p&gt;Qtum是一个专注于去中心化应用（DApps）的区块链项目，该公司在官方推特上宣布，由其开发的“首个基于太空的区块链节点”已经部署在了一颗中国卫星上。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>uchain创始人谢朝晔：区块链的世界里没有BAT，但会诞生很多市值更大的Token</title>
+			<link>/uchain</link>
+			<guid>/uchain</guid>
+			<pubDate>Tue, 06 Feb 2018 14:05:00 +0000</pubDate>
+			<description>&lt;p&gt;Uchain创始人谢朝晔围绕“人类信任机制的发展”、“Uchain如何帮助企业实现去中心化的生态系统”等话题做了精彩的演讲。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>苹果公司联合创始人Steve Wozniak已将大部分比特币变现</title>
+			<link>/steve-wozniak</link>
+			<guid>/steve-wozniak</guid>
+			<pubDate>Tue, 06 Feb 2018 13:55:00 +0000</pubDate>
+			<description>&lt;p&gt;苹果公司联合创始人Steve Wozniak已将大部分比特币变现&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链应用研究</title>
+			<link>/application</link>
+			<guid>/application</guid>
+			<pubDate>Tue, 06 Feb 2018 13:30:00 +0000</pubDate>
+			<description>&lt;p&gt;美国国家标准与技术研究院（NIST）发布了一篇名为《谈谈区块链》的报告（。这一报告的目的是提供一个高水平的技术评估，该报告深入讨论了区块链技术的应用到电子货币的价值，同时也进一步讨论了区块链更大范围的应用。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>比特币的十年发展</title>
+			<link>/Bitcoin</link>
+			<guid>/Bitcoin</guid>
+			<pubDate>Tue, 06 Feb 2018 12:40:00 +0000</pubDate>
+			<description>&lt;p&gt;比特币十年&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>春节与比特币有什么关系？</title>
+			<link>/SF</link>
+			<guid>/SF</guid>
+			<pubDate>Tue, 06 Feb 2018 11:55:00 +0000</pubDate>
+			<description>&lt;p&gt;有分析人士认为，比特币的暴跌，最大的原因可能是中国农历春节的临近。目前，中国、韩国、日本等比特币持有大国都有过农历春节的习俗，币圈投资者过年花费多，需要安排外出旅行和购买礼物，就要把手头上的数字货币换成法定货币，因而触发跌势。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>腾讯区块链总经理蔡弋戈表示希望通过区块链技术赋能小微企业！</title>
+			<link>/tencent</link>
+			<guid>/tencent</guid>
+			<pubDate>Tue, 06 Feb 2018 11:40:00 +0000</pubDate>
+			<description>&lt;p&gt;2月3日的“2017-2018中国区块链风云榜盛典”中，腾讯区块链总经理蔡弋戈提到，腾讯目前的定位是希望通过区块链技术，赋能小微企业，降低社会融资成本，提升资金配置效率、提升流动性。希望能通过腾讯的区块链技术和运营资源，来链接核心企业资产端和金融机构资金端，实现对小微企业流动性的支撑。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链宠物游戏会火吗</title>
+			<link>/Pet</link>
+			<guid>/Pet</guid>
+			<pubDate>Tue, 06 Feb 2018 11:25:00 +0000</pubDate>
+			<description>&lt;p&gt;未来或许会有很多游戏会应用区块链技术来解决版权、游戏数据与虚拟资产保护方面的问题。但真正意义上的区块链游戏并不会火，一方面在性能有限的区块链网络上构建游戏本来就是一件不符合逻辑的事情；另一方面，在我国用游戏作为加密货币发行的掩饰，也不大可能行得通。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>新加坡航空公司利用区块链推出忠诚度数字钱包</title>
+			<link>/Singapore</link>
+			<guid>/Singapore</guid>
+			<pubDate>Tue, 06 Feb 2018 10:09:00 +0000</pubDate>
+			<description>&lt;p&gt;近日，新加坡航空公司（SIA）宣布，旗下KrisFlyer飞行常客计划即将推出一个基于区块链技术的航空里程忠诚度数字钱包功能。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-6</link>
+			<guid>/2018-2-6</guid>
+			<pubDate>Tue, 06 Feb 2018 09:40:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>PRA般若与 CSDN达成区块链战略合作</title>
+			<link>/PRA</link>
+			<guid>/PRA</guid>
+			<pubDate>Mon, 05 Feb 2018 15:25:00 +0000</pubDate>
+			<description>&lt;p&gt;2018年2月1日，PRA般若（ProChain）宣布与中国最大IT技术社区CSDN达成区块链战略合作，共同推进区块链技术及应用的落地，以优势互补、资源共享为牵引，谋求共赢，积极助力区块链生态圈的良性发展及产业创新。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>巴比特创始人：区块链思维是什么样的?</title>
+			<link>/Thinking</link>
+			<guid>/Thinking</guid>
+			<pubDate>Mon, 05 Feb 2018 15:20:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链思维是什么样的？&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>朱嘉明回顾五年来对比特币的认知</title>
+			<link>/jiaming</link>
+			<guid>/jiaming</guid>
+			<pubDate>Mon, 05 Feb 2018 14:45:00 +0000</pubDate>
+			<description>&lt;p&gt;朱嘉明｜回顧五年来我對比特幣的認知&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>杭州2018将加快培育区块链</title>
+			<link>/Hangzhou</link>
+			<guid>/Hangzhou</guid>
+			<pubDate>Mon, 05 Feb 2018 14:05:00 +0000</pubDate>
+			<description>&lt;p&gt;杭州市长徐立毅在昨天（2月4日）上午召开的杭州市两会上提出，杭州将加快区块链这一未来产业的发展。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链的最大影响在发展中国家</title>
+			<link>/Development</link>
+			<guid>/Development</guid>
+			<pubDate>Mon, 05 Feb 2018 13:55:00 +0000</pubDate>
+			<description>&lt;p&gt;对区块链技术的关注以及围绕着区块链技术的人群和投资大部分是来自于西方国家的，在那里，人们投资者加密货币，同时也关注着一大批新的应用，比如说一个使用区块链技术来追踪蔬菜从种植园到货架上的应用。但是区块链技术的最大影响力将会是在发展中国家，比如说津巴布韦和委内瑞拉。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>财新网：中国对境外虚拟货币交易所采取措施</title>
+			<link>/crack</link>
+			<guid>/crack</guid>
+			<pubDate>Mon, 05 Feb 2018 11:45:00 +0000</pubDate>
+			<description>&lt;p&gt;针对虚拟货币交易，中国监管正在继续升级打击措施。而面向中国境内用户提供相关服务的境内外交易所，又将迎来一阵疾风骤雨。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>2018年全球（上海）区块链应用创业大赛启动仪式暨区块链应用（DApp）研讨会盛大举行</title>
+			<link>/DApp</link>
+			<guid>/DApp</guid>
+			<pubDate>Mon, 05 Feb 2018 11:15:00 +0000</pubDate>
+			<description>&lt;p&gt;2018年全球（上海）区块链应用创业大赛启动仪式暨区块链应用（DApp）研讨会将于2018年2月3日下午1点在上海盛大举行，此次大会包括数十位行业大咖在内的500名与会者出席这场盛会.&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>“京杭区块链”2018年2月4日宣布获暾澜投资领投的千万美金天使轮融资</title>
+			<link>/Bomb</link>
+			<guid>/Bomb</guid>
+			<pubDate>Mon, 05 Feb 2018 10:35:00 +0000</pubDate>
+			<description>&lt;p&gt;鸵鸟区块链消息：“京杭区块链”2018年2月4日宣布获暾澜投资领投的千万美金天使轮融资，并于当天在杭州未来科技城举办媒体发布会。一时间，圈内消息炸裂，据悉，发布会除媒体外，十分钟内报名参会人数便破百，均是资本公司和专业技术人才。这是暾澜投资，继投资“嘉楠耘智（阿瓦隆）”和“空天区块链”等技术公司之后，在区块链上布局的又一全新大动作！&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>BitFury 决定亲手解决比特币犯罪打击难题</title>
+			<link>/bitfury</link>
+			<guid>/bitfury</guid>
+			<pubDate>Mon, 05 Feb 2018 10:15:00 +0000</pubDate>
+			<description>&lt;p&gt;Bitfury并没有等着法律强制清理比特币相关领域。今天开始运行的这种名为Crystal（水晶）的工具将帮助用户，使其在全世界最大的区块链上鉴定和侦查的犯罪活动更为简单。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-5</link>
+			<guid>/2018-2-5</guid>
+			<pubDate>Mon, 05 Feb 2018 09:35:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-4</link>
+			<guid>/2018-2-4</guid>
+			<pubDate>Sun, 04 Feb 2018 11:35:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-3</link>
+			<guid>/2018-2-3</guid>
+			<pubDate>Sat, 03 Feb 2018 11:45:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>比特币已降至九千美元</title>
+			<link>/decline</link>
+			<guid>/decline</guid>
+			<pubDate>Fri, 02 Feb 2018 18:50:00 +0000</pubDate>
+			<description>&lt;p&gt;两小时前，CoinDesk的比特币价格指数（BPI）已经达到8,932.89美元的低点，这次跌落距离上次高点10,000美元仅仅用了几个小时的时间。 正如之前所报道的，在本周四比特币的价格出现大幅波动。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>创未来—2017-2018中国区块链风云榜盛典倒计时2天</title>
+			<link>/FY</link>
+			<guid>/FY</guid>
+			<pubDate>Fri, 02 Feb 2018 18:45:00 +0000</pubDate>
+			<description>&lt;p&gt;2017-2018中国区块链风云榜盛典倒计时2天&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>天德科技助力区块链新生态！</title>
+			<link>/ecology</link>
+			<guid>/ecology</guid>
+			<pubDate>Fri, 02 Feb 2018 18:40:00 +0000</pubDate>
+			<description>&lt;p&gt;天德链已涉足国内外金融、能源、司法、数字资产交易等领域，开发出版权保护、三方支付、大宗商品交易清结算等行业应用和参考架构。 天德团队将携手合作伙伴共建自主创新区块链生态系统：成立国际化的开放社区，打造测试沙盒等生态工具，建设教育培训平台，发展投资孵化引导基金等。我们将联合工信部中国电子产业发展研究院等权威机构和行业龙头合作伙伴共同推广和发展自主创新的天德信链生态系统。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>泡沫之下</title>
+			<link>/Foam</link>
+			<guid>/Foam</guid>
+			<pubDate>Fri, 02 Feb 2018 18:20:00 +0000</pubDate>
+			<description>&lt;p&gt;在区块链的搅动下，已近固化的互联网市场似重回“不确定即为可能”的千禧时代，但未来等待他们的，同样是并不确定的结局。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>“达沃斯人”真的了解区块链吗？</title>
+			<link>/Really</link>
+			<guid>/Really</guid>
+			<pubDate>Fri, 02 Feb 2018 14:40:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链会议有着让人获得关于这种技术如何工作的有价值的见解，同时可能来自于对区块链技术所承诺的去中心化的记录分享以及去除中介信任的觉察，这一技术涉及了支付领域的每一个细节，国际发展、物联网的金融市场、能源、环境管理以及身份识别。但是随着这颗种子在人们的脑中萌发，还有一些来自于世界经济论坛的同样强烈的信号告诉我们，这些概念仍然距离广义的金融、经济以及政治领域上的广泛接受还有很长的一段距离。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>比特币取代黄金？</title>
+			<link>/If</link>
+			<guid>/If</guid>
+			<pubDate>Fri, 02 Feb 2018 12:00:00 +0000</pubDate>
+			<description>&lt;p&gt;黄金作为避险资产界的一哥，仿佛投资界的保护神，出现危险时就被众多投资者投靠，带给他们一丝安全感。而当数字货币浪潮来袭时，比特币被狂热的投资者标上“数字黄金”的标签，试图取代实体黄金。其实“实体”和“数字”两个世界正在不断交织，要想穿透两个世界的壁垒称霸避险王国，比特币似乎还有一段路要走。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>Qtum正在搭建QTUM X86 虚拟机</title>
+			<link>/Qtum</link>
+			<guid>/Qtum</guid>
+			<pubDate>Fri, 02 Feb 2018 11:50:00 +0000</pubDate>
+			<description>&lt;p&gt;QTUM X86虚拟机,预计2018年中旬或下旬能出原型或测试版。希望把主流的编程语言比如C++、Rust、Go、C#，Java引入进智能合约体系里。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>数字世界的华尔街</title>
+			<link>/Number</link>
+			<guid>/Number</guid>
+			<pubDate>Fri, 02 Feb 2018 11:30:00 +0000</pubDate>
+			<description>&lt;p&gt;DRC弥补区块链行业专业服务空缺,，旨在打造“数字世界的华尔街”，营造自律、自治、透明、公开的区块链生态系统，促进区块链行业的稳定、有序与健康发展.&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>中证中小投资者服务中心提示上市公司区块链概念炒作风险</title>
+			<link>/Careful</link>
+			<guid>/Careful</guid>
+			<pubDate>Fri, 02 Feb 2018 11:20:00 +0000</pubDate>
+			<description>&lt;p&gt;中证中小投资者服务中心
+呼吁广大中小投资者谨防区块链概念炒作，慎重决策，理性投资。同时也告诫那些借此概念忽悠炒作的上市公司及相关行为人，切勿损害广大中小投资者的利益。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-2</link>
+			<guid>/2018-2-2</guid>
+			<pubDate>Fri, 02 Feb 2018 10:50:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链相关职业需求增加</title>
+			<link>/Occupation</link>
+			<guid>/Occupation</guid>
+			<pubDate>Thu, 01 Feb 2018 19:50:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链相关职位在过去一年翻了10倍&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链究竟是新机遇还是泡沫</title>
+			<link>/Swing</link>
+			<guid>/Swing</guid>
+			<pubDate>Thu, 01 Feb 2018 19:30:00 +0000</pubDate>
+			<description>&lt;p&gt;从2018年伊始，借着A股市场的东风，区块链便成为炙手可热的话题。然而面对近期持续跌停的概念股，给不少准备进军区块链市场的追随者们一盆冷水。区块链为何如此火爆？究竟是新机遇还是新泡沫？局内人是怎么看的？&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链版权应用</title>
+			<link>/Copyright</link>
+			<guid>/Copyright</guid>
+			<pubDate>Thu, 01 Feb 2018 19:20:00 +0000</pubDate>
+			<description>&lt;p&gt;默默打磨产品，国内第一个面向C端用户的落地应用。亿书项目立项两年，期间有无数的艰难险阻，但一直没有高调宣传，而是默默打磨自身产品，这次重新扬帆，的确是行业内的一杆鲜亮的旗帜。亿书客户端也早已上线，足够开放，而开放是网络内在的精神；没有开放，就没有网络。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>先了解行业和市场</title>
+			<link>/KNOW</link>
+			<guid>/KNOW</guid>
+			<pubDate>Thu, 01 Feb 2018 19:05:00 +0000</pubDate>
+			<description>&lt;p&gt;至少现在，“炒币”实际上已经成为了投资券最新兴的名词和很多人一夜暴富的手段。身处这个时代，我们参与币圈交易，还是要先对这个行业，这个市场有一定的了解。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>知产链</title>
+			<link>/Knowledgechain</link>
+			<guid>/Knowledgechain</guid>
+			<pubDate>Thu, 01 Feb 2018 19:00:00 +0000</pubDate>
+			<description>&lt;p&gt;知产链的相关采访。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>知道虚拟币系统开发与区块链但不一定知道区块链与分布式的关系</title>
+			<link>/Uncertain</link>
+			<guid>/Uncertain</guid>
+			<pubDate>Thu, 01 Feb 2018 18:45:00 +0000</pubDate>
+			<description>&lt;p&gt;区块链通过分布式算法实现了无需人或人类组织介入的分布式记账和共识机制，从而大大提高了组织运行的效率。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>区块链正在如何改变世界</title>
+			<link>/How</link>
+			<guid>/How</guid>
+			<pubDate>Thu, 01 Feb 2018 18:30:00 +0000</pubDate>
+			<description>&lt;p&gt;不论任何行业，区块链都有巨大潜力可以颠覆这些行业，创造一个让人们参与其创造价值的繁荣世界。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>百合佳缘将利用“BHChain”的区块链平台，打造全方位的新型婚恋社交生态圈</title>
+			<link>/BHChain</link>
+			<guid>/BHChain</guid>
+			<pubDate>Thu, 01 Feb 2018 17:15:00 +0000</pubDate>
+			<description>&lt;p&gt;百合佳缘将建立一个全新的名为“BHChain”的区块链平台，运用区块链技术和机制，结合百合佳缘在大数据、人工智能等方面的先进技术，为平台用户构建一个高效、安全、公正的信用惩戒机制，打造全方位的新型婚恋社交生态圈。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>每日快讯</title>
+			<link>/2018-2-1</link>
+			<guid>/2018-2-1</guid>
+			<pubDate>Thu, 01 Feb 2018 15:00:00 +0000</pubDate>
+			<description>&lt;p&gt;每日快讯，了解区块链动向的实时资讯。&lt;/p&gt;</description>
+		</item>
+		<item>
+			<title>京东物流加入区块链货运联盟BiTA</title>
+			<link>/Start</link>
+			<guid>/Start</guid>
+			<pubDate>Thu, 01 Feb 2018 05:50:00 +0000</pubDate>
+			<description>&lt;p&gt;2018年2月1日消息，京东物流日前出现在了全球区块链货运联盟BiTA的成员名单之中，成为中国首个加入该组织的成员。&lt;/p&gt;</description>
+		</item>
+		<item>
 			<title>前Airbnb工程师：如何零基础猥琐发育成区块链开发者？</title>
 			<link>/blockchain-guide</link>
 			<guid>/blockchain-guide</guid>
