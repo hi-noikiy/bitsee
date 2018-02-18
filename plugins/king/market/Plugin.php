@@ -1,6 +1,7 @@
 <?php namespace King\Market;
 
 use System\Classes\PluginBase;
+use Backend;
 
 class Plugin extends PluginBase
 {
