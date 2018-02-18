@@ -51,5 +51,5 @@ class Market extends Model
 	/**
 	 * @var string The database table used by the model.
 	 */
-	public $table = 'bohe_clinic';
+	public $table = 'markets';
 }
