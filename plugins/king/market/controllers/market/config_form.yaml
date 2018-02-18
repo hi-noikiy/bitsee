@@ -1,0 +1,11 @@
+name: '交易所'
+modelClass: King\Market\Models\Market
+form: $/king/market/models/market/fields.yaml
+defaultRedirect: king/market/market
+create:
+    redirect: 'king/market/market/update/:id'
+    redirectClose: king/market/market
+update:
+    redirect: king/market/market
+    redirectClose: king/market/market
+preview: {  }

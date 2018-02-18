@@ -14,4 +14,18 @@ class Plugin extends PluginBase
     public function registerSettings()
     {
     }
+
+    public function registerNavigation()
+    {
+    	return [
+    			'market' => [
+    					'label'       => '交易所管理',
+    					'url'         => Backend::url('king/market/market'),
+    					'icon'        => 'icon-pencil',
+    					'iconSvg'     => 'plugins/king/market/assets/images/article.svg',
+    					'permissions' => ['king.market.*'],
+    					'order'       => 50
+    			]
+    	];
+    }
 }

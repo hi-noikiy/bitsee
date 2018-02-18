@@ -3,3 +3,6 @@
 1.0.2:
     - ticker table.
     - create_ticker_table.php
+1.0.3:
+    - market table
+    - create_market_table.php

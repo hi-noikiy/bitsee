@@ -17,10 +17,10 @@ class CreateTickerTable extends Migration
             $table->double('vol')->nullable();
             $table->double('open')->nullable();
             $table->double('close')->nullable();
-            $table->enum('symbol', ['BTC/USDT', 'LTC/BTC']);
+            $table->char('symbol', 50);
             $table->enum('market', ['huobipro', 'cokex']);
-            $table->dateTime('date_at')->nullable();
-            $table->timestamp('published_at')->nullable();
+            $table->dateTime('published_at')->nullable();
+            $table->timestamp('published_stamp')->nullable();
             $table->timestamps();
         });
     }

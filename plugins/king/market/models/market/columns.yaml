@@ -1,0 +1,9 @@
+columns:
+    id:
+        label: 'id'
+        type: text
+        searchable: true
+    content:
+        label: '内容'
+    name:
+        label: '名称'

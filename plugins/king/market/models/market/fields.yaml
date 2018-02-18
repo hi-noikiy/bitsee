@@ -1,0 +1,24 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    featured_images:
+        label: 'image'
+        type: fileupload
+        mode: image
+        imageWidth: 200
+        imageHeight: 200
+    name:
+        label: '交易所名称'
+        span: left
+        placeholder: '交易所名称'
+    content:
+        label: '交易所介绍'
+        type: King\Market\FormWidgets\BlogMarkdown
+        cssClass: field-slim blog-post-preview
+        mode: split
+
+
+
+
