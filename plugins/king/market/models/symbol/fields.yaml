@@ -1,0 +1,17 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+
+    name:
+        label: 币对
+        placeholder: 输入币对
+        span: left
+
+    description:
+        label: '描述'
+        size: large
+        oc.commentPosition: ''
+        span: full
+        type: textarea

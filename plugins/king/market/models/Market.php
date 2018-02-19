@@ -24,6 +24,13 @@ class Market extends Model
 			'content_images' => ['System\Models\File'],
 			'featured_images' => ['System\Models\File']
 	];
+	public $belongsToMany = [
+        'symbols' => [
+            'King\Market\Models\Symbol',
+            'table' => 'markets_symbols',
+            'order' => 'name'
+        ]
+    ];
 	public static function formatHtml($input, $preview = false)
 	{
 		$result = Markdown::parse(trim($input));

@@ -25,8 +25,29 @@ class Plugin extends PluginBase
     					'icon'        => 'icon-pencil',
     					'iconSvg'     => 'plugins/king/market/assets/images/article.svg',
     					'permissions' => ['king.market.*'],
-    					'order'       => 50
-    			]
+    					'order'       => 50,
+                        'sideMenu' => [
+                                        'new_market' => [
+                                            'label'       => '新建交易所',
+                                            'icon'        => 'icon-plus',
+                                            'url'         => Backend::url('king/market/market/create'),
+                                            'permissions' => ['*']
+                                        ],
+                                        'markets' => [
+                                            'label'       => '交易所',
+                                            'icon'        => 'icon-copy',
+                                            'url'         => Backend::url('king/market/market'),
+                                            'permissions' => ['*']
+                                        ],
+                                        'symbols' => [
+                                            'label'       => '经营币对',
+                                            'icon'        => 'icon-list-ul',
+                                            'url'         => Backend::url('king/market/symbol'),
+                                            'permissions' => ['*']
+                                        ]
+                        ]
+    			],
+
     	];
     }
 }

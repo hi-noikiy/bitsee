@@ -6,3 +6,6 @@
 1.0.3:
     - market table
     - create_market_table.php
+1.0.4:
+    - symbol table
+    - create_symbols_table.php
