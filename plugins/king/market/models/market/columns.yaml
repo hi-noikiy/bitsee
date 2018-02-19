@@ -7,3 +7,9 @@ columns:
         label: '内容'
     name:
         label: '名称'
+    symbols:
+        label: 经营币对
+        relation: symbols
+        select: name
+        searchable: true
+        sortable: false

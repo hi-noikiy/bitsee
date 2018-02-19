@@ -18,6 +18,8 @@ fields:
         type: King\Market\FormWidgets\BlogMarkdown
         cssClass: field-slim blog-post-preview
         mode: split
+    symbols:
+        type: relation
 
 
 
