@@ -21,7 +21,7 @@ class Market extends Controller
 
     public function onGetSymbols($recordid)
     {
-        $model = $this->controller->formFindModelObject($recordId);
+        $model = $this->formFindModelObject($recordId);
 
         include '/var/www/html/vendor/ccxt/' . '/ccxt.php';
 
