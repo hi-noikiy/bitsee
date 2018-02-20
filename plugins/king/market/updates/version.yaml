@@ -9,3 +9,6 @@
 1.0.4:
     - symbol table
     - create_symbols_table.php
+1.0.5:
+    - add backend field
+    - markets_add_backend_field.php

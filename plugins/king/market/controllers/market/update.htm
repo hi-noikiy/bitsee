@@ -3,6 +3,12 @@
         <li><a href="<?= Backend::url('king/market/market') ?>">交易所管理</a></li>
         <li><?= e($this->pageTitle) ?></li>
     </ul>
+    <button
+    type="button"
+    data-request="onGetSymbols"
+    class="btn btn-default">
+    获取经营的币对
+    </button>
 <?php Block::endPut() ?>
 
 <?php if (!$this->fatalError): ?>

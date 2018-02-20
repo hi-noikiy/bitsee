@@ -18,4 +18,35 @@ class Market extends Controller
         parent::__construct();
         BackendMenu::setContext('King.Market', 'market', 'market');
     }
+
+    public function onGetSymbols($recordid)
+    {
+        $model = $this->controller->formFindModelObject($recordId);
+
+        include '/var/www/html/vendor/ccxt/' . '/ccxt.php';
+
+        date_default_timezone_set ('UTC');
+
+        $backend = "\\ccxt\\".$model->backend;
+
+        $exchange = new $backend();
+
+        if (!method_exists($exchange,'fetch_markets')) {
+                return;
+        }
+
+        try {
+
+            return $exchange->fetch_markets ();
+
+        } catch (\ccxt\NetworkError $e) {
+            echo '[Network Error] ' . $e->getMessage () . "\n";
+        } catch (\ccxt\ExchangeError $e) {
+            echo '[Exchange Error] ' . $e->getMessage () . "\n";
+        } catch (Exception $e) {
+            echo '[Error] ' . $e->getMessage () . "\n";
+        }
+
+
+    }
 }
