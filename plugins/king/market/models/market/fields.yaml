@@ -20,6 +20,9 @@ fields:
         mode: split
     symbols:
         type: relation
+    backend:
+        label: '后端'
+        placeholder: '务必填写ccxt库对应的类名'
 
 
 

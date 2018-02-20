@@ -7,6 +7,8 @@ columns:
         label: '内容'
     name:
         label: '名称'
+    backend:
+        label: '后端'
     symbols:
         label: 经营币对
         relation: symbols
