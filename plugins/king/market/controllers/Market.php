@@ -67,9 +67,9 @@ class Market extends Controller
                 $symbol['precision_price'] = $market['precision']['price'];
 
                 $symbols[] =  $symbol;
+                
+                $model->symbols()->create($symbol);
             }
-
-            $model->symbols()->create($symbols);
 
             return $symbols;
 
