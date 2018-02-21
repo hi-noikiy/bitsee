@@ -4,7 +4,7 @@
 
 fields:
 
-    name:
+    symbol:
         label: 币对
         placeholder: 输入币对
         span: left

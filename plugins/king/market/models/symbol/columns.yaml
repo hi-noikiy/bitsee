@@ -4,6 +4,6 @@
 
 columns:
 
-    name:
+    symbol:
         label: 币对
         searchable: true
