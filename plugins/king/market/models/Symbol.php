@@ -20,7 +20,7 @@ class Symbol extends Model
      * Validation
      */
     public $rules = [
-        'name' => 'required',
+        'symbol' => 'required',
         'slug' => 'required|between:3,64|unique:symbols',
         'code' => 'nullable|unique:symbols',
     ];

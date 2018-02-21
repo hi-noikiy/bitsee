@@ -50,6 +50,7 @@ class Market extends Controller
             foreach ($markets as $market) {
                 # code...
                 $symbol['symbol'] = $market['symbol'];
+                $symbol['slug']  = $market['id'];
                 $symbol['base']   = $market['base'];
                 $symbol['maker']  =  $market['maker'];
                 $symbol['taker'] =   $market['taker'];
@@ -67,7 +68,7 @@ class Market extends Controller
                 $symbol['precision_price'] = $market['precision']['price'];
 
                 $symbols[] =  $symbol;
-                
+
                 $model->symbols()->create($symbol);
             }
 
