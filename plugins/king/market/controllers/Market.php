@@ -3,6 +3,8 @@
 use Backend\Classes\Controller;
 use BackendMenu;
 
+use King\Market\Models\Symbol;
+
 class Market extends Controller
 {
     public $implement = [
@@ -39,7 +41,37 @@ class Market extends Controller
 
         try {
 
-            return $exchange->fetch_markets ();
+            $markets = $exchange->fetch_markets ();
+
+            Symbol::where('market_id', $model->id)->delete();
+
+            $symbols = []
+
+            foreach ($markets as $market) {
+                # code...
+                $symbol['symbol'] = $market['symbol'];
+                $symbol['base']   = $market['base'];
+                $symbol['maker']  =  $market['maker'];
+                $symbol['taker'] =   $market['taker'];
+                $symbol['lot']  =   $market['lot'];
+                $symbol['quote'] =   $market['quote'];
+                $symbol['limits_amount_max'] = $market['limits']['amount']['max'];
+  
+                $symbol['limits_amount_min'] = $market['limits']['amount']['min'];
+                $symbol['limits_cost_max']  = $market['limits']['cost']['max'];
+                $symbol['limits_cost_min'] = $market['limits']['cost']['min'];
+
+                $symbol['limits_price_max'] = $market['limits']['price']['max'];
+                $symbol['limits_price_min'] = $market['limits']['price']['min'];
+                $symbol['precision_amount'] = $market['precision']['amount'];
+                $symbol['precision_price'] = $market['precision']['price'];
+
+                $symbols[] =  $symbol;
+            }
+
+            return $symbols;
+
+            
 
         } catch (\ccxt\NetworkError $e) {
             echo '[Network Error] ' . $e->getMessage () . "\n";
