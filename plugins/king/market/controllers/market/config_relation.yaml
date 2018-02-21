@@ -3,7 +3,7 @@
 # ===================================
 
 symbols:
-    label: Symbol
+    label: Symbols
     manage:
         form: $/king/market/models/symbol/fields.yaml
         list: $/king/market/models/symbol/columns.yaml

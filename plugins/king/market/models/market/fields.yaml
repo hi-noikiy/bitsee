@@ -19,7 +19,9 @@ fields:
         cssClass: field-slim blog-post-preview
         mode: split
     symbols:
-        type: relation
+        label: Symbols
+        type: partial
+        path: field_symbols
     backend:
         label: '后端'
         placeholder: '务必填写ccxt库对应的类名'
