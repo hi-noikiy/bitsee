@@ -6,10 +6,10 @@
 title: 重排序
 
 # Attribute name
-nameFrom: name
+nameFrom: symbol
 
 # Model Class name
-modelClass: RainLab\Blog\Models\Category
+modelClass: King\Market\Models\Symbol
 
 # Toolbar widget configuration
 toolbar:
