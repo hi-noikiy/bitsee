@@ -43,6 +43,9 @@ class Market extends Controller
 
             $markets = $exchange->fetch_markets ();
 
+
+            return Symbol::where('market_id', $model->id)->get()->toArray();
+
             Symbol::where('market_id', $model->id)->delete();
 
             $symbols = [];
