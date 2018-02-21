@@ -42,7 +42,7 @@ class Market extends Controller
         try {
 
             $markets = $exchange->fetch_markets ();
-            
+
             Symbol::where('market_id', $model->id)->delete();
 
             $symbols = [];
@@ -69,8 +69,10 @@ class Market extends Controller
 
                 $symbols[] =  $symbol;
 
-                $model->symbols()->create($symbol);
+                //$model->symbols()->create($symbol);
             }
+
+            $model->symbols()->addAll($symbols);
 
             return $symbols;
 

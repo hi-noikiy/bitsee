@@ -8,6 +8,8 @@ use October\Rain\Router\Helper as RouterHelper;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
 
+use DB;
+
 class Symbol extends Model
 {
     use \October\Rain\Database\Traits\Validation;
@@ -46,6 +48,12 @@ class Symbol extends Model
         if (!$this->exists && !$this->slug) {
             $this->slug = Str::slug($this->name);
         }
+    }
+
+    public function addAll(Array $data)
+    {
+        $rs = DB::table($this->getTable())->insert($data);
+        return $rs;
     }
 
     public function afterDelete()
