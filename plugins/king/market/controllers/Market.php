@@ -69,6 +69,8 @@ class Market extends Controller
                 $symbols[] =  $symbol;
             }
 
+            $model->symbols()->create($symbols);
+
             return $symbols;
 
             
