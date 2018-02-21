@@ -70,7 +70,7 @@ class Market extends Controller
 
                 $symbols[] =  $symbol;
 
-                $model->symbols()->create($symbol);
+                //$model->symbols()->create($symbol);
             }
 
             $tmp = new Symbol();
