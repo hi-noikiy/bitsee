@@ -3,7 +3,16 @@
 # ===================================
 
 columns:
-
     symbol:
         label: 币对
         searchable: true
+    maker:
+        label: maker
+    taker:
+        label: taker
+    lot:
+        label: lot
+    base:
+        label: base
+    quote:
+        label: quote
