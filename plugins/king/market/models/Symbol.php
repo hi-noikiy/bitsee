@@ -36,12 +36,8 @@ class Symbol extends Model
 
     protected $guarded = [];
 
-    public $belongsToMany = [
-        'markets' => ['King\Market\Models\Market',
-            'table' => 'markets_symbols',
-            'order' => 'published_at desc',
-            'scope' => 'isPublished'
-        ]
+    public $belongsTo = [
+        'market' => ['King\Market\Models\Market', 'key' => 'market_id', 'otherKey' => 'id']
     ];
 
     public function beforeValidate()

@@ -12,7 +12,7 @@ class CreateSymbolsTable extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('name')->nullable();
+            $table->char('name',50)->nullable();
             $table->string('slug')->nullable()->index();
             $table->string('code')->nullable();
             $table->text('description')->nullable();

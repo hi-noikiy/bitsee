@@ -19,7 +19,7 @@ class Market extends Controller
         BackendMenu::setContext('King.Market', 'market', 'market');
     }
 
-    public function onGetSymbols($recordid)
+    public function onGetSymbols($recordId)
     {
         $model = $this->formFindModelObject($recordId);
 
