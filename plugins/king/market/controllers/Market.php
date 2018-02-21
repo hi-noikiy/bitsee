@@ -7,7 +7,8 @@ class Market extends Controller
 {
     public $implement = [
        'Backend\Behaviors\ListController',
-       'Backend\Behaviors\FormController'
+       'Backend\Behaviors\FormController',
+       'Backend.Behaviors.RelationController'
     ];
 
     public $listConfig = 'config_list.yaml';
