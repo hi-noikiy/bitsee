@@ -66,13 +66,16 @@ class Market extends Controller
                 $symbol['limits_price_min'] = $market['limits']['price']['min'];
                 $symbol['precision_amount'] = $market['precision']['amount'];
                 $symbol['precision_price'] = $market['precision']['price'];
+                $symbol['market_id'] = $model->id;
 
                 $symbols[] =  $symbol;
 
-                //$model->symbols()->create($symbol);
+                $model->symbols()->create($symbol);
             }
 
-            $model->symbols()->addAll($symbols);
+            $tmp = new Symbol();
+
+            $tmp->addAll($symbols);
 
             return $symbols;
 
