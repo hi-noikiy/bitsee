@@ -10,3 +10,4 @@ symbols:
     view:
         list: $/king/market/models/symbol/columns.yaml
         toolbarButtons: create|delete
+        recordsPerPage: 25
