@@ -45,7 +45,7 @@ class Market extends Controller
 
             Symbol::where('market_id', $model->id)->delete();
 
-            $symbols = []
+            $symbols = [];
 
             foreach ($markets as $market) {
                 # code...
