@@ -9,10 +9,19 @@ fields:
         mode: image
         imageWidth: 200
         imageHeight: 200
+    icon:
+        label: '图标'
+        type: fileupload
+        mode: image
+        imageHeight: 260
+        imageWidth: 260
     name:
         label: '交易所名称'
         span: left
         placeholder: '交易所名称'
+    country:
+        label: '国家'
+        placeholder: '国家'
     content:
         label: '交易所介绍'
         type: King\Market\FormWidgets\BlogMarkdown

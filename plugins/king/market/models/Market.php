@@ -24,6 +24,11 @@ class Market extends Model
 			'content_images' => ['System\Models\File'],
 			'featured_images' => ['System\Models\File']
 	];
+
+    public $attachOne = [
+        'icon' => \System\Models\File::class
+    ];
+
 	public $hasMany = [
 		'symbols' => ['King\Market\Models\Symbol', 'key' => 'market_id', 'otherKey' => 'id']
 	];
