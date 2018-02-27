@@ -1,0 +1,13 @@
+title: '交易所管理'
+modelClass: King\Market\Models\Market
+list: $/king/market/models/market/columns.yaml
+recordUrl: 'king/market/market/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+
+recordsPerPage: 25
