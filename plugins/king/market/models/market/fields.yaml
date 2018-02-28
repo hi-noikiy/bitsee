@@ -34,6 +34,14 @@ fields:
     backend:
         label: '后端'
         placeholder: '务必填写ccxt库对应的类名'
+    openaccount:
+        label: '开户要求'
+        placeholder: '开户要求'
+        type: textarea
+        size: large
+    volume:
+        label: '交易量'
+        placeholder: '交易量'   
 
 
 
