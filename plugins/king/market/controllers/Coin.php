@@ -9,13 +9,11 @@ class Coin extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ListController',
-        'Backend.Behaviors.ReorderController'
+        'Backend.Behaviors.ListController'
     ];
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
-    public $reorderConfig = 'config_reorder.yaml';
 
     public $requiredPermissions = ['king.market.access_symbols'];
 
@@ -25,5 +23,6 @@ class Coin extends Controller
 
         BackendMenu::setContext('King.Market', 'Market', 'coin');
     }
+
 
 }
