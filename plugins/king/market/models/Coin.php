@@ -8,6 +8,8 @@ use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
 use Markdown;
 
+use King\Market\Classes\TagProcessor;
+
 use DB;
 
 class Coin extends Model
