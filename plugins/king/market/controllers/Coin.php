@@ -15,8 +15,6 @@ class Coin extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    public $requiredPermissions = ['king.market.access_symbols'];
-
     public function __construct()
     {
         parent::__construct();

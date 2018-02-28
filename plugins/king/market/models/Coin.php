@@ -11,8 +11,6 @@ use DB;
 
 class Coin extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
-    use \October\Rain\Database\Traits\NestedTree;
 
     public $table = 'coins';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
