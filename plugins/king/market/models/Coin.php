@@ -6,6 +6,7 @@ use URL;
 use October\Rain\Router\Helper as RouterHelper;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
+use Markdown;
 
 use DB;
 
@@ -53,7 +54,7 @@ class Coin extends Model
 
         return $this->url = $controller->pageUrl($pageName, $params);
     }
-    
+
     public static function formatHtml($input, $preview = false)
 	{
 		$result = Markdown::parse(trim($input));
