@@ -1,0 +1,39 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: 币种
+        placeholder: 输入币名
+        span: left
+    content:
+        label: '交易所介绍'
+        type: King\Market\FormWidgets\BlogMarkdown
+        cssClass: field-slim blog-post-preview
+        mode: split
+    platform:
+        label: 平台
+        placeholder: 平台
+        span: left
+    type:
+        label: 类型
+        placeholder: 类型
+        span: left
+    auth:
+        label: 认证方式
+        placeholder: 认证方式
+        span: left
+    supply:
+        label: 供给率
+        placeholder: 供给率
+        span: left
+    url:
+        label: 官网
+        placeholder: 官网
+        span: left
+    markets:
+        tab: 上市市场
+        type: relation
+        commentAbove: 交易所
+        placeholder: 交易所

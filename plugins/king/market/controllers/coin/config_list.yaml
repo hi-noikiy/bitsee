@@ -1,0 +1,13 @@
+title: '新币管理'
+modelClass: King\Market\Models\Coin
+list: $/king/market/models/coin/columns.yaml
+recordUrl: 'king/market/coin/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+
+recordsPerPage: 25

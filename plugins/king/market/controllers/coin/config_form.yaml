@@ -1,0 +1,11 @@
+name: '币种'
+modelClass: King\Market\Models\Coin
+form: $/king/market/models/coin/fields.yaml
+defaultRedirect: king/market/coin
+create:
+    redirect: 'king/market/coin/update/:id'
+    redirectClose: king/market/coin
+update:
+    redirect: king/market/coin
+    redirectClose: king/market/coin
+preview: {  }

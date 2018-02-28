@@ -15,3 +15,7 @@
 1.0.6:
     - update relation
     - update_relation.php
+1.0.7:
+    - add coin
+    - create_coin_table.php
+    - create_coin_relation.php

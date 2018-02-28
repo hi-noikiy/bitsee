@@ -44,6 +44,12 @@ class Plugin extends PluginBase
                                             'icon'        => 'icon-list-ul',
                                             'url'         => Backend::url('king/market/symbol'),
                                             'permissions' => ['*']
+                                        ],
+                                        'coins' => [
+                                            'label'       => '币种',
+                                            'icon'        => 'icon-list-ul',
+                                            'url'         => Backend::url('king/market/symbol'),
+                                            'permissions' => ['*']
                                         ]
                         ]
     			],

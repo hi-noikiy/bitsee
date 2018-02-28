@@ -29,6 +29,13 @@ class Market extends Model
         'icon' => \System\Models\File::class
     ];
 
+	public $belongsToMany = [
+        'coins' => [
+            'King\Market\Models\Coin',
+            'table' => 'coin_market'
+        ]
+	];
+	
 	public $hasMany = [
 		'symbols' => ['King\Market\Models\Symbol', 'key' => 'market_id', 'otherKey' => 'id']
 	];

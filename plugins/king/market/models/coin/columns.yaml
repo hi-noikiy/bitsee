@@ -1,0 +1,18 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: 币种
+        searchable: true
+    platform:
+        label: 平台
+    type:
+        label: 类型
+    auth:
+        label: 认证方式
+    supply:
+        label: 供给率
+    url:
+        label: 官网
