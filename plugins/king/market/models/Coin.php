@@ -53,4 +53,23 @@ class Coin extends Model
 
         return $this->url = $controller->pageUrl($pageName, $params);
     }
+    
+    public static function formatHtml($input, $preview = false)
+	{
+		$result = Markdown::parse(trim($input));
+	
+		if ($preview) {
+			$result = str_replace('<pre>', '<pre class="prettyprint">', $result);
+		}
+	
+		$result = TagProcessor::instance()->processTags($result, $preview);
+	
+		return $result;
+	}
+	
+	public function beforeSave()
+	{
+		$this->content_html = self::formatHtml($this->content);
+    }
+    
 }
