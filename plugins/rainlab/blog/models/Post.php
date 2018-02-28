@@ -189,7 +189,7 @@ class Post extends Model
 
         $result = strip_tags(trim($input));
 
-        return (strlen($result) > 50) ? substr($result,0,49).'...' : $result;
+        return (mb_strlen($result,'utf-8') > 50) ? mb_substr($result,0,49,'utf-8'); .'...' : $result;
     }
 
     //
