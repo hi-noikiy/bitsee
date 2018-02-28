@@ -131,6 +131,7 @@ class Post extends Model
     public function beforeSave()
     {
         $this->content_html = self::formatHtml($this->content);
+        $this->content_raw  = self::formatRaw($this->content);
     }
 
     /**
@@ -179,6 +180,14 @@ class Post extends Model
         }
 
         $result = TagProcessor::instance()->processTags($result, $preview);
+
+        return $result;
+    }
+
+    public static function formatRaw($input, $preview = false)
+    {
+
+        $result = strip_tags(trim($input))
 
         return $result;
     }
