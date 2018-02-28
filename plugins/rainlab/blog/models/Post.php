@@ -187,7 +187,7 @@ class Post extends Model
     public static function formatRaw($input, $preview = false)
     {
 
-        $result = strip_tags(trim($input))
+        $result = strip_tags(trim($input));
 
         return $result;
     }
