@@ -37,3 +37,11 @@ fields:
         type: relation
         commentAbove: 交易所
         placeholder: 交易所
+    begin:
+        label: begin
+        type: datepicker
+        mode: datetime
+    end:
+        label: end
+        type: datepicker
+        mode: datetime
