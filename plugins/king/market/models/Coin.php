@@ -34,6 +34,10 @@ class Coin extends Model
         ]
     ];
 
+    public $attachOne = [
+        'icon' => \System\Models\File::class
+    ];
+    
     public function beforeValidate()
     {
         // Generate a URL slug for this model

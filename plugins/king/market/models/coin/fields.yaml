@@ -7,6 +7,12 @@ fields:
         label: 币种
         placeholder: 输入币名
         span: left
+    icon:
+        label: '图标'
+        type: fileupload
+        mode: image
+        imageHeight: 260
+        imageWidth: 260
     content:
         label: '交易所介绍'
         type: King\Market\FormWidgets\BlogMarkdown
