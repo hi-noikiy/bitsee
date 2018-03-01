@@ -3,6 +3,10 @@
 use System\Classes\PluginBase;
 use Backend;
 
+use RainLab\Blog\Controllers\Posts as PostsController;
+
+use RainLab\Blog\Models\Post as PostModel;
+
 class Plugin extends PluginBase
 {
     public function registerComponents()
@@ -55,5 +59,26 @@ class Plugin extends PluginBase
     			],
 
     	];
+    }
+
+        /**
+     * Inject into Blog Posts
+     */
+    public function boot()
+    {
+        // Extend the controller
+        PostsController::extendFormFields(function ($form, $model) {
+            if (!$model instanceof PostModel) {
+                return;
+            }
+            $form->addSecondaryTabFields([
+                'author' => [
+                    'tab'    => 'author',
+                    'label' => '文章作者',
+                    'placeholder' => '输入来源',
+                    'span'   => 'left'
+                ]
+            ]);
+        });
     }
 }

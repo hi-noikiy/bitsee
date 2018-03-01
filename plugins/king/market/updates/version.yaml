@@ -19,3 +19,6 @@
     - add coin
     - create_coin_table.php
     - create_coin_relation.php
+1.0.8
+   - add author
+   - add_blog_author.php
