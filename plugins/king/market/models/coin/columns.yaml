@@ -16,3 +16,5 @@ columns:
         label: 供给率
     url:
         label: 官网
+    follow:
+        label: 关注
