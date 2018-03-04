@@ -17,18 +17,5 @@ columns:
     quote:
         label: quote
     published:
-        label: 'published'
-
-        # Define the type as "inetis-list-switch" to enable this functionality
-        type: inetis-list-switch
-
-        # Whether to use ✓/✗ icons to replace the Yes/No text (default: true)
-        icon: true
-
-        # Overrides the title displayed on hover over the column
-        titleTrue: 'Unpublish symbol' # (default: 'inetis.listswitch::lang.inetis.listswitch.title_true')
-        titleFalse: 'Publish symbol' # (default: 'inetis.listswitch::lang.inetis.listswitch.title_false')
-
-        # Overrides the text displayed on the button
-        textTrue: 'Published' # (default: 'inetis.listswitch::lang.inetis.listswitch.text_true')
-        textFalse: 'Unpublished' #(default: 'inetis.listswitch::lang.inetis.listswitch.text_false')
+        label: Enabled
+        type: switch
