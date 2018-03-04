@@ -19,3 +19,7 @@ columns:
     published:
         label: Enabled
         type: switch
+    market:
+        label: Market
+        type: relation
+        select: name
