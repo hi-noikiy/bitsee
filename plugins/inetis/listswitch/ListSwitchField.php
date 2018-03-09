@@ -46,14 +46,14 @@ class ListSwitchField
         $config = $field->getConfig();
 
         return '
-<a href="javascript:;"
-    data-request="' . $config['request'] . '"
-    data-request-data="' . $field->getRequestData() . '"
-    data-stripe-load-indicator
-    title="' . $field->getButtonTitle() . '">
-    ' . $field->getButtonValue() . '
-</a>
-';
+        <a href="javascript:;"
+            data-request="' . $config['request'] . '"
+            data-request-data="' . $field->getRequestData() . '"
+            data-stripe-load-indicator
+            title="' . $field->getButtonTitle() . '">
+            ' . $field->getButtonValue() . '
+        </a>
+        ';
     }
 
     /**

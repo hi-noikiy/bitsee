@@ -35,13 +35,13 @@ class Market extends Controller
 
         $exchange = new $backend();
 
-        if (!method_exists($exchange,'fetch_markets')) {
+        if (!method_exists($exchange,'loadMarkets')) {
                 return;
         }
 
         try {
 
-            $markets = $exchange->fetch_markets ();
+            $markets = $exchange->loadMarkets ();
 
             Symbol::where('market_id', $model->id)->delete();
 
