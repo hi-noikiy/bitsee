@@ -721,6 +721,24 @@ module.exports = class hitbtc2 extends hitbtc {
         let symbol = undefined;
         if (market)
             symbol = market['symbol'];
+        let baseVolume = this.safeFloat (ticker, 'volume');
+        let quoteVolume = this.safeFloat (ticker, 'volumeQuote');
+        let open = this.safeFloat (ticker, 'open');
+        let last = this.safeFloat (ticker, 'last');
+        let change = undefined;
+        let percentage = undefined;
+        let average = undefined;
+        if (typeof last !== 'undefined' && typeof open !== 'undefined') {
+            change = last - open;
+            average = this.sum (last, open) / 2;
+            if (open > 0)
+                percentage = change / open * 100;
+        }
+        let vwap = undefined;
+        if (typeof quoteVolume !== 'undefined')
+            if (typeof baseVolume !== 'undefined')
+                if (baseVolume > 0)
+                    vwap = quoteVolume / baseVolume;
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -729,16 +747,16 @@ module.exports = class hitbtc2 extends hitbtc {
             'low': this.safeFloat (ticker, 'low'),
             'bid': this.safeFloat (ticker, 'bid'),
             'ask': this.safeFloat (ticker, 'ask'),
-            'vwap': undefined,
-            'open': this.safeFloat (ticker, 'open'),
-            'close': this.safeFloat (ticker, 'close'),
-            'first': undefined,
-            'last': this.safeFloat (ticker, 'last'),
-            'change': undefined,
-            'percentage': undefined,
-            'average': undefined,
-            'baseVolume': this.safeFloat (ticker, 'volume'),
-            'quoteVolume': this.safeFloat (ticker, 'volumeQuote'),
+            'vwap': vwap,
+            'open': open,
+            'close': last,
+            'last': last,
+            'previousClose': undefined,
+            'change': change,
+            'percentage': percentage,
+            'average': average,
+            'baseVolume': baseVolume,
+            'quoteVolume': quoteVolume,
             'info': ticker,
         };
     }
@@ -979,7 +997,9 @@ module.exports = class hitbtc2 extends hitbtc {
         if (typeof since !== 'undefined')
             request['from'] = this.iso8601 (since);
         let response = await this.privateGetHistoryOrder (this.extend (request, params));
-        return this.parseOrders (response, market, since, limit);
+        let orders = this.parseOrders (response, market);
+        orders = this.filterBy (orders, 'status', 'closed');
+        return this.filterBySinceLimit (orders, since, limit);
     }
 
     async fetchMyTrades (symbol = undefined, since = undefined, limit = undefined, params = {}) {
@@ -1030,6 +1050,7 @@ module.exports = class hitbtc2 extends hitbtc {
             'currency': currency['id'],
         });
         let address = response['address'];
+        this.checkAddress (address);
         let tag = this.safeString (response, 'paymentId');
         return {
             'currency': currency,
@@ -1047,6 +1068,7 @@ module.exports = class hitbtc2 extends hitbtc {
             'currency': currency['id'],
         });
         let address = response['address'];
+        this.checkAddress (address);
         let tag = this.safeString (response, 'paymentId');
         return {
             'currency': currency,
@@ -1058,6 +1080,7 @@ module.exports = class hitbtc2 extends hitbtc {
     }
 
     async withdraw (code, amount, address, tag = undefined, params = {}) {
+        this.checkAddress (address);
         let currency = this.currency (code);
         let request = {
             'currency': currency['id'],

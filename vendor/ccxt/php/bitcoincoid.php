@@ -16,7 +16,6 @@ class bitcoincoid extends Exchange {
                 'CORS' => false,
                 'createMarketOrder' => false,
                 'fetchTickers' => false,
-                'fetchOHLCV' => false,
                 'fetchOrder' => true,
                 'fetchOrders' => false,
                 'fetchClosedOrders' => true,
@@ -86,7 +85,7 @@ class bitcoincoid extends Exchange {
                     'tierBased' => false,
                     'percentage' => true,
                     'maker' => 0,
-                    'taker' => 0.3,
+                    'taker' => 0.003,
                 ),
             ),
         ));
@@ -296,7 +295,7 @@ class bitcoincoid extends Exchange {
         $orders = $this->parse_orders($response['return']['orders'], $market, $since, $limit);
         $orders = $this->filter_by($orders, 'status', 'closed');
         if ($symbol)
-            return $this->filter_orders_by_symbol($orders, $symbol);
+            return $this->filter_by_symbol($orders, $symbol);
         return $orders;
     }
 

@@ -24,7 +24,6 @@ class bitcoincoid (Exchange):
                 'CORS': False,
                 'createMarketOrder': False,
                 'fetchTickers': False,
-                'fetchOHLCV': False,
                 'fetchOrder': True,
                 'fetchOrders': False,
                 'fetchClosedOrders': True,
@@ -94,7 +93,7 @@ class bitcoincoid (Exchange):
                     'tierBased': False,
                     'percentage': True,
                     'maker': 0,
-                    'taker': 0.3,
+                    'taker': 0.003,
                 },
             },
         })
@@ -287,7 +286,7 @@ class bitcoincoid (Exchange):
         orders = self.parse_orders(response['return']['orders'], market, since, limit)
         orders = self.filter_by(orders, 'status', 'closed')
         if symbol:
-            return self.filter_orders_by_symbol(orders, symbol)
+            return self.filter_by_symbol(orders, symbol)
         return orders
 
     async def create_order(self, symbol, type, side, amount, price=None, params={}):
