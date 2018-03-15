@@ -34,9 +34,6 @@ fields:
     backend:
         label: '后端'
         placeholder: '务必填写ccxt库对应的类名'
-    currencymethod:
-        label: '获取支持货币的方法'
-        placeholder: '获取支持货币的方法'
     openaccount:
         label: '开户要求'
         placeholder: '开户要求'

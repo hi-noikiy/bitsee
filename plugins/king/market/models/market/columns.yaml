@@ -11,5 +11,3 @@ columns:
         label: '后端'
     country:
         label: '国家'
-    currencymethod:
-        label: '获取支持货币的方法'

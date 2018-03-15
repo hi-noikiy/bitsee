@@ -2,6 +2,9 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use Ccxt\Currency;
+
+use King\Market\Models\Coin;
 
 use King\Market\Models\Symbol;
 
@@ -29,16 +32,25 @@ class Market extends Controller
 
         include '/var/www/html/vendor/ccxt/' . '/ccxt.php';
 
-        date_default_timezone_set ('UTC');
         $backend = "\\ccxt\\".$model->backend;
-        $currencymethod = $model->currencymethod;
-        $exchange = new $backend();
 
-        $response = $exchange->$currencymethod();
-        $currencys = $response['data'];
+        $symbols = Currency::$backend();
 
+        foreach($symbols as $symbol){
 
-        return $currencys;
+            $coin = Coin::where('base',$symbol)->first();
+            if ($coin) {
+                $model->coins()->detach($coin->id);
+            } else {
+                $coin = Coin::create([
+                    'base' => $symbol
+                ]);
+            }
+
+            $model->coins()->attach($coin->id);
+        }
+
+        return $symbols;
 
 
     }
