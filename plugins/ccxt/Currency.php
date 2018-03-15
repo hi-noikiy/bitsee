@@ -4,10 +4,10 @@ include '/var/www/html/vendor/ccxt/' . '/ccxt.php';
 
 class Currency 
 {
-    static public function huobipro()
+    static public function huobipro($backend)
     {
         date_default_timezone_set ('UTC');
-        $backend = "\\ccxt\\".$model->backend;
+        $backend = "\\ccxt\\".$backend;
         $exchange = new $backend();
         $currencys = $exchange->publicGetCommonCurrencys()['data'];
         $result = [];
@@ -17,10 +17,10 @@ class Currency
 
         return $result;
     }
-    static public function okex()
+    static public function okex($backend)
     {
         date_default_timezone_set ('UTC');
-        $backend = "\\ccxt\\".$model->backend;
+        $backend = "\\ccxt\\".$backend;
         $exchange = new $backend();
         $currencys = $exchange->webGetMarketsCurrencies()['data'];
         $result = [];

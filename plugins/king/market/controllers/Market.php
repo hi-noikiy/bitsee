@@ -32,7 +32,7 @@ class Market extends Controller
 
         $backend = $model->backend;
 
-        $symbols = Currency::$backend();
+        $symbols = Currency::$backend($backend);
 
         foreach($symbols as $symbol){
 
