@@ -41,7 +41,10 @@ fields:
         size: large
     volume:
         label: '交易量'
-        placeholder: '交易量'   
+        placeholder: '交易量'  
+    coins:
+        label: '支持币种'
+        type: relation
 
 
 
