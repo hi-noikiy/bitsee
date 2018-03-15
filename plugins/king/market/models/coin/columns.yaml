@@ -6,6 +6,9 @@ columns:
     name:
         label: 币种
         searchable: true
+    base:
+        label: symbol
+        searchable: true
     platform:
         label: 平台
     type:
