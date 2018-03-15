@@ -31,10 +31,10 @@ class Market extends Controller
 
         date_default_timezone_set ('UTC');
         $backend = "\\ccxt\\".$model->backend;
+        $currencymethod = "\\ccxt\\".$model->currencymethod;
         $exchange = new $backend();
 
-        $response = $exchange->publicGetCommonCurrencys();
-
+        $response = $exchange->$currencymethod();
         $currencys = $response['data'];
 
 
