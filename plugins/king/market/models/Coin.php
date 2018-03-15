@@ -27,6 +27,10 @@ class Coin extends Model
         'code' => 'nullable|unique:symbols',
     ];
 
+    protected $fillable = [
+        'base'
+    ];
+
     public $belongsToMany = [
         'markets' => [
             'King\Market\Models\Market',
