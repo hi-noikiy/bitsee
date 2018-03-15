@@ -11,7 +11,7 @@ class Currency
         $exchange = new $backend();
         $currencys = $exchange->publicGetCommonCurrencys()['data'];
         $result = [];
-        foreach ($currency as $currencys) { 
+        foreach ($currencys as $currency) { 
             $result[] = $currency;
         }
 
@@ -24,7 +24,7 @@ class Currency
         $exchange = new $backend();
         $currencys = $exchange->webGetMarketsCurrencies()['data'];
         $result = [];
-        foreach ($currency as $currencys) { 
+        foreach ($currencys as $currency) { 
             $result[] = $currency['symbol'];
         }
 
