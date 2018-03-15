@@ -30,7 +30,7 @@ class Market extends Controller
     {
         $model = $this->formFindModelObject($recordId);
 
-        $backend = "\\ccxt\\".$model->backend;
+        $backend = $model->backend;
 
         $symbols = Currency::$backend();
 
