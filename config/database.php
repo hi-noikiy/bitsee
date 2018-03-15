@@ -1,5 +1,7 @@
 <?php
 
+$develop = env('BITSEEENV', 'develop');
+
 return [
 
     /*
@@ -54,13 +56,13 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => env('OCTOBER_DB_HOST', 'mysql'),
+            'host'      => ($develop=='production')?env('MYCAT_SERVICE_HOST'):env('OCTOBER_DB_HOST', 'mysql'),
             'port'      => env('OCTOBER_DB_PORT', 3306),
             'database'  => env('OCTOBER_DB_NAME', 'october_cms'),
             'username'  => env('OCTOBER_DB_USER', 'root'),
             'password'  => env('OCTOBER_DB_PASSWORD', ''),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
+            'charset'   => ($develop=='production')?'utf8mb4':'utf8',
+            'collation' => ($develop=='production')?'utf8mb4_unicode_ci':'utf8_unicode_ci',
             'prefix'    => '',
         ],
 

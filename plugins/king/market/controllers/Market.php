@@ -23,6 +23,26 @@ class Market extends Controller
         BackendMenu::setContext('King.Market', 'market', 'market');
     }
 
+    public function onGetCoins($recordId)
+    {
+        $model = $this->formFindModelObject($recordId);
+
+        include '/var/www/html/vendor/ccxt/' . '/ccxt.php';
+
+        date_default_timezone_set ('UTC');
+        $backend = "\\ccxt\\".$model->backend;
+        $exchange = new $backend();
+
+        $response = $exchange->publicGetCommonCurrencys();
+
+        $currencys = $response['data'];
+
+
+        return $currencys;
+
+
+    }
+
     public function onGetSymbols($recordId)
     {
         $model = $this->formFindModelObject($recordId);
