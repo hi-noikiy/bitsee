@@ -32,6 +32,10 @@ class SymbolApp extends Model
         'name',
     ];
 
+    // public $belongsTo = [
+    //     'market' => ['King\Market\Models\Market', 'key' => 'market_id', 'otherKey' => 'id']
+    // ];
+
     protected $guarded = [];
 
     public function beforeValidate()
@@ -48,15 +52,15 @@ class SymbolApp extends Model
         return $rs;
     }
 
-    public function afterDelete()
-    {
-        $this->markets()->detach();
-    }
+    // public function afterDelete()
+    // {
+    //     $this->markets()->detach();
+    // }
 
-    public function getMarketCountAttribute()
-    {
-        return $this->markets()->count();
-    }
+    // public function getMarketCountAttribute()
+    // {
+    //     return $this->markets()->count();
+    // }
 
     /**
      * Sets the "url" attribute with a URL to this object
