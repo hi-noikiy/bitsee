@@ -31,6 +31,11 @@ class User extends Model
     public $attachOne = [
         'icon' => \System\Models\File::class
     ];
+
+    public $attachMany = [
+        'featured_images' => ['System\Models\File']
+    ];
+
     
     public function findForPassport($username)
     {
