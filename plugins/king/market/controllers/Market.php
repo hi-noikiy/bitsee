@@ -8,6 +8,8 @@ use King\Market\Models\Coin;
 
 use King\Market\Models\Symbol;
 
+use King\Market\Models\SymbolApp;
+
 class Market extends Controller
 {
     public $implement = [
@@ -74,8 +76,10 @@ class Market extends Controller
             $markets = $exchange->loadMarkets ();
 
             Symbol::where('market_id', $model->id)->delete();
+            SymbolApp::where('market', $model->backend)->delete();
 
             $symbols = [];
+            $symbolsapp = [];
 
             foreach ($markets as $market) {
                 # code...
@@ -98,14 +102,20 @@ class Market extends Controller
                 $symbol['precision_price'] = $market['precision']['price'];
                 $symbol['market_id'] = $model->id;
 
+                $symbolapp['symbol'] = $market['symbol'];
+                $symbolapp['market'] = $market['backend'];
+
                 $symbols[] =  $symbol;
+                $symbolsapp[] = $symbolapp;
 
                 //$model->symbols()->create($symbol);
             }
 
             $tmp = new Symbol();
+            $tmpapp = new SymbolApp();
 
             $tmp->addAll($symbols);
+            $tmpapp->addAll($symbolsapp);
 
             return $symbols;
 

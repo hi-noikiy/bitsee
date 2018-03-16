@@ -66,6 +66,21 @@ return [
             'prefix'    => '',
         ],
 
+        'mysqlapp' => [
+            'driver' => 'mysql',
+            'host' => ($develop=='production')?env('MYCAT_APP_SERVICE_HOST'):env('OCTOBER_DB_HOST', '127.0.0.1'),
+            'port' => ($develop=='production')?env('MYCAT_APP_SERVICE_PORT'):env('OCTOBER_DB_PORT', '3306'),
+            'database' => 'app',
+            'username' => 'root',
+            'password' => 'bitsee',
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset'   => ($develop=='production')?'utf8mb4':'utf8',
+            'collation' => ($develop=='production')?'utf8mb4_unicode_ci':'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => env('OCTOBER_DB_HOST', 'postgres'),
