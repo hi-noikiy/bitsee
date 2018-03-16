@@ -1,0 +1,3 @@
+columns:
+    market:
+        label: '交易所'

@@ -1,0 +1,14 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    market:
+        label: '交易所'
+        span: left
+        placeholder: '币对'
+    
+
+
+
+
