@@ -5,6 +5,7 @@ columns:
         searchable: true
     symbol:
         label: '名称'
+        searchable: true
     market:
         label: '交易所'
         searchable: true
