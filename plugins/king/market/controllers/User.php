@@ -15,13 +15,13 @@ class User extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    public $requiredPermissions = ['king.market.access_symbols'];
+    //public $requiredPermissions = ['king.market.access_symbols'];
 
     public function __construct()
     {
         parent::__construct();
 
-        BackendMenu::setContext('King.Market', 'Market', 'symbol');
+        BackendMenu::setContext('King.Market', 'Market', 'user');
     }
 
     public function index_onDelete()
