@@ -132,7 +132,7 @@ class Market extends Controller
 
                 $tmp->addAll($symbols);
                 DB::commit();
-                Flash::success('网站交易所币对交易心思更新成功');
+                //Flash::success('网站交易所币对交易心思更新成功');
             }catch(\Exception $e){
                 DB::rollback();
                 Flash::error('网站交易所币对交易心思更新失败，没有更新app交易所经营币对');
