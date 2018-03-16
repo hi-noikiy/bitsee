@@ -16,3 +16,4 @@ symbols:
             fields:
                 pivot[market]:
                     label: 交易所
+                    defaultFrom: market
