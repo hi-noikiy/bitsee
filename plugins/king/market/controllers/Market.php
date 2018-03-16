@@ -12,6 +12,8 @@ use King\Market\Models\SymbolApp;
 
 use King\Market\Models\User;
 
+use Flash;
+
 class Market extends Controller
 {
     public $implement = [
@@ -72,7 +74,6 @@ class Market extends Controller
         if (!method_exists($exchange,'loadMarkets')) {
                 return;
         }
-        DB::beginTransaction();
         try {
 
             $markets = $exchange->loadMarkets ();
@@ -86,6 +87,7 @@ class Market extends Controller
             }
 
             $symbols = [];
+            $symbolsApp = [];
 
             foreach ($markets as $market) {
                 # code...
@@ -114,40 +116,57 @@ class Market extends Controller
                 if (array_key_exists($market['symbol'],$old_symbols_transform) ){
 
                 }else{
-                    SymbolApp::create([
-                        'symbol' => $market['symbol'],
-                        'market' => $model->backend
-                    ]);
+
+                    $symbolsApp[] = ['symbol' => $market['symbol'] , 'market' => $model->backend];
+
                 }
 
                 $symbols[] =  $symbol;
                 //$model->symbols()->create($symbol);
             }
+            DB::beginTransaction();
+            try{
+                $tmp = new Symbol();
 
-            foreach($old_symbols as $old_symbol) {
-                if (array_key_exists($old_symbol->symbol,$market_transform)) {
-
-                }else{
-                    $old_symbol->published = 0;
-                    $old_symbol->save();
-                }
+                $tmp->addAll($symbols);
+                DB::commit();
+                Flash::success('网站交易所币对交易心思更新成功');
+            }catch(\Exception $e){
+                DB::rollback();
+                Flash::error('网站交易所币对交易心思更新失败，没有更新app交易所经营币对');
+                return;
             }
+            DB::connection('mysqlapp')->beginTransaction();
+            try{
+                $tmpapp = new SymbolApp();
 
-            $tmp = new Symbol();
+                $tmpapp->addAll($symbolsApp);
+                foreach($old_symbols as $old_symbol) {
+                    if (array_key_exists($old_symbol->symbol,$market_transform)) {
 
-            $tmp->addAll($symbols);
-
-            DB::commit();
+                    }else{
+                        $old_symbol->published = 0;
+                        $old_symbol->save();
+                    }
+                }
+                Flash::success('app交易所币对交易心思更新成功');
+                DB::connection('mysqlapp')->commit();
+                return;
+            }catch(\Exception $e){
+                DB::connection('mysqlapp')->rollback();
+                Flash::error('app交易所币对交易心思更新失败，网站交易所经营币对更新成功');
+                return;
+            }
 
             return $symbols;
         } catch (\ccxt\NetworkError $e) {
-            DB::rollback();
+
             echo '[Network Error] ' . $e->getMessage () . "\n";
         } catch (\ccxt\ExchangeError $e) {
-            DB::rollback();
+
             echo '[Exchange Error] ' . $e->getMessage () . "\n";
         } catch (Exception $e) {
-            DB::rollback();
+
             echo '[Error] ' . $e->getMessage () . "\n";
         }
 
