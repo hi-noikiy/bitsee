@@ -2,10 +2,10 @@
 
 namespace King\Market\Models;
 
+use Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Model
 {
     use Notifiable;
     public $table = 'users';
