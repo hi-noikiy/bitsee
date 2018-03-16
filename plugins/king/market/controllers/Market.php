@@ -14,6 +14,8 @@ use King\Market\Models\User;
 
 use Flash;
 
+use DB;
+
 class Market extends Controller
 {
     public $implement = [
