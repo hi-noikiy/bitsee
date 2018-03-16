@@ -161,15 +161,20 @@ class Market extends Controller
                 Flash::error('app交易所币对交易心思更新失败，网站交易所经营币对更新成功');
                 return;
             }
-
-            return $symbols;
+            return;
         } catch (\ccxt\NetworkError $e) {
+
+            Flash::error('服务器异常');
 
             echo '[Network Error] ' . $e->getMessage () . "\n";
         } catch (\ccxt\ExchangeError $e) {
 
+            Flash::error('服务器异常');
+
             echo '[Exchange Error] ' . $e->getMessage () . "\n";
         } catch (Exception $e) {
+
+            Flash::error('服务器异常');
 
             echo '[Error] ' . $e->getMessage () . "\n";
         }
