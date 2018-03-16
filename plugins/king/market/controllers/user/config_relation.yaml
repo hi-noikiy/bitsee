@@ -8,10 +8,12 @@ symbols:
         form: $/king/market/models/symbolapp/fields.yaml
         list: $/king/market/models/symbolapp/columns.yaml
         recordsPerPage: 50
+        showSearch: true
     view:
         list: $/king/market/models/symbolapp/columns.yaml
         toolbarButtons: add|remove
         recordsPerPage: 25
+        showSearch: true
     pivot:
         form:
             fields:
