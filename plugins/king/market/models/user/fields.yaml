@@ -24,7 +24,8 @@ fields:
         placeholder: '手机号'
     symbols:
         label: '关注的币对'
-        type: relation       
+        type: relation     
+        nameFrom: symbol  
     
 
 

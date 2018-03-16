@@ -45,6 +45,7 @@ fields:
     coins:
         label: '支持币种'
         type: relation
+        nameFrom: base 
 
 
 
