@@ -9,11 +9,13 @@ symbols:
         list: $/king/market/models/symbolapp/columns.yaml
         recordsPerPage: 50
         showSearch: true
+        showSorting: true
     view:
         list: $/king/market/models/symbolapp/columns.yaml
         toolbarButtons: add|remove
         recordsPerPage: 25
         showSearch: true
+        showSorting: true
     pivot:
         form:
             fields:
