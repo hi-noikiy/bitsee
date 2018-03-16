@@ -72,4 +72,9 @@ class SymbolApp extends Model
 
         return $this->url = $controller->pageUrl($pageName, $params);
     }
+
+    public function users()
+    {
+       return $this->belongsToMany('King\Market\Models\User', 'symbols_users' ,'symbol_id','user_id');
+    }
 }

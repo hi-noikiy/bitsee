@@ -10,6 +10,8 @@ use King\Market\Models\Symbol;
 
 use King\Market\Models\SymbolApp;
 
+use King\Market\Models\User;
+
 class Market extends Controller
 {
     public $implement = [
@@ -70,16 +72,20 @@ class Market extends Controller
         if (!method_exists($exchange,'loadMarkets')) {
                 return;
         }
-
+        DB::beginTransaction();
         try {
 
             $markets = $exchange->loadMarkets ();
 
             Symbol::where('market_id', $model->id)->delete();
-            SymbolApp::where('market', $model->backend)->delete();
+            $old_symbols  = SymbolApp::where('market', $model->backend)->get();
+            $old_symbols_transform = [];
+            $market_transform = [];
+            foreach($old_symbols as $old_symbol){
+                $old_symbols_transform[$old_symbol->symbol] = $old_symbol->id;
+            }
 
             $symbols = [];
-            $symbolsapp = [];
 
             foreach ($markets as $market) {
                 # code...
@@ -102,30 +108,46 @@ class Market extends Controller
                 $symbol['precision_price'] = $market['precision']['price'];
                 $symbol['market_id'] = $model->id;
 
-                $symbolapp['symbol'] = $market['symbol'];
-                $symbolapp['market'] = $model->backend;
+                $market_transform[$market['symbol']] =  $market;
+
+
+                if (array_key_exists($market['symbol'],$old_symbols_transform) ){
+
+                }else{
+                    SymbolApp::create([
+                        'symbol' => $market['symbol'],
+                        'market' => $model->backend
+                    ]);
+                }
 
                 $symbols[] =  $symbol;
-                $symbolsapp[] = $symbolapp;
-
                 //$model->symbols()->create($symbol);
             }
 
+            foreach($old_symbols as $old_symbol) {
+                if (array_key_exists($old_symbol->symbol,$market_transform)) {
+
+                }else{
+                    $old_symbol->published = 0;
+                    $old_symbol->save();
+                }
+            }
+
             $tmp = new Symbol();
-            $tmpapp = new SymbolApp();
 
             $tmp->addAll($symbols);
-            $tmpapp->addAll($symbolsapp);
+
+            DB::commit();
 
             return $symbols;
-
-            
-
         } catch (\ccxt\NetworkError $e) {
+            DB::rollback();
             echo '[Network Error] ' . $e->getMessage () . "\n";
         } catch (\ccxt\ExchangeError $e) {
+            DB::rollback();
             echo '[Exchange Error] ' . $e->getMessage () . "\n";
         } catch (Exception $e) {
+            DB::rollback();
             echo '[Error] ' . $e->getMessage () . "\n";
         }
 
