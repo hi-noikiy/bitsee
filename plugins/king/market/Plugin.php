@@ -54,6 +54,12 @@ class Plugin extends PluginBase
                                             'icon'        => 'icon-list-ul',
                                             'url'         => Backend::url('king/market/coin'),
                                             'permissions' => ['*']
+                                        ],
+                                        'users' => [
+                                            'label'       => '用户',
+                                            'icon'        => 'icon-list-ul',
+                                            'url'         => Backend::url('king/market/user'),
+                                            'permissions' => ['*']
                                         ]
                         ]
     			],

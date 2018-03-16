@@ -1,0 +1,19 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    symbol:
+        label: '币对'
+        span: left
+        placeholder: '币对'
+    market:
+        label: '交易所'
+        placeholder: '交易所'
+    published:
+        label: '发布状态' 
+    
+
+
+
+

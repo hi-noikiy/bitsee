@@ -1,0 +1,9 @@
+columns:
+    id:
+        label: 'id'
+        type: text
+        searchable: true
+    symbol:
+        label: '名称'
+    published:
+        label: '发布状态'
