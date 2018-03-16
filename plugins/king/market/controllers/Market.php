@@ -56,7 +56,9 @@ class Market extends Controller
             $model->coins()->attach($coin->id);
         }
 
-        return $symbols;
+        Flash::success('交易所支持币种 获取成功');
+
+        return;
 
 
     }
