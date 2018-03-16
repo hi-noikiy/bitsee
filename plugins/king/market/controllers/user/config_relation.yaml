@@ -11,3 +11,5 @@ symbols:
         list: $/king/market/models/symbolapp/columns.yaml
         toolbarButtons: add|remove
         recordsPerPage: 25
+    pivot:
+        form: $/king/market/models/symboluser/fields.yaml
