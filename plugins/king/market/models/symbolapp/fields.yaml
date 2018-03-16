@@ -11,7 +11,7 @@ fields:
         label: '交易所'
         placeholder: '交易所'
     published:
-        label: '发布状态' 
+        label: '发布状态'     
     
 
 

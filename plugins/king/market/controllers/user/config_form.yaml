@@ -1,6 +1,6 @@
 name: '币种'
 modelClass: King\Market\Models\User
-form: $/king/market/models/coin/fields.yaml
+form: $/king/market/models/user/fields.yaml
 defaultRedirect: king/market/user
 create:
     redirect: 'king/market/user/update/:id'
