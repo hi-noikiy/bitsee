@@ -27,6 +27,10 @@ class User extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public $attachOne = [
+        'icon' => \System\Models\File::class
+    ];
     
     public function findForPassport($username)
     {
