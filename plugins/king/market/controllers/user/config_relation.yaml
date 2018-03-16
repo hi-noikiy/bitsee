@@ -12,4 +12,4 @@ symbols:
         toolbarButtons: create|delete
         recordsPerPage: 25
     pivot:
-        form: $/acme/user/models/symboluser/fields.yaml
+        form: $/king/market/models/symboluser/fields.yaml
