@@ -1,0 +1,32 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    featured_images:
+        label: 'image'
+        type: fileupload
+        mode: image
+        imageWidth: 200
+        imageHeight: 200
+    icon:
+        label: '头像'
+        type: fileupload
+        mode: image
+        imageHeight: 260
+        imageWidth: 260
+    name:
+        label: '用户名'
+        span: left
+        placeholder: '交易所名称'
+    mobile:
+        label: '手机号'
+        placeholder: '手机号'
+    symbols:
+        label: '关注的币对'
+        type: relation       
+    
+
+
+
+
