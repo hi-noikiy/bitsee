@@ -12,4 +12,7 @@ symbols:
         toolbarButtons: add|remove
         recordsPerPage: 25
     pivot:
-        form: $/king/market/models/symboluser/fields.yaml
+        form:
+            fields:
+                pivot[market]:
+                    label: 交易所
