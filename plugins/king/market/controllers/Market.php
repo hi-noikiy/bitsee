@@ -103,7 +103,7 @@ class Market extends Controller
                 $symbol['market_id'] = $model->id;
 
                 $symbolapp['symbol'] = $market['symbol'];
-                $symbolapp['market'] = $market['backend'];
+                $symbolapp['market'] = $model->backend;
 
                 $symbols[] =  $symbol;
                 $symbolsapp[] = $symbolapp;
