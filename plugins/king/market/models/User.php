@@ -36,6 +36,16 @@ class User extends Model
         'featured_images' => ['System\Models\File']
     ];
 
+    public $belongsToMany = [
+        'symbols' => [
+            'King\Market\Models\SymbolApp',
+            'table' => 'symbols_users',
+            'key'      => 'user_id',
+            'otherKey' => 'symbol_id'
+        ]
+    ];
+    
+
     
     public function findForPassport($username)
     {
@@ -48,8 +58,8 @@ class User extends Model
     {
         return true;
     }
-    public function symbols()
-    {
-       return $this->belongsToMany('King\Market\Models\SymbolApp', 'symbols_users' ,'user_id','symbol_id');
-    }
+    // public function symbols()
+    // {
+    //    return $this->belongsToMany('King\Market\Models\SymbolApp', 'symbols_users' ,'user_id','symbol_id');
+    // }
 }
