@@ -151,7 +151,7 @@ class Market extends Controller
                         $old_symbol->save();
                     }
                 }
-                Flash::success('app交易所币对交易心思更新成功');
+                Flash::success('网站交易所经营币对信息更新成功 app交易所币对交易心思更新成功');
                 DB::connection('mysqlapp')->commit();
                 return;
             }catch(\Exception $e){
