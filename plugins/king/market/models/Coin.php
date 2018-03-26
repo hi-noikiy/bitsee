@@ -39,7 +39,8 @@ class Coin extends Model
     ];
 
     public $attachOne = [
-        'icon' => \System\Models\File::class
+        'icon' => \System\Models\File::class,
+        'team_icon' => \System\Models\File::class,
     ];
     
     public function beforeValidate()
