@@ -14,7 +14,7 @@ fields:
         imageHeight: 260
         imageWidth: 260
     content:
-        label: '交易所介绍'
+        label: '新币介绍'
         type: King\Market\FormWidgets\BlogMarkdown
         cssClass: field-slim blog-post-preview
         mode: split
@@ -51,3 +51,8 @@ fields:
         label: end
         type: datepicker
         mode: datetime
+    team:
+        label: 团队
+        type: King\Market\FormWidgets\BlogMarkdown
+        cssClass: field-slim blog-post-preview
+        mode: split        

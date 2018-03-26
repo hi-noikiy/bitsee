@@ -91,6 +91,10 @@ class Coin extends Model
 	{
         $this->content_html = self::formatHtml($this->content);
         $this->content_raw  = self::formatRaw($this->content);
+
+        $this->team_html = self::formatHtml($this->team);
+        $this->team_raw  = self::formatRaw($this->team);
+
     }
     
 }
