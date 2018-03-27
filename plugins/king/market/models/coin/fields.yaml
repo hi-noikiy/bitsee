@@ -14,7 +14,7 @@ fields:
         imageHeight: 260
         imageWidth: 260
     team_icon:
-        label: '图标'
+        label: '团队图标'
         type: fileupload
         mode: image
         imageHeight: 260
