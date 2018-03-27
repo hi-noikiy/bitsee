@@ -61,4 +61,10 @@ fields:
         label: 团队
         type: King\Market\FormWidgets\BlogMarkdown
         cssClass: field-slim blog-post-preview
-        mode: split        
+        mode: split   
+    status:
+        label: 币种状态
+        type: dropdown
+        options:
+            新币: new
+            已发行: old
