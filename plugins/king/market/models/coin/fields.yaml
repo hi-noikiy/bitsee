@@ -66,5 +66,5 @@ fields:
         label: 币种状态
         type: dropdown
         options:
-            新币: new
-            已发行: old
+            new: 新币
+            old: 已发行
