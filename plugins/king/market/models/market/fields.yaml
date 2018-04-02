@@ -28,7 +28,7 @@ fields:
         cssClass: field-slim blog-post-preview
         mode: split
     symbols:
-        label: Symbols
+        label: "经营币对"
         type: partial
         path: field_symbols
     backend:
