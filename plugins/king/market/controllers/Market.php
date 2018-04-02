@@ -77,7 +77,7 @@ class Market extends Controller
 
         if (!method_exists($exchange,'loadMarkets')) {
                 Flash::error('不存在 loadMarkets 函数');
-                return;
+                return 111;
         }
         try {
 
