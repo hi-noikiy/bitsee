@@ -8,7 +8,7 @@ fields:
         placeholder: 输入币名
         span: left
     icon:
-        label: '图标'
+        label: '币种图标'
         type: fileupload
         mode: image
         imageHeight: 260
