@@ -99,7 +99,6 @@ module.exports = class bit2c extends Exchange {
         let averagePrice = parseFloat (ticker['av']);
         let baseVolume = parseFloat (ticker['a']);
         let quoteVolume = baseVolume * averagePrice;
-        let last = parseFloat (ticker['ll']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -107,14 +106,12 @@ module.exports = class bit2c extends Exchange {
             'high': undefined,
             'low': undefined,
             'bid': parseFloat (ticker['h']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['l']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['ll']),
             'change': undefined,
             'percentage': undefined,
             'average': averagePrice,

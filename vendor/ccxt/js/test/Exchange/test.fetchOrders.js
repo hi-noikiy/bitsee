@@ -27,7 +27,7 @@ module.exports = async (exchange, symbol) => {
 
         for (let i = 0; i < orders.length; i++) {
             let order = orders[i]
-            testOrder (exchange, order, symbol, now)
+            testOrder (order, symbol, now)
         }
 
         // log (asTable (orders))

@@ -90,7 +90,6 @@ class wex extends liqui {
         $symbol = null;
         if ($market)
             $symbol = $market['symbol'];
-        $last = $this->safe_float($ticker, 'last');
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -98,14 +97,12 @@ class wex extends liqui {
             'high' => $this->safe_float($ticker, 'high'),
             'low' => $this->safe_float($ticker, 'low'),
             'bid' => $this->safe_float($ticker, 'sell'),
-            'bidVolume' => null,
             'ask' => $this->safe_float($ticker, 'buy'),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => $this->safe_float($ticker, 'last'),
             'change' => null,
             'percentage' => null,
             'average' => $this->safe_float($ticker, 'avg'),

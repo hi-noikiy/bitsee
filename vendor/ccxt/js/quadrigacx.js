@@ -109,7 +109,6 @@ module.exports = class quadrigacx extends Exchange {
         let vwap = parseFloat (ticker['vwap']);
         let baseVolume = parseFloat (ticker['volume']);
         let quoteVolume = baseVolume * vwap;
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -117,14 +116,12 @@ module.exports = class quadrigacx extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['ask']),
-            'askVolume': undefined,
             'vwap': vwap,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,

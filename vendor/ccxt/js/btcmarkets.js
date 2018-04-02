@@ -150,7 +150,6 @@ module.exports = class btcmarkets extends Exchange {
         let symbol = undefined;
         if (market)
             symbol = market['symbol'];
-        let last = parseFloat (ticker['lastPrice']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -158,14 +157,12 @@ module.exports = class btcmarkets extends Exchange {
             'high': undefined,
             'low': undefined,
             'bid': parseFloat (ticker['bestBid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['bestAsk']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['lastPrice']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,

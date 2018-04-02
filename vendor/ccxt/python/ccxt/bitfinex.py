@@ -34,13 +34,14 @@ class bitfinex (Exchange):
                 'deposit': True,
                 'fetchClosedOrders': True,
                 'fetchDepositAddress': True,
-                'fetchTradingFees': True,
+                'fetchFees': True,
                 'fetchFundingFees': True,
                 'fetchMyTrades': True,
                 'fetchOHLCV': True,
                 'fetchOpenOrders': True,
                 'fetchOrder': True,
                 'fetchTickers': True,
+                'fetchTradingFees': True,
                 'withdraw': True,
             },
             'timeframes': {
@@ -227,19 +228,6 @@ class bitfinex (Exchange):
                     },
                 },
             },
-            'commonCurrencies': {
-                'BCC': 'CST_BCC',
-                'BCU': 'CST_BCU',
-                'DAT': 'DATA',
-                'DSH': 'DASH',  # Bitfinex names Dash as DSH, instead of DASH
-                'IOT': 'IOTA',
-                'MNA': 'MANA',
-                'QSH': 'QASH',
-                'QTM': 'QTUM',
-                'SNG': 'SNGLS',
-                'SPK': 'SPANK',
-                'YYW': 'YOYOW',
-            },
             'exceptions': {
                 'exact': {
                     'Order could not be cancelled.': OrderNotFound,  # non-existent order
@@ -258,8 +246,18 @@ class bitfinex (Exchange):
                     'Invalid order': InvalidOrder,  # ?
                 },
             },
-            'significantPrecision': True,
         })
+
+    def common_currency_code(self, currency):
+        currencies = {
+            'DSH': 'DASH',  # Bitfinex names Dash as DSH, instead of DASH
+            'QTM': 'QTUM',
+            'BCC': 'CST_BCC',
+            'BCU': 'CST_BCU',
+            'IOT': 'IOTA',
+            'DAT': 'DATA',
+        }
+        return currencies[currency] if (currency in list(currencies.keys())) else currency
 
     def fetch_funding_fees(self, params={}):
         self.load_markets()
@@ -288,6 +286,21 @@ class bitfinex (Exchange):
             'maker': self.safe_float(response, 'maker_fee'),
             'taker': self.safe_float(response, 'taker_fee'),
         }
+
+    def load_fees(self):
+        #  # PHP does flat copying for arrays
+        #  # setting fees on the exchange instance isn't portable, unfortunately...
+        #  # self should probably go into the base class as well
+        # funding = self.fees['funding']
+        # fees = self.fetch_funding_fees()
+        # funding = self.deep_extend(funding, fees)
+        # return funding
+        raise NotSupported(self.id + ' loadFees() not implemented yet')
+
+    def fetch_fees(self):
+        fundingFees = self.fetch_funding_fees()
+        tradingFees = self.fetch_trading_fees()
+        return self.deep_extend(fundingFees, tradingFees)
 
     def fetch_markets(self):
         markets = self.publicGetSymbolsDetails()
@@ -333,30 +346,6 @@ class bitfinex (Exchange):
             })
         return result
 
-    def cost_to_precision(self, symbol, cost):
-        return self.decimalToPrecision(float(cost), self.ROUND, self.markets[symbol].precision.price, self.SIGNIFICANT_DIGITS)
-
-    def price_to_precision(self, symbol, price):
-        return self.decimalToPrecision(float(price), self.ROUND, self.markets[symbol].precision.price, self.SIGNIFICANT_DIGITS)
-
-    def amount_to_precision(self, symbol, amount):
-        return self.decimalToPrecision(float(amount), self.ROUND, self.markets[symbol].precision.amount, self.SIGNIFICANT_DIGITS)
-
-    def fee_to_precision(self, currency, fee):
-        return self.decimalToPrecision(float(fee), self.ROUND, self.currencies[currency]['precision'], self.SIGNIFICANT_DIGITS)
-
-    def calculate_fee(self, symbol, type, side, amount, price, takerOrMaker='taker', params={}):
-        market = self.markets[symbol]
-        rate = market[takerOrMaker]
-        cost = amount * price
-        key = 'quote'
-        return {
-            'type': takerOrMaker,
-            'currency': market[key],
-            'rate': rate,
-            'cost': float(self.fee_to_precision(market[key], rate * cost)),
-        }
-
     def fetch_balance(self, params={}):
         self.load_markets()
         balanceType = self.safe_string(params, 'type', 'exchange')
@@ -392,9 +381,16 @@ class bitfinex (Exchange):
         result = {}
         for i in range(0, len(tickers)):
             ticker = tickers[i]
-            parsedTicker = self.parse_ticker(ticker)
-            symbol = parsedTicker['symbol']
-            result[symbol] = parsedTicker
+            if 'pair' in ticker:
+                id = ticker['pair']
+                if id in self.markets_by_id:
+                    market = self.markets_by_id[id]
+                    symbol = market['symbol']
+                    result[symbol] = self.parse_ticker(ticker, market)
+                else:
+                    raise ExchangeError(self.id + ' fetchTickers() failed to recognize symbol ' + id + ' ' + self.json(ticker))
+            else:
+                raise ExchangeError(self.id + ' fetchTickers() response not recognized ' + self.json(tickers))
         return result
 
     def fetch_ticker(self, symbol, params={}):
@@ -408,21 +404,15 @@ class bitfinex (Exchange):
     def parse_ticker(self, ticker, market=None):
         timestamp = float(ticker['timestamp']) * 1000
         symbol = None
-        if market is not None:
+        if market:
             symbol = market['symbol']
         elif 'pair' in ticker:
             id = ticker['pair']
             if id in self.markets_by_id:
                 market = self.markets_by_id[id]
-            if market is not None:
                 symbol = market['symbol']
             else:
-                baseId = id[0:3]
-                quoteId = id[3:6]
-                base = self.common_currency_code(baseId)
-                quote = self.common_currency_code(quoteId)
-                symbol = base + '/' + quote
-        last = float(ticker['last_price'])
+                raise ExchangeError(self.id + ' unrecognized ticker symbol ' + id + ' ' + self.json(ticker))
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -430,14 +420,12 @@ class bitfinex (Exchange):
             'high': float(ticker['high']),
             'low': float(ticker['low']),
             'bid': float(ticker['bid']),
-            'bidVolume': None,
             'ask': float(ticker['ask']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last_price']),
             'change': None,
             'percentage': None,
             'average': float(ticker['mid']),
@@ -455,7 +443,7 @@ class bitfinex (Exchange):
         cost = price * amount
         fee = None
         if 'fee_amount' in trade:
-            feeCost = -self.safe_float(trade, 'fee_amount')
+            feeCost = self.safe_float(trade, 'fee_amount')
             feeCurrency = self.safe_string(trade, 'fee_currency')
             if feeCurrency in self.currencies_by_id:
                 feeCurrency = self.currencies_by_id[feeCurrency]['code']
@@ -609,8 +597,6 @@ class bitfinex (Exchange):
 
     def fetch_ohlcv(self, symbol, timeframe='1m', since=None, limit=100, params={}):
         self.load_markets()
-        if since is None:
-            since = self.milliseconds() - self.parse_timeframe(timeframe) * limit * 1000
         market = self.market(symbol)
         v2id = 't' + market['id']
         request = {
@@ -618,9 +604,11 @@ class bitfinex (Exchange):
             'timeframe': self.timeframes[timeframe],
             'sort': 1,
             'limit': limit,
-            'start': since,
         }
-        response = self.v2GetCandlesTradeTimeframeSymbolHist(self.extend(request, params))
+        if since is not None:
+            request['start'] = since
+        request = self.extend(request, params)
+        response = self.v2GetCandlesTradeTimeframeSymbolHist(request)
         return self.parse_ohlcvs(response, market, timeframe, since, limit)
 
     def get_currency_name(self, currency):

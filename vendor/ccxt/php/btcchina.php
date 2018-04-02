@@ -146,7 +146,9 @@ class btcchina extends Exchange {
         $request = $this->create_market_request ($market);
         $orderbook = $this->$method (array_merge ($request, $params));
         $timestamp = $orderbook['date'] * 1000;
-        return $this->parse_order_book($orderbook, $timestamp);
+        $result = $this->parse_order_book($orderbook, $timestamp);
+        $result['asks'] = $this->sort_by($result['asks'], 0);
+        return $result;
     }
 
     public function parse_ticker ($ticker, $market) {

@@ -80,20 +80,42 @@ class cryptopia (Exchange):
                     ],
                 },
             },
-            'commonCurrencies': {
-                'ACC': 'AdCoin',
-                'BAT': 'BatCoin',
-                'BLZ': 'BlazeCoin',
-                'CC': 'CCX',
-                'CMT': 'Comet',
-                'FCN': 'Facilecoin',
-                'NET': 'NetCoin',
-                'BTG': 'Bitgem',
-                'FUEL': 'FC2',  # FuelCoin != FUEL
-                'QBT': 'Cubits',
-                'WRC': 'WarCoin',
-            },
         })
+
+    def common_currency_code(self, currency):
+        currencies = {
+            'ACC': 'AdCoin',
+            'BAT': 'BatCoin',
+            'BLZ': 'BlazeCoin',
+            'CC': 'CCX',
+            'CMT': 'Comet',
+            'FCN': 'Facilecoin',
+            'NET': 'NetCoin',
+            'BTG': 'Bitgem',
+            'FUEL': 'FC2',  # FuelCoin != FUEL
+            'QBT': 'Cubits',
+            'WRC': 'WarCoin',
+        }
+        if currency in currencies:
+            return currencies[currency]
+        return currency
+
+    def currency_id(self, currency):
+        currencies = {
+            'AdCoin': 'ACC',
+            'BatCoin': 'BAT',
+            'BlazeCoin': 'BLZ',
+            'CCX': 'CC',
+            'Comet': 'CMT',
+            'Cubits': 'QBT',
+            'Facilecoin': 'FCN',
+            'NetCoin': 'NET',
+            'Bitgem': 'BTG',
+            'FC2': 'FUEL',
+        }
+        if currency in currencies:
+            return currencies[currency]
+        return currency
 
     def fetch_markets(self):
         response = self.publicGetGetTradePairs()
@@ -208,9 +230,7 @@ class cryptopia (Exchange):
             'high': float(ticker['High']),
             'low': float(ticker['Low']),
             'bid': float(ticker['BidPrice']),
-            'bidVolume': None,
             'ask': float(ticker['AskPrice']),
-            'askVolume': None,
             'vwap': vwap,
             'open': open,
             'close': last,
@@ -246,7 +266,7 @@ class cryptopia (Exchange):
             market = self.markets_by_id[id]
             symbol = market['symbol']
             result[symbol] = self.parse_ticker(ticker, market)
-        return self.filter_by_array(result, 'symbol', symbols)
+        return result
 
     def parse_trade(self, trade, market=None):
         timestamp = None
@@ -294,7 +314,7 @@ class cryptopia (Exchange):
         if since is not None:
             elapsed = self.milliseconds() - since
             hour = 1000 * 60 * 60
-            hours = int(int(math.ceil(elapsed / hour)))
+            hours = int(elapsed / hour)
         request = {
             'id': market['id'],
             'hours': hours,
@@ -538,27 +558,27 @@ class cryptopia (Exchange):
                 result.append(orders[i])
         return result
 
-    def fetch_deposit_address(self, code, params={}):
-        currency = self.currency(code)
+    def fetch_deposit_address(self, currency, params={}):
+        currencyId = self.currency_id(currency)
         response = self.privatePostGetDepositAddress(self.extend({
-            'Currency': currency['id'],
+            'Currency': currencyId,
         }, params))
         address = self.safe_string(response['Data'], 'BaseAddress')
         if not address:
             address = self.safe_string(response['Data'], 'Address')
         self.check_address(address)
         return {
-            'currency': code,
+            'currency': currency,
             'address': address,
             'status': 'ok',
             'info': response,
         }
 
-    def withdraw(self, code, amount, address, tag=None, params={}):
-        currency = self.currency(code)
+    def withdraw(self, currency, amount, address, tag=None, params={}):
         self.check_address(address)
+        currencyId = self.currency_id(currency)
         request = {
-            'Currency': currency['id'],
+            'Currency': currencyId,
             'Amount': amount,
             'Address': address,  # Address must exist in you AddressBook in security settings
         }

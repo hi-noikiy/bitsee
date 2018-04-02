@@ -64,20 +64,20 @@ class flowbtc (Exchange):
     def fetch_markets(self):
         response = self.publicPostGetProductPairs()
         markets = response['productPairs']
-        result = {}
+        result = []
         for p in range(0, len(markets)):
             market = markets[p]
             id = market['name']
             base = market['product1Label']
             quote = market['product2Label']
             symbol = base + '/' + quote
-            result[symbol] = {
+            result.append({
                 'id': id,
                 'symbol': symbol,
                 'base': base,
                 'quote': quote,
                 'info': market,
-            }
+            })
         return result
 
     def fetch_balance(self, params={}):
@@ -112,7 +112,6 @@ class flowbtc (Exchange):
             'productPair': market['id'],
         }, params))
         timestamp = self.milliseconds()
-        last = float(ticker['last'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -120,14 +119,12 @@ class flowbtc (Exchange):
             'high': float(ticker['high']),
             'low': float(ticker['low']),
             'bid': float(ticker['bid']),
-            'bidVolume': None,
             'ask': float(ticker['ask']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last']),
             'change': None,
             'percentage': None,
             'average': None,

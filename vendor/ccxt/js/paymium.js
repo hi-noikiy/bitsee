@@ -97,7 +97,9 @@ module.exports = class paymium extends Exchange {
         let orderbook = await this.publicGetDataIdDepth (this.extend ({
             'id': this.marketId (symbol),
         }, params));
-        return this.parseOrderBook (orderbook, undefined, 'bids', 'asks', 'price', 'amount');
+        let result = this.parseOrderBook (orderbook, undefined, 'bids', 'asks', 'price', 'amount');
+        result['bids'] = this.sortBy (result['bids'], 0, true);
+        return result;
     }
 
     async fetchTicker (symbol, params = {}) {
@@ -108,7 +110,6 @@ module.exports = class paymium extends Exchange {
         let vwap = parseFloat (ticker['vwap']);
         let baseVolume = parseFloat (ticker['volume']);
         let quoteVolume = baseVolume * vwap;
-        let last = this.safeFloat (ticker, 'price');
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -116,14 +117,12 @@ module.exports = class paymium extends Exchange {
             'high': this.safeFloat (ticker, 'high'),
             'low': this.safeFloat (ticker, 'low'),
             'bid': this.safeFloat (ticker, 'bid'),
-            'bidVolume': undefined,
             'ask': this.safeFloat (ticker, 'ask'),
-            'askVolume': undefined,
             'vwap': vwap,
             'open': this.safeFloat (ticker, 'open'),
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': this.safeFloat (ticker, 'price'),
             'change': undefined,
             'percentage': this.safeFloat (ticker, 'variation'),
             'average': undefined,

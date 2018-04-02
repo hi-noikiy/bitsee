@@ -96,7 +96,6 @@ class bit2c (Exchange):
         averagePrice = float(ticker['av'])
         baseVolume = float(ticker['a'])
         quoteVolume = baseVolume * averagePrice
-        last = float(ticker['ll'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -104,14 +103,12 @@ class bit2c (Exchange):
             'high': None,
             'low': None,
             'bid': float(ticker['h']),
-            'bidVolume': None,
             'ask': float(ticker['l']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['ll']),
             'change': None,
             'percentage': None,
             'average': averagePrice,

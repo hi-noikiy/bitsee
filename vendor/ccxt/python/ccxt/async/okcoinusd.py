@@ -162,9 +162,6 @@ class okcoinusd (Exchange):
             'ETC/USD': True,
             'ETH/USD': True,
             'LTC/USD': True,
-            'XRP/USD': True,
-            'EOS/USD': True,
-            'BTG/USD': True,
         }
         for i in range(0, len(markets)):
             id = markets[i]['symbol']
@@ -239,7 +236,13 @@ class okcoinusd (Exchange):
             request['contract_type'] = 'this_week'  # next_week, quarter
         method += 'Depth'
         orderbook = await getattr(self, method)(self.extend(request, params))
-        return self.parse_order_book(orderbook)
+        timestamp = self.milliseconds()
+        return {
+            'bids': orderbook['bids'],
+            'asks': self.sort_by(orderbook['asks'], 0),
+            'timestamp': timestamp,
+            'datetime': self.iso8601(timestamp),
+        }
 
     def parse_ticker(self, ticker, market=None):
         timestamp = ticker['timestamp']
@@ -251,7 +254,6 @@ class okcoinusd (Exchange):
                     market = self.markets_by_id[marketId]
         if market:
             symbol = market['symbol']
-        last = float(ticker['last'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -259,14 +261,12 @@ class okcoinusd (Exchange):
             'high': float(ticker['high']),
             'low': float(ticker['low']),
             'bid': float(ticker['buy']),
-            'bidVolume': None,
             'ask': float(ticker['sell']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last']),
             'change': None,
             'percentage': None,
             'average': None,
@@ -287,13 +287,8 @@ class okcoinusd (Exchange):
             request['contract_type'] = 'this_week'  # next_week, quarter
         method += 'Ticker'
         response = await getattr(self, method)(self.extend(request, params))
-        ticker = self.safe_value(response, 'ticker')
-        if ticker is None:
-            raise ExchangeError(self.id + ' fetchTicker returned an empty response: ' + self.json(response))
-        timestamp = self.safe_integer(response, 'date')
-        if timestamp is not None:
-            timestamp *= 1000
-            ticker = self.extend(ticker, {'timestamp': timestamp})
+        timestamp = int(response['date']) * 1000
+        ticker = self.extend(response['ticker'], {'timestamp': timestamp})
         return self.parse_ticker(ticker, market)
 
     def parse_trade(self, trade, market=None):

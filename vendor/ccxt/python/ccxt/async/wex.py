@@ -95,7 +95,6 @@ class wex (liqui):
         symbol = None
         if market:
             symbol = market['symbol']
-        last = self.safe_float(ticker, 'last')
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -103,14 +102,12 @@ class wex (liqui):
             'high': self.safe_float(ticker, 'high'),
             'low': self.safe_float(ticker, 'low'),
             'bid': self.safe_float(ticker, 'sell'),
-            'bidVolume': None,
             'ask': self.safe_float(ticker, 'buy'),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': self.safe_float(ticker, 'last'),
             'change': None,
             'percentage': None,
             'average': self.safe_float(ticker, 'avg'),

@@ -121,10 +121,6 @@ module.exports = class poloniex extends Exchange {
                 'amount': 8,
                 'price': 8,
             },
-            'commonCurrencies': {
-                'BTM': 'Bitmark',
-                'STR': 'XLM',
-            },
         });
     }
 
@@ -144,6 +140,22 @@ module.exports = class poloniex extends Exchange {
             'rate': rate,
             'cost': parseFloat (this.feeToPrecision (symbol, cost)),
         };
+    }
+
+    commonCurrencyCode (currency) {
+        if (currency === 'BTM')
+            return 'Bitmark';
+        if (currency === 'STR')
+            return 'XLM';
+        return currency;
+    }
+
+    currencyId (currency) {
+        if (currency === 'Bitmark')
+            return 'BTM';
+        if (currency === 'XLM')
+            return 'STR';
+        return currency;
     }
 
     parseOHLCV (ohlcv, market = undefined, timeframe = '5m', since = undefined, limit = undefined) {
@@ -190,24 +202,7 @@ module.exports = class poloniex extends Exchange {
                 'base': base,
                 'quote': quote,
                 'active': true,
-                'precision': {
-                    'amount': 8,
-                    'price': 8,
-                },
-                'limits': {
-                    'amount': {
-                        'min': 0.00000001,
-                        'max': 1000000000,
-                    },
-                    'price': {
-                        'min': 0.00000001,
-                        'max': 1000000000,
-                    },
-                    'cost': {
-                        'min': 0.00000000,
-                        'max': 1000000000,
-                    },
-                },
+                'lot': this.limits['amount']['min'],
                 'info': market,
             }));
         }
@@ -255,10 +250,8 @@ module.exports = class poloniex extends Exchange {
         };
         if (typeof limit !== 'undefined')
             request['depth'] = limit; // 100
-        let response = await this.publicGetReturnOrderBook (this.extend (request, params));
-        let orderbook = this.parseOrderBook (response);
-        orderbook['nonce'] = this.safeInteger (response, 'sec');
-        return orderbook;
+        let orderbook = await this.publicGetReturnOrderBook (this.extend (request, params));
+        return this.parseOrderBook (orderbook);
     }
 
     parseTicker (ticker, market = undefined) {
@@ -283,9 +276,7 @@ module.exports = class poloniex extends Exchange {
             'high': parseFloat (ticker['high24hr']),
             'low': parseFloat (ticker['low24hr']),
             'bid': parseFloat (ticker['highestBid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['lowestAsk']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': open,
             'close': last,
@@ -492,16 +483,13 @@ module.exports = class poloniex extends Exchange {
         if (market)
             symbol = market['symbol'];
         let price = this.safeFloat (order, 'price');
+        let cost = this.safeFloat (order, 'total', 0.0);
         let remaining = this.safeFloat (order, 'amount');
         let amount = this.safeFloat (order, 'startingAmount', remaining);
         let filled = undefined;
-        let cost = 0;
         if (typeof amount !== 'undefined') {
-            if (typeof remaining !== 'undefined') {
+            if (typeof remaining !== 'undefined')
                 filled = amount - remaining;
-                if (typeof price !== 'undefined')
-                    cost = filled * price;
-            }
         }
         if (typeof filled === 'undefined') {
             if (typeof trades !== 'undefined') {
@@ -743,44 +731,43 @@ module.exports = class poloniex extends Exchange {
         return this.parseTrades (trades);
     }
 
-    async createDepositAddress (code, params = {}) {
-        let currency = this.currency (code);
+    async createDepositAddress (currency, params = {}) {
+        let currencyId = this.currencyId (currency);
         let response = await this.privatePostGenerateNewAddress ({
-            'currency': currency['id'],
+            'currency': currencyId,
         });
         let address = undefined;
         if (response['success'] === 1)
             address = this.safeString (response, 'response');
         this.checkAddress (address);
         return {
-            'currency': code,
+            'currency': currency,
             'address': address,
             'status': 'ok',
             'info': response,
         };
     }
 
-    async fetchDepositAddress (code, params = {}) {
-        let currency = this.currency (code);
+    async fetchDepositAddress (currency, params = {}) {
         let response = await this.privatePostReturnDepositAddresses ();
-        let currencyId = currency['id'];
+        let currencyId = this.currencyId (currency);
         let address = this.safeString (response, currencyId);
         this.checkAddress (address);
         let status = address ? 'ok' : 'none';
         return {
-            'currency': code,
+            'currency': currency,
             'address': address,
             'status': status,
             'info': response,
         };
     }
 
-    async withdraw (code, amount, address, tag = undefined, params = {}) {
+    async withdraw (currency, amount, address, tag = undefined, params = {}) {
         this.checkAddress (address);
         await this.loadMarkets ();
-        let currency = this.currency (code);
+        let currencyId = this.currencyId (currency);
         let request = {
-            'currency': currency['id'],
+            'currency': currencyId,
             'amount': amount,
             'address': address,
         };

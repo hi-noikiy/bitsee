@@ -126,7 +126,6 @@ module.exports = class coincheck extends Exchange {
             throw new NotSupported (this.id + ' fetchTicker () supports BTC/JPY only');
         let ticker = await this.publicGetTicker (params);
         let timestamp = ticker['timestamp'] * 1000;
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -134,14 +133,12 @@ module.exports = class coincheck extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['ask']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,

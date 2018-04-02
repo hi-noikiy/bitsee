@@ -184,14 +184,12 @@ class xbtce extends Exchange {
             'high' => $ticker['DailyBestBuyPrice'],
             'low' => $ticker['DailyBestSellPrice'],
             'bid' => $ticker['BestBid'],
-            'bidVolume' => null,
             'ask' => $ticker['BestAsk'],
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
+            'close' => null,
+            'first' => null,
             'last' => $last,
-            'previousClose' => null,
             'change' => null,
             'percentage' => null,
             'average' => null,
@@ -283,7 +281,7 @@ class xbtce extends Exchange {
         $this->load_markets();
         if ($type === 'market')
             throw new ExchangeError ($this->id . ' allows limit orders only');
-        $response = $this->privatePostTrade (array_merge (array (
+        $response = $this->tapiPostTrade (array_merge (array (
             'pair' => $this->market_id($symbol),
             'type' => $side,
             'amount' => $amount,

@@ -70,9 +70,6 @@ module.exports = class liqui extends Exchange {
                     'deposit': {},
                 },
             },
-            'commonCurrencies': {
-                'DSH': 'DASH',
-            },
             'exceptions': {
                 '803': InvalidOrder, // "Count could not be less than 0.001." (selling below minAmount)
                 '804': InvalidOrder, // "Count could not be more than 10000." (buying above maxAmount)
@@ -102,6 +99,21 @@ module.exports = class liqui extends Exchange {
             'rate': rate,
             'cost': cost,
         };
+    }
+
+    commonCurrencyCode (currency) {
+        if (!this.substituteCommonCurrencyCodes)
+            return currency;
+        if (currency === 'XBT')
+            return 'BTC';
+        if (currency === 'BCC')
+            return 'BCH';
+        if (currency === 'DRK')
+            return 'DASH';
+        // they misspell DASH as dsh :/
+        if (currency === 'DSH')
+            return 'DASH';
+        return currency;
     }
 
     getBaseQuoteFromMarketId (id) {
@@ -200,7 +212,10 @@ module.exports = class liqui extends Exchange {
         if (!market_id_in_reponse)
             throw new ExchangeError (this.id + ' ' + market['symbol'] + ' order book is empty or not available');
         let orderbook = response[market['id']];
-        return this.parseOrderBook (orderbook);
+        let result = this.parseOrderBook (orderbook);
+        result['bids'] = this.sortBy (result['bids'], 0, true);
+        result['asks'] = this.sortBy (result['asks'], 0);
+        return result;
     }
 
     async fetchOrderBooks (symbols = undefined, params = {}) {
@@ -239,7 +254,6 @@ module.exports = class liqui extends Exchange {
         let symbol = undefined;
         if (market)
             symbol = market['symbol'];
-        let last = this.safeFloat (ticker, 'last');
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -247,14 +261,12 @@ module.exports = class liqui extends Exchange {
             'high': this.safeFloat (ticker, 'high'),
             'low': this.safeFloat (ticker, 'low'),
             'bid': this.safeFloat (ticker, 'buy'),
-            'bidVolume': undefined,
             'ask': this.safeFloat (ticker, 'sell'),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': this.safeFloat (ticker, 'last'),
             'change': undefined,
             'percentage': undefined,
             'average': this.safeFloat (ticker, 'avg'),

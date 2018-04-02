@@ -70,7 +70,7 @@ class therock (Exchange):
             },
             'fees': {
                 'trading': {
-                    'maker': 0.2 / 100,
+                    'maker': 0.02 / 100,
                     'taker': 0.2 / 100,
                 },
                 'funding': {
@@ -156,9 +156,7 @@ class therock (Exchange):
             'high': float(ticker['high']),
             'low': float(ticker['low']),
             'bid': float(ticker['bid']),
-            'bidVolume': None,
             'ask': float(ticker['ask']),
-            'askVolume': None,
             'vwap': None,
             'open': float(ticker['open']),
             'close': last,

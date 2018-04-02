@@ -59,9 +59,6 @@ class southxchange (Exchange):
                     'taker': 0.2 / 100,
                 },
             },
-            'commonCurrencies': {
-                'SMT': 'SmartNode',
-            },
         })
 
     def fetch_markets(self):
@@ -69,10 +66,8 @@ class southxchange (Exchange):
         result = []
         for p in range(0, len(markets)):
             market = markets[p]
-            baseId = market[0]
-            quoteId = market[1]
-            base = self.common_currency_code(baseId)
-            quote = self.common_currency_code(quoteId)
+            base = market[0]
+            quote = market[1]
             symbol = base + '/' + quote
             id = symbol
             result.append({
@@ -80,8 +75,6 @@ class southxchange (Exchange):
                 'symbol': symbol,
                 'base': base,
                 'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
                 'info': market,
             })
         return result
@@ -94,10 +87,8 @@ class southxchange (Exchange):
         result = {'info': balances}
         for b in range(0, len(balances)):
             balance = balances[b]
-            currencyId = balance['Currency']
-            uppercase = currencyId.upper()
-            currency = self.currencies_by_id[uppercase]
-            code = currency['code']
+            currency = balance['Currency']
+            uppercase = currency.upper()
             free = float(balance['Available'])
             used = float(balance['Unconfirmed'])
             total = self.sum(free, used)
@@ -106,7 +97,7 @@ class southxchange (Exchange):
                 'used': used,
                 'total': total,
             }
-            result[code] = account
+            result[uppercase] = account
         return self.parse_balance(result)
 
     def fetch_order_book(self, symbol, limit=None, params={}):
@@ -121,7 +112,6 @@ class southxchange (Exchange):
         symbol = None
         if market:
             symbol = market['symbol']
-        last = self.safe_float(ticker, 'Last')
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -129,14 +119,12 @@ class southxchange (Exchange):
             'high': None,
             'low': None,
             'bid': self.safe_float(ticker, 'Bid'),
-            'bidVolume': None,
             'ask': self.safe_float(ticker, 'Ask'),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': self.safe_float(ticker, 'Last'),
             'change': self.safe_float(ticker, 'Variation24Hr'),
             'percentage': None,
             'average': None,

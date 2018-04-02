@@ -101,31 +101,11 @@ module.exports = class zaif extends Exchange {
             let id = market['currency_pair'];
             let symbol = market['name'];
             let [ base, quote ] = symbol.split ('/');
-            let precision = {
-                'amount': -Math.log10 (market['item_unit_step']),
-                'price': market['aux_unit_point'],
-            };
             result.push ({
                 'id': id,
                 'symbol': symbol,
                 'base': base,
                 'quote': quote,
-                'active': true, // can trade or not
-                'precision': precision,
-                'limits': {
-                    'amount': {
-                        'min': parseFloat (market['item_unit_min']),
-                        'max': undefined,
-                    },
-                    'price': {
-                        'min': parseFloat (market['aux_unit_min']),
-                        'max': undefined,
-                    },
-                    'cost': {
-                        'min': undefined,
-                        'max': undefined,
-                    },
-                },
                 'info': market,
             });
         }
@@ -175,7 +155,6 @@ module.exports = class zaif extends Exchange {
         let vwap = ticker['vwap'];
         let baseVolume = ticker['volume'];
         let quoteVolume = baseVolume * vwap;
-        let last = ticker['last'];
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -183,14 +162,12 @@ module.exports = class zaif extends Exchange {
             'high': ticker['high'],
             'low': ticker['low'],
             'bid': ticker['bid'],
-            'bidVolume': undefined,
             'ask': ticker['ask'],
-            'askVolume': undefined,
             'vwap': vwap,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': ticker['last'],
             'change': undefined,
             'percentage': undefined,
             'average': undefined,

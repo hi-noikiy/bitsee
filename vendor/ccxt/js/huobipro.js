@@ -3,7 +3,7 @@
 //  ---------------------------------------------------------------------------
 
 const Exchange = require ('./base/Exchange');
-const { ExchangeError, InvalidOrder } = require ('./base/errors');
+const { ExchangeError } = require ('./base/errors');
 
 //  ---------------------------------------------------------------------------
 
@@ -18,10 +18,9 @@ module.exports = class huobipro extends Exchange {
             'version': 'v1',
             'accounts': undefined,
             'accountsById': undefined,
-            'hostname': 'api.huobipro.com',
+            'hostname': 'api.huobi.pro',
             'has': {
                 'CORS': false,
-                'fetchTradingLimits': true,
                 'fetchOHCLV': true,
                 'fetchOrders': true,
                 'fetchOrder': true,
@@ -42,10 +41,10 @@ module.exports = class huobipro extends Exchange {
             },
             'urls': {
                 'logo': 'https://user-images.githubusercontent.com/1294454/27766569-15aa7b9a-5edd-11e7-9e7f-44791f4ee49c.jpg',
-                'api': 'https://api.huobipro.com',
-                'www': 'https://www.huobipro.com',
+                'api': 'https://api.huobi.pro',
+                'www': 'https://www.huobi.pro',
                 'doc': 'https://github.com/huobiapi/API_Docs/wiki/REST_api_reference',
-                'fees': 'https://www.huobipro.com/about/fee/',
+                'fees': 'https://www.huobi.pro/about/fee/',
             },
             'api': {
                 'market': {
@@ -63,7 +62,6 @@ module.exports = class huobipro extends Exchange {
                         'common/symbols', // 查询系统支持的所有交易对
                         'common/currencys', // 查询系统支持的所有币种
                         'common/timestamp', // 查询系统当前时间
-                        'common/exchange', // order limits
                     ],
                 },
                 'private': {
@@ -99,16 +97,15 @@ module.exports = class huobipro extends Exchange {
                     'taker': 0.002,
                 },
             },
-            'exceptions': {
-                'order-limitorder-amount-min-error': InvalidOrder, // limit order amount error, min: `0.001`
-            },
         });
     }
 
-    parseMarkets (markets) {
+    async fetchMarkets () {
+        let response = await this.publicGetCommonSymbols ();
+        let markets = response['data'];
         let numMarkets = markets.length;
         if (numMarkets < 1)
-            throw new ExchangeError (this.id + ' publicGetCommonSymbols returned empty response: ' + this.json (markets));
+            throw new ExchangeError (this.id + ' publicGetCommonSymbols returned empty response: ' + this.json (response));
         let result = [];
         for (let i = 0; i < markets.length; i++) {
             let market = markets[i];
@@ -154,63 +151,6 @@ module.exports = class huobipro extends Exchange {
             });
         }
         return result;
-    }
-
-    async loadTradingLimits (symbols = undefined, reload = false, params = {}) {
-        if (reload || !('limitsLoaded' in this.options)) {
-            let response = this.fetchTradingLimits (symbols);
-            let limits = response['limits'];
-            let keys = Object.keys (limits);
-            for (let i = 0; i < keys.length; i++) {
-                let symbol = keys[i];
-                this.markets[symbol] = this.extend (this.markets[symbol], {
-                    'limits': limits[symbol],
-                });
-            }
-        }
-        return this.markets;
-    }
-
-    async fetchTradingLimits (symbols = undefined, params = {}) {
-        //  by default it will try load withdrawal fees of all currencies (with separate requests)
-        //  however if you define codes = [ 'ETH', 'BTC' ] in args it will only load those
-        await this.loadMarkets ();
-        let info = {};
-        let limits = {};
-        if (typeof symbols === 'undefined')
-            symbols = this.symbols;
-        for (let i = 0; i < symbols.length; i++) {
-            let symbol = symbols[i];
-            let market = this.market (symbol);
-            let response = await this.publicGetCommonExchange (this.extend ({
-                'symbol': market['id'],
-            }));
-            let limits = this.parseTradingLimits (response);
-            info[symbol] = response;
-            limits[symbol] = limits;
-        }
-        return {
-            'limits': limits,
-            'info': info,
-        };
-    }
-
-    parseTradingLimits (response, symbol = undefined, params = {}) {
-        let data = response['data'];
-        if (typeof data === 'undefined') {
-            return undefined;
-        }
-        return {
-            'amount': {
-                'min': data['limit-order-must-greater-than'],
-                'max': data['limit-order-must-less-than'],
-            },
-        };
-    }
-
-    async fetchMarkets () {
-        let response = await this.publicGetCommonSymbols ();
-        return this.parseMarkets (response['data']);
     }
 
     parseTicker (ticker, market = undefined) {
@@ -266,7 +206,6 @@ module.exports = class huobipro extends Exchange {
             'open': open,
             'close': close,
             'last': close,
-            'previousClose': undefined,
             'change': change,
             'percentage': percentage,
             'average': average,
@@ -287,10 +226,7 @@ module.exports = class huobipro extends Exchange {
             if (!response['tick']) {
                 throw new ExchangeError (this.id + ' fetchOrderBook() returned empty response: ' + this.json (response));
             }
-            let orderbook = response['tick'];
-            let timestamp = orderbook['ts'];
-            orderbook['nonce'] = orderbook['version'];
-            return this.parseOrderBook (orderbook, timestamp);
+            return this.parseOrderBook (response['tick'], response['tick']['ts']);
         }
         throw new ExchangeError (this.id + ' fetchOrderBook() returned unrecognized response: ' + this.json (response));
     }
@@ -412,7 +348,7 @@ module.exports = class huobipro extends Exchange {
     async fetchOrders (symbol = undefined, since = undefined, limit = undefined, params = {}) {
         if (!symbol)
             throw new ExchangeError (this.id + ' fetchOrders() requires a symbol parameter');
-        await this.loadMarkets ();
+        this.loadMarkets ();
         let market = this.market (symbol);
         let status = undefined;
         if ('type' in params) {
@@ -423,11 +359,11 @@ module.exports = class huobipro extends Exchange {
             throw new ExchangeError (this.id + ' fetchOrders() requires a type param or status param for spot market ' + symbol + ' (0 or "open" for unfilled or partial filled orders, 1 or "closed" for filled orders)');
         }
         if ((status === 0) || (status === 'open')) {
-            status = 'pre-submitted,submitted,partial-filled';
+            status = 'submitted,partial-filled';
         } else if ((status === 1) || (status === 'closed')) {
-            status = 'filled,partial-canceled,canceled';
+            status = 'filled,partial-canceled';
         } else {
-            status = 'pre-submitted,submitted,partial-filled,filled,partial-canceled,canceled';
+            throw new ExchangeError (this.id + ' fetchOrders() wrong type param or status param for spot market ' + symbol + ' (0 or "open" for unfilled or partial filled orders, 1 or "closed" for filled orders)');
         }
         let response = await this.privateGetOrderOrders (this.extend ({
             'symbol': market['id'],
@@ -553,14 +489,10 @@ module.exports = class huobipro extends Exchange {
         };
     }
 
-    feeToPrecision (currency, fee) {
-        return parseFloat (this.decimalToPrecision (fee, 0, this.currencies[currency]['precision']));
-    }
-
     calculateFee (symbol, type, side, amount, price, takerOrMaker = 'taker', params = {}) {
         let market = this.markets[symbol];
         let rate = market[takerOrMaker];
-        let cost = amount * rate;
+        let cost = parseFloat (this.costToPrecision (symbol, amount * rate));
         let key = 'quote';
         if (side === 'sell') {
             cost *= price;
@@ -571,7 +503,7 @@ module.exports = class huobipro extends Exchange {
             'type': takerOrMaker,
             'currency': market[key],
             'rate': rate,
-            'cost': parseFloat (this.feeToPrecision (market[key], cost)),
+            'cost': parseFloat (this.feeToPrecision (symbol, cost)),
         };
     }
 
@@ -637,29 +569,11 @@ module.exports = class huobipro extends Exchange {
         return { 'url': url, 'method': method, 'body': body, 'headers': headers };
     }
 
-    handleErrors (httpCode, reason, url, method, headers, body) {
-        if (typeof body !== 'string')
-            return; // fallback to default error handler
-        if (body.length < 2)
-            return; // fallback to default error handler
-        if ((body[0] === '{') || (body[0] === '[')) {
-            let response = JSON.parse (body);
-            if ('status' in response) {
-                //
-                //     {"status":"error","err-code":"order-limitorder-amount-min-error","err-msg":"limit order amount error, min: `0.001`","data":null}
-                //
-                let status = this.safeString (response, 'status');
-                if (status === 'error') {
-                    const code = this.safeString (response, 'err-code');
-                    const feedback = this.id + ' ' + this.json (response);
-                    const message = this.safeString (response, 'err-msg', feedback);
-                    const exceptions = this.exceptions;
-                    if (code in exceptions) {
-                        throw new exceptions[code] (message);
-                    }
-                    throw new ExchangeError (message);
-                }
-            }
-        }
+    async request (path, api = 'public', method = 'GET', params = {}, headers = undefined, body = undefined) {
+        let response = await this.fetch2 (path, api, method, params, headers, body);
+        if ('status' in response)
+            if (response['status'] === 'error')
+                throw new ExchangeError (this.id + ' ' + this.json (response));
+        return response;
     }
 };

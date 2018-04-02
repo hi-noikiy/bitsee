@@ -22,7 +22,7 @@ module.exports = class _1broker extends Exchange {
                 'fetchOHLCV': true,
             },
             'timeframes': {
-                '1m': '60', // not working for some reason, returns {"server_time":"2018-03-26T03:52:27.912Z","error":true,"warning":false,"response":null,"error_code":-1,"error_message":"Error while trying to fetch historical market data. An invalid resolution was probably used."}
+                '1m': '60',
                 '15m': '900',
                 '1h': '3600',
                 '1d': '86400',
@@ -153,7 +153,6 @@ module.exports = class _1broker extends Exchange {
             'datetime': this.iso8601 (timestamp),
             'bids': [ bid ],
             'asks': [ ask ],
-            'nonce': undefined,
         };
     }
 
@@ -180,9 +179,7 @@ module.exports = class _1broker extends Exchange {
             'high': parseFloat (ticker['h']),
             'low': parseFloat (ticker['l']),
             'bid': undefined,
-            'bidVolume': undefined,
             'ask': undefined,
-            'askVolume': undefined,
             'vwap': undefined,
             'open': open,
             'close': close,

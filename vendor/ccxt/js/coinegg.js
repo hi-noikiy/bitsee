@@ -3,7 +3,7 @@
 //  ---------------------------------------------------------------------------
 
 const Exchange = require ('./base/Exchange');
-const { ExchangeError, ExchangeNotAvailable, AuthenticationError, InvalidNonce, InsufficientFunds, InvalidOrder, OrderNotFound, DDoSProtection } = require ('./base/errors');
+const { ExchangeError, AuthenticationError, InvalidNonce, InsufficientFunds, InvalidOrder, OrderNotFound, DDoSProtection } = require ('./base/errors');
 
 //  ---------------------------------------------------------------------------
 
@@ -14,11 +14,8 @@ module.exports = class coinegg extends Exchange {
             'name': 'CoinEgg',
             'countries': [ 'CN', 'UK' ],
             'has': {
-                'fetchOrder': true,
-                'fetchOrders': true,
-                'fetchOpenOrders': 'emulated',
+                'fetchOpenOrders': true,
                 'fetchMyTrades': true,
-                'fetchTickers': true,
             },
             'urls': {
                 'logo': 'https://user-images.githubusercontent.com/1294454/36770310-adfa764e-1c5a-11e8-8e09-449daac3d2fb.jpg',
@@ -48,8 +45,10 @@ module.exports = class coinegg extends Exchange {
                     ],
                 },
                 'private': {
-                    'post': [
+                    'get': [
                         'balance',
+                    ],
+                    'post': [
                         'trade_add/{quote}',
                         'trade_cancel/{quote}',
                         'trade_view/{quote}',
@@ -120,27 +119,6 @@ module.exports = class coinegg extends Exchange {
                 '203': OrderNotFound,
                 '402': DDoSProtection,
             },
-            'errorMessages': {
-                '100': 'Required parameters can not be empty',
-                '101': 'Illegal parameter',
-                '102': 'coin does not exist',
-                '103': 'Key does not exist',
-                '104': 'Signature does not match',
-                '105': 'Insufficient permissions',
-                '106': 'Request expired(nonce error)',
-                '200': 'Lack of balance',
-                '201': 'Too small for the number of trading',
-                '202': 'Price must be in 0 - 1000000',
-                '203': 'Order does not exist',
-                '204': 'Pending order amount must be above 0.001 BTC',
-                '205': 'Restrict pending order prices',
-                '206': 'Decimal place error',
-                '401': 'System error',
-                '402': 'Requests are too frequent',
-                '403': 'Non-open API',
-                '404': 'IP restriction does not request the resource',
-                '405': 'Currency transactions are temporarily closed',
-            },
         });
     }
 
@@ -152,12 +130,10 @@ module.exports = class coinegg extends Exchange {
             let bases = await this.webGetQuoteAllcoin ({
                 'quote': quoteId,
             });
-            if (typeof bases === 'undefined')
-                throw new ExchangeNotAvailable (this.id + ' fetchMarkets() for "' + quoteId + '" returned: "' + this.json (bases) + '"');
             let baseIds = Object.keys (bases);
             let numBaseIds = baseIds.length;
             if (numBaseIds < 1)
-                throw new ExchangeNotAvailable (this.id + ' fetchMarkets() for "' + quoteId + '" returned: "' + this.json (bases) + '"');
+                throw new ExchangeError (this.id + ' fetchMarkets() failed for ' + quoteId);
             for (let i = 0; i < baseIds.length; i++) {
                 let baseId = baseIds[i];
                 let market = bases[baseId];
@@ -206,7 +182,6 @@ module.exports = class coinegg extends Exchange {
     parseTicker (ticker, market = undefined) {
         let symbol = market['symbol'];
         let timestamp = this.milliseconds ();
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -214,14 +189,12 @@ module.exports = class coinegg extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['buy']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['sell']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': this.safeFloat (ticker, 'change'),
             'percentage': undefined,
             'average': undefined,
@@ -258,20 +231,18 @@ module.exports = class coinegg extends Exchange {
                 let baseId = baseIds[i];
                 let ticker = tickers[baseId];
                 let id = baseId + quoteId;
-                if (id in this.markets_by_id) {
-                    let market = this.marketsById[id];
-                    let symbol = market['symbol'];
-                    result[symbol] = this.parseTicker ({
-                        'high': ticker[4],
-                        'low': ticker[5],
-                        'buy': ticker[2],
-                        'sell': ticker[3],
-                        'last': ticker[1],
-                        'change': ticker[8],
-                        'vol': ticker[6],
-                        'quoteVol': ticker[7],
-                    }, market);
-                }
+                let market = this.marketsById[id];
+                let symbol = market['symbol'];
+                result[symbol] = this.parseTicker ({
+                    'high': ticker[4],
+                    'low': ticker[5],
+                    'buy': ticker[2],
+                    'sell': ticker[3],
+                    'last': ticker[1],
+                    'change': ticker[8],
+                    'vol': ticker[6],
+                    'quoteVol': ticker[7],
+                }, market);
             }
         }
         return result;
@@ -321,7 +292,7 @@ module.exports = class coinegg extends Exchange {
 
     async fetchBalance (params = {}) {
         await this.loadMarkets ();
-        let balances = await this.privatePostBalance (params);
+        let balances = await this.privateGetBalance (params);
         let result = { 'info': balances };
         balances = this.omit (balances['data'], 'uid');
         let rows = Object.keys (balances);
@@ -394,7 +365,10 @@ module.exports = class coinegg extends Exchange {
             'amount': amount,
             'price': price,
         }, params));
-        let id = response['id'].toString ();
+        if (!response['status']) {
+            throw new InvalidOrder (this.json (response));
+        }
+        let id = response['id'];
         let order = this.parseOrder ({
             'id': id,
             'datetime': this.ymdhms (this.milliseconds ()),
@@ -416,6 +390,9 @@ module.exports = class coinegg extends Exchange {
             'coin': market['baseId'],
             'quote': market['quoteId'],
         }, params));
+        if (!response['status']) {
+            throw new ExchangeError (this.json (response));
+        }
         return response;
     }
 
@@ -472,7 +449,7 @@ module.exports = class coinegg extends Exchange {
                 'key': this.apiKey,
                 'nonce': this.nonce (),
             }, query));
-            let secret = this.hash (this.encode (this.secret));
+            let secret = this.hash (this.secret);
             let signature = this.hmac (this.encode (query), this.encode (secret));
             query += '&' + 'signature=' + signature;
             if (method === 'GET') {
@@ -488,31 +465,43 @@ module.exports = class coinegg extends Exchange {
     }
 
     handleErrors (code, reason, url, method, headers, body) {
+        let errorMessages = {
+            '100': 'Required parameters can not be empty',
+            '101': 'Illegal parameter',
+            '102': 'coin does not exist',
+            '103': 'Key does not exist',
+            '104': 'Signature does not match',
+            '105': 'Insufficient permissions',
+            '106': 'Request expired(nonce error)',
+            '200': 'Lack of balance',
+            '201': 'Too small for the number of trading',
+            '202': 'Price must be in 0 - 1000000',
+            '203': 'Order does not exist',
+            '204': 'Pending order amount must be above 0.001 BTC',
+            '205': 'Restrict pending order prices',
+            '206': 'Decimal place error',
+            '401': 'System error',
+            '402': 'Requests are too frequent',
+            '403': 'Non-open API',
+            '404': 'IP restriction does not request the resource',
+            '405': 'Currency transactions are temporarily closed',
+        };
         // checks against error codes
-        if (typeof body !== 'string')
-            return;
-        if (body.length === 0)
-            return;
-        if (body[0] !== '{')
-            return;
-        let response = JSON.parse (body);
-        // private endpoints return the following structure:
-        // {"result":true,"data":{...}} - success
-        // {"result":false,"code":"103"} - failure
-        let result = this.safeValue (response, 'result');
-        if (typeof result === 'undefined')
-            // public endpoint
-            return;
-        if (result === true)
-            // success
-            return;
-        const errorCode = this.safeString (response, 'code');
-        const errorMessages = this.errorMessages;
-        const message = this.safeString (errorMessages, errorCode, 'Unknown Error');
-        if (errorCode in this.exceptions) {
-            throw new this.exceptions[errorCode] (this.id + ' ' + message);
-        } else {
-            throw new ExchangeError (this.id + ' ' + message);
+        if (typeof body === 'string') {
+            if (body.length > 0) {
+                if (body[0] === '{') {
+                    let response = JSON.parse (body);
+                    let error = this.safeString (response, 'code');
+                    let message = this.safeString (errorMessages, code, 'Error');
+                    if (typeof error !== 'undefined') {
+                        if (error in this.exceptions) {
+                            throw new this.exceptions[error] (this.id + ' ' + message);
+                        } else {
+                            throw new ExchangeError (this.id + message);
+                        }
+                    }
+                }
+            }
         }
     }
 };

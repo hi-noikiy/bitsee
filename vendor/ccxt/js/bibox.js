@@ -3,7 +3,7 @@
 //  ---------------------------------------------------------------------------
 
 const Exchange = require ('./base/Exchange');
-const { ExchangeError, AuthenticationError, DDoSProtection, ExchangeNotAvailable, InvalidOrder, OrderNotFound, PermissionDenied } = require ('./base/errors');
+const { ExchangeError, AuthenticationError, DDoSProtection, ExchangeNotAvailable, InvalidOrder, OrderNotFound } = require ('./base/errors');
 
 //  ---------------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ module.exports = class bibox extends Exchange {
                 'fetchClosedOrders': true,
                 'fetchMyTrades': true,
                 'fetchOHLCV': true,
-                'createMarketOrder': false, // or they will return https://github.com/ccxt/ccxt/issues/2338
                 'withdraw': true,
             },
             'timeframes': {
@@ -133,7 +132,6 @@ module.exports = class bibox extends Exchange {
         } else {
             symbol = ticker['coin_symbol'] + '/' + ticker['currency_symbol'];
         }
-        let last = this.safeFloat (ticker, 'last');
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -141,18 +139,16 @@ module.exports = class bibox extends Exchange {
             'high': this.safeFloat (ticker, 'high'),
             'low': this.safeFloat (ticker, 'low'),
             'bid': this.safeFloat (ticker, 'buy'),
-            'bidVolume': undefined,
             'ask': this.safeFloat (ticker, 'sell'),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': this.safeFloat (ticker, 'last'),
             'change': undefined,
             'percentage': this.safeString (ticker, 'percent'),
             'average': undefined,
-            'baseVolume': this.safeFloat (ticker, 'vol24H'),
+            'baseVolume': this.safeFloat (ticker, 'vol'),
             'quoteVolume': undefined,
             'info': ticker,
         };
@@ -168,19 +164,21 @@ module.exports = class bibox extends Exchange {
         return this.parseTicker (response['result'], market);
     }
 
-    parseTickers (rawTickers, symbols = undefined) {
-        let tickers = [];
-        for (let i = 0; i < rawTickers.length; i++) {
-            tickers.push (this.parseTicker (rawTickers[i]));
-        }
-        return this.filterByArray (tickers, 'symbol', symbols);
-    }
-
     async fetchTickers (symbols = undefined, params = {}) {
         let response = await this.publicGetMdata (this.extend ({
             'cmd': 'marketAll',
         }, params));
-        return this.parseTickers (response['result'], symbols);
+        let tickers = response['result'];
+        let result = {};
+        for (let t = 0; t < tickers.length; t++) {
+            let ticker = this.parseTicker (tickers[t]);
+            let symbol = ticker['symbol'];
+            if (symbols && (!(symbol in symbols))) {
+                continue;
+            }
+            result[symbol] = ticker;
+        }
+        return result;
     }
 
     parseTrade (trade, market = undefined) {
@@ -495,15 +493,14 @@ module.exports = class bibox extends Exchange {
         await this.loadMarkets ();
         let currency = this.currency (code);
         let response = await this.privatePostTransfer ({
-            'cmd': 'transfer/transferIn',
+            'cmd': 'transfer/transferOutInfo',
             'body': this.extend ({
                 'coin_symbol': currency['id'],
             }, params),
         });
-        let address = this.safeString (response, 'result');
         let result = {
             'info': response,
-            'address': address,
+            'address': undefined,  // POINTLESS?
         };
         return result;
     }
@@ -568,19 +565,12 @@ module.exports = class bibox extends Exchange {
                     // operation failed! Orders have been completed or revoked
                     // e.g. trying to cancel a filled order
                     throw new OrderNotFound (message);
-                else if (code === '2067')
-                    // https://github.com/ccxt/ccxt/issues/2338
-                    //  { "error": { "code": "2067", "msg": "暂不支持市价单"}, "cmd": "orderpending/trade" }
-                    // "Does not support market orders"
-                    throw new InvalidOrder (message);
                 else if (code === '2068')
                     // \u4e0b\u5355\u6570\u91cf\u4e0d\u80fd\u4f4e\u4e8e
                     // The number of orders can not be less than
                     throw new InvalidOrder (message);
                 else if (code === '3012')
-                    throw new AuthenticationError (message); // invalid apiKey
-                else if (code === '3024')
-                    throw new PermissionDenied (message); // insufficient apiKey permissions
+                    throw new AuthenticationError (message); // invalid api key
                 else if (code === '3025')
                     throw new AuthenticationError (message); // signature failed
                 else if (code === '4000')

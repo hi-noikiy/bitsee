@@ -47,6 +47,10 @@ module.exports = class cobinhood extends Exchange {
                     'web': 'https://api.cobinhood.com/v1',
                     'ws': 'wss://feed.cobinhood.com',
                 },
+                'test': {
+                    'web': 'https://sandbox-api.cobinhood.com',
+                    'ws': 'wss://sandbox-feed.cobinhood.com',
+                },
                 'www': 'https://cobinhood.com',
                 'doc': 'https://cobinhood.github.io/api-public',
             },
@@ -76,7 +80,6 @@ module.exports = class cobinhood extends Exchange {
                 },
                 'public': {
                     'get': [
-                        'market/tickers',
                         'market/currencies',
                         'market/trading_pairs',
                         'market/orderbooks/{trading_pair_id}',
@@ -224,36 +227,36 @@ module.exports = class cobinhood extends Exchange {
     }
 
     parseTicker (ticker, market = undefined) {
-        if (typeof market === 'undefined') {
-            let marketId = this.safeString (ticker, 'trading_pair_id');
-            market = this.findMarket (marketId);
+        let symbol = market['symbol'];
+        let timestamp = undefined;
+        if ('timestamp' in ticker) {
+            timestamp = ticker['timestamp'];
+        } else {
+            timestamp = this.milliseconds ();
         }
-        let symbol = undefined;
-        if (typeof market !== 'undefined')
-            symbol = market['symbol'];
-        let timestamp = this.safeInteger (ticker, 'timestamp');
-        let last = this.safeFloat (ticker, 'last_trade_price');
+        let info = ticker;
+        // from fetchTicker
+        if ('info' in ticker)
+            info = ticker['info'];
         return {
             'symbol': symbol,
             'timestamp': timestamp,
             'datetime': this.iso8601 (timestamp),
-            'high': parseFloat (ticker['24h_high']),
-            'low': parseFloat (ticker['24h_low']),
+            'high': parseFloat (ticker['high_24hr']),
+            'low': parseFloat (ticker['low_24hr']),
             'bid': parseFloat (ticker['highest_bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['lowest_ask']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': this.safeFloat (ticker, 'last_price'),
             'change': this.safeFloat (ticker, 'percentChanged24hr'),
             'percentage': undefined,
             'average': undefined,
-            'baseVolume': parseFloat (ticker['24h_volume']),
+            'baseVolume': parseFloat (ticker['base_volume']),
             'quoteVolume': this.safeFloat (ticker, 'quote_volume'),
-            'info': ticker,
+            'info': info,
         };
     }
 
@@ -264,18 +267,33 @@ module.exports = class cobinhood extends Exchange {
             'trading_pair_id': market['id'],
         }, params));
         let ticker = response['result']['ticker'];
+        ticker = {
+            'last_price': ticker['last_trade_price'],
+            'highest_bid': ticker['highest_bid'],
+            'lowest_ask': ticker['lowest_ask'],
+            'base_volume': ticker['24h_volume'],
+            'high_24hr': ticker['24h_high'],
+            'low_24hr': ticker['24h_low'],
+            'timestamp': ticker['timestamp'],
+            'info': response,
+        };
         return this.parseTicker (ticker, market);
     }
 
     async fetchTickers (symbols = undefined, params = {}) {
         await this.loadMarkets ();
-        let response = await this.publicGetMarketTickers (params);
-        let tickers = response['result']['tickers'];
-        let result = [];
-        for (let i = 0; i < tickers.length; i++) {
-            result.push (this.parseTicker (tickers[i]));
+        let response = await this.publicGetMarketStats (params);
+        let tickers = response['result'];
+        let ids = Object.keys (tickers);
+        let result = {};
+        for (let i = 0; i < ids.length; i++) {
+            let id = ids[i];
+            let market = this.markets_by_id[id];
+            let symbol = market['symbol'];
+            let ticker = tickers[id];
+            result[symbol] = this.parseTicker (ticker, market);
         }
-        return this.indexBy (result, 'symbol');
+        return result;
     }
 
     async fetchOrderBook (symbol, limit = undefined, params = {}) {
@@ -385,13 +403,11 @@ module.exports = class cobinhood extends Exchange {
 
     parseOrder (order, market = undefined) {
         let symbol = undefined;
-        if (typeof market === 'undefined') {
-            let marketId = this.safeString (order, 'trading_pair');
-            if (typeof marketId === 'undefined')
-                marketId = this.safeString (order, 'trading_pair_id');
+        if (!market) {
+            let marketId = order['trading_pair'];
             market = this.markets_by_id[marketId];
         }
-        if (typeof market !== 'undefined')
+        if (market)
             symbol = market['symbol'];
         let timestamp = order['timestamp'];
         let price = parseFloat (order['price']);
@@ -476,7 +492,7 @@ module.exports = class cobinhood extends Exchange {
             'order_id': id,
         }, params));
         let market = (typeof symbol === 'undefined') ? undefined : this.market (symbol);
-        return this.parseTrades (response['result']['trades'], market);
+        return this.parseTrades (response['result'], market);
     }
 
     async createDepositAddress (code, params = {}) {
@@ -501,11 +517,7 @@ module.exports = class cobinhood extends Exchange {
         let response = await this.privateGetWalletDepositAddresses (this.extend ({
             'currency': currency['id'],
         }, params));
-        let addresses = this.safeValue (response['result'], 'deposit_addresses', []);
-        let address = undefined;
-        if (addresses.length > 0) {
-            address = this.safeString (addresses[0], 'address');
-        }
+        let address = this.safeString (response['result']['deposit_addresses'], 'address');
         this.checkAddress (address);
         return {
             'currency': code,

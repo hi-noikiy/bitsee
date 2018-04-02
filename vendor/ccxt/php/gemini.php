@@ -71,7 +71,6 @@ class gemini extends Exchange {
             'fees' => array (
                 'trading' => array (
                     'taker' => 0.0025,
-                    'maker' => 0.0025,
                 ),
             ),
         ));
@@ -115,7 +114,6 @@ class gemini extends Exchange {
         $timestamp = $ticker['volume']['timestamp'];
         $baseVolume = $market['base'];
         $quoteVolume = $market['quote'];
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -123,14 +121,12 @@ class gemini extends Exchange {
             'high' => null,
             'low' => null,
             'bid' => floatval ($ticker['bid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['ask']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,
@@ -143,8 +139,8 @@ class gemini extends Exchange {
     public function parse_trade ($trade, $market) {
         $timestamp = $trade['timestampms'];
         $order = null;
-        if (is_array ($trade) && array_key_exists ('order_id', $trade))
-            $order = (string) $trade['order_id'];
+        if (is_array ($trade) && array_key_exists ('orderId', $trade))
+            $order = (string) $trade['orderId'];
         $fee = $this->safe_float($trade, 'fee_amount');
         if ($fee !== null) {
             $currency = $this->safe_string($trade, 'fee_currency');

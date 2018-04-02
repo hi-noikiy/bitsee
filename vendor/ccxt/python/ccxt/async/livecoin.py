@@ -29,7 +29,7 @@ class livecoin (Exchange):
                 'CORS': False,
                 'fetchTickers': True,
                 'fetchCurrencies': True,
-                'fetchTradingFees': True,
+                'fetchFees': True,
                 'fetchOrders': True,
                 'fetchOpenOrders': True,
                 'fetchClosedOrders': True,
@@ -92,11 +92,10 @@ class livecoin (Exchange):
                     'taker': 0.18 / 100,
                 },
             },
-            'commonCurrencies': {
-                'CRC': 'CryCash',
-                'XBT': 'Bricktox',
-            },
         })
+
+    def common_currency_code(self, currency):
+        return currency
 
     async def fetch_markets(self):
         markets = await self.publicGetExchangeTicker()
@@ -107,9 +106,7 @@ class livecoin (Exchange):
             market = markets[p]
             id = market['symbol']
             symbol = id
-            baseId, quoteId = symbol.split('/')
-            base = self.common_currency_code(baseId)
-            quote = self.common_currency_code(quoteId)
+            base, quote = symbol.split('/')
             coinRestrictions = self.safe_value(restrictionsById, symbol)
             precision = {
                 'price': 5,
@@ -134,9 +131,6 @@ class livecoin (Exchange):
                 'symbol': symbol,
                 'base': base,
                 'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'active': True,
                 'precision': precision,
                 'limits': limits,
                 'info': market,
@@ -242,6 +236,12 @@ class livecoin (Exchange):
             result[currency] = account
         return self.parse_balance(result)
 
+    async def fetch_fees(self, params={}):
+        tradingFees = await self.fetch_trading_fees(params)
+        return self.extend(tradingFees, {
+            'withdraw': {},
+        })
+
     async def fetch_trading_fees(self, params={}):
         await self.load_markets()
         response = await self.privateGetExchangeCommissionCommonInfo(params)
@@ -272,7 +272,6 @@ class livecoin (Exchange):
         vwap = float(ticker['vwap'])
         baseVolume = float(ticker['volume'])
         quoteVolume = baseVolume * vwap
-        last = float(ticker['last'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -280,14 +279,12 @@ class livecoin (Exchange):
             'high': float(ticker['high']),
             'low': float(ticker['low']),
             'bid': float(ticker['best_bid']),
-            'bidVolume': None,
             'ask': float(ticker['best_ask']),
-            'askVolume': None,
             'vwap': float(ticker['vwap']),
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last']),
             'change': None,
             'percentage': None,
             'average': None,
@@ -400,10 +397,12 @@ class livecoin (Exchange):
     async def fetch_orders(self, symbol=None, since=None, limit=None, params={}):
         await self.load_markets()
         market = None
-        request = {}
-        if symbol is not None:
+        if symbol:
             market = self.market(symbol)
-            request['currencyPair'] = market['id']
+        pair = market['id'] if market else None
+        request = {}
+        if pair:
+            request['currencyPair'] = pair
         if since is not None:
             request['issuedFrom'] = int(since)
         if limit is not None:
@@ -471,14 +470,10 @@ class livecoin (Exchange):
         # Sometimes the response with be {key: null} for all keys.
         # An example is if you attempt to withdraw more than is allowed when withdrawal fees are considered.
         await self.load_markets()
-        self.check_address(address)
-        wallet = address
-        if tag is not None:
-            wallet += '::' + tag
         withdrawal = {
             'amount': amount,
             'currency': self.common_currency_code(currency),
-            'wallet': wallet,
+            'wallet': self.check_address(address),
         }
         response = await self.privatePostPaymentOutCoin(self.extend(withdrawal, params))
         return {

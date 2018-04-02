@@ -19,7 +19,7 @@ module.exports = class livecoin extends Exchange {
                 'CORS': false,
                 'fetchTickers': true,
                 'fetchCurrencies': true,
-                'fetchTradingFees': true,
+                'fetchFees': true,
                 'fetchOrders': true,
                 'fetchOpenOrders': true,
                 'fetchClosedOrders': true,
@@ -82,11 +82,11 @@ module.exports = class livecoin extends Exchange {
                     'taker': 0.18 / 100,
                 },
             },
-            'commonCurrencies': {
-                'CRC': 'CryCash',
-                'XBT': 'Bricktox',
-            },
         });
+    }
+
+    commonCurrencyCode (currency) {
+        return currency;
     }
 
     async fetchMarkets () {
@@ -98,9 +98,7 @@ module.exports = class livecoin extends Exchange {
             let market = markets[p];
             let id = market['symbol'];
             let symbol = id;
-            let [ baseId, quoteId ] = symbol.split ('/');
-            let base = this.commonCurrencyCode (baseId);
-            let quote = this.commonCurrencyCode (quoteId);
+            let [ base, quote ] = symbol.split ('/');
             let coinRestrictions = this.safeValue (restrictionsById, symbol);
             let precision = {
                 'price': 5,
@@ -126,9 +124,6 @@ module.exports = class livecoin extends Exchange {
                 'symbol': symbol,
                 'base': base,
                 'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'active': true,
                 'precision': precision,
                 'limits': limits,
                 'info': market,
@@ -242,6 +237,13 @@ module.exports = class livecoin extends Exchange {
         return this.parseBalance (result);
     }
 
+    async fetchFees (params = {}) {
+        let tradingFees = await this.fetchTradingFees (params);
+        return this.extend (tradingFees, {
+            'withdraw': {},
+        });
+    }
+
     async fetchTradingFees (params = {}) {
         await this.loadMarkets ();
         let response = await this.privateGetExchangeCommissionCommonInfo (params);
@@ -274,7 +276,6 @@ module.exports = class livecoin extends Exchange {
         let vwap = parseFloat (ticker['vwap']);
         let baseVolume = parseFloat (ticker['volume']);
         let quoteVolume = baseVolume * vwap;
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -282,14 +283,12 @@ module.exports = class livecoin extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['best_bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['best_ask']),
-            'askVolume': undefined,
             'vwap': parseFloat (ticker['vwap']),
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,
@@ -412,11 +411,12 @@ module.exports = class livecoin extends Exchange {
     async fetchOrders (symbol = undefined, since = undefined, limit = undefined, params = {}) {
         await this.loadMarkets ();
         let market = undefined;
-        let request = {};
-        if (typeof symbol !== 'undefined') {
+        if (symbol)
             market = this.market (symbol);
-            request['currencyPair'] = market['id'];
-        }
+        let pair = market ? market['id'] : undefined;
+        let request = {};
+        if (pair)
+            request['currencyPair'] = pair;
         if (typeof since !== 'undefined')
             request['issuedFrom'] = parseInt (since);
         if (typeof limit !== 'undefined')
@@ -493,14 +493,10 @@ module.exports = class livecoin extends Exchange {
         // Sometimes the response with be { key: null } for all keys.
         // An example is if you attempt to withdraw more than is allowed when withdrawal fees are considered.
         await this.loadMarkets ();
-        this.checkAddress (address);
-        let wallet = address;
-        if (typeof tag !== 'undefined')
-            wallet += '::' + tag;
         let withdrawal = {
             'amount': amount,
             'currency': this.commonCurrencyCode (currency),
-            'wallet': wallet,
+            'wallet': this.checkAddress (address),
         };
         let response = await this.privatePostPaymentOutCoin (this.extend (withdrawal, params));
         return {

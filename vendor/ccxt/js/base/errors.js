@@ -13,9 +13,7 @@ module.exports = subclass (
     { 'BaseError':
         { 'ExchangeError':
             { 'NotSupported':               {}
-            , 'AuthenticationError':
-                { 'PermissionDenied':       {}
-                }
+            , 'AuthenticationError':        {}
             , 'InsufficientFunds':          {}
             , 'InvalidAddress':             {}
             , 'InvalidOrder':

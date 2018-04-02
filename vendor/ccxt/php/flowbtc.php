@@ -70,7 +70,7 @@ class flowbtc extends Exchange {
             $base = $market['product1Label'];
             $quote = $market['product2Label'];
             $symbol = $base . '/' . $quote;
-            $result[$symbol] = array (
+            $result[] = array (
                 'id' => $id,
                 'symbol' => $symbol,
                 'base' => $base,
@@ -116,7 +116,6 @@ class flowbtc extends Exchange {
             'productPair' => $market['id'],
         ), $params));
         $timestamp = $this->milliseconds ();
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -124,14 +123,12 @@ class flowbtc extends Exchange {
             'high' => floatval ($ticker['high']),
             'low' => floatval ($ticker['low']),
             'bid' => floatval ($ticker['bid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['ask']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,

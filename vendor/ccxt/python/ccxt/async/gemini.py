@@ -75,7 +75,6 @@ class gemini (Exchange):
             'fees': {
                 'trading': {
                     'taker': 0.0025,
-                    'maker': 0.0025,
                 },
             },
         })
@@ -115,7 +114,6 @@ class gemini (Exchange):
         timestamp = ticker['volume']['timestamp']
         baseVolume = market['base']
         quoteVolume = market['quote']
-        last = float(ticker['last'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -123,14 +121,12 @@ class gemini (Exchange):
             'high': None,
             'low': None,
             'bid': float(ticker['bid']),
-            'bidVolume': None,
             'ask': float(ticker['ask']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last']),
             'change': None,
             'percentage': None,
             'average': None,
@@ -142,8 +138,8 @@ class gemini (Exchange):
     def parse_trade(self, trade, market):
         timestamp = trade['timestampms']
         order = None
-        if 'order_id' in trade:
-            order = str(trade['order_id'])
+        if 'orderId' in trade:
+            order = str(trade['orderId'])
         fee = self.safe_float(trade, 'fee_amount')
         if fee is not None:
             currency = self.safe_string(trade, 'fee_currency')

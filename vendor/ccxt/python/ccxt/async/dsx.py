@@ -114,7 +114,6 @@ class dsx (liqui):
         if average is not None:
             if average > 0:
                 average = 1 / average
-        last = self.safe_float(ticker, 'last')
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -122,14 +121,12 @@ class dsx (liqui):
             'high': self.safe_float(ticker, 'high'),
             'low': self.safe_float(ticker, 'low'),
             'bid': self.safe_float(ticker, 'buy'),
-            'bidVolume': None,
             'ask': self.safe_float(ticker, 'sell'),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': self.safe_float(ticker, 'last'),
             'change': None,
             'percentage': None,
             'average': average,

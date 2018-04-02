@@ -8,7 +8,6 @@ import hashlib
 import math
 from ccxt.base.errors import ExchangeError
 from ccxt.base.errors import AuthenticationError
-from ccxt.base.errors import PermissionDenied
 from ccxt.base.errors import InvalidOrder
 from ccxt.base.errors import OrderNotFound
 from ccxt.base.errors import DDoSProtection
@@ -34,7 +33,6 @@ class bibox (Exchange):
                 'fetchClosedOrders': True,
                 'fetchMyTrades': True,
                 'fetchOHLCV': True,
-                'createMarketOrder': False,  # or they will return https://github.com/ccxt/ccxt/issues/2338
                 'withdraw': True,
             },
             'timeframes': {
@@ -138,7 +136,6 @@ class bibox (Exchange):
             symbol = market['symbol']
         else:
             symbol = ticker['coin_symbol'] + '/' + ticker['currency_symbol']
-        last = self.safe_float(ticker, 'last')
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -146,18 +143,16 @@ class bibox (Exchange):
             'high': self.safe_float(ticker, 'high'),
             'low': self.safe_float(ticker, 'low'),
             'bid': self.safe_float(ticker, 'buy'),
-            'bidVolume': None,
             'ask': self.safe_float(ticker, 'sell'),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': self.safe_float(ticker, 'last'),
             'change': None,
             'percentage': self.safe_string(ticker, 'percent'),
             'average': None,
-            'baseVolume': self.safe_float(ticker, 'vol24H'),
+            'baseVolume': self.safe_float(ticker, 'vol'),
             'quoteVolume': None,
             'info': ticker,
         }
@@ -171,17 +166,19 @@ class bibox (Exchange):
         }, params))
         return self.parse_ticker(response['result'], market)
 
-    def parse_tickers(self, rawTickers, symbols=None):
-        tickers = []
-        for i in range(0, len(rawTickers)):
-            tickers.append(self.parse_ticker(rawTickers[i]))
-        return self.filter_by_array(tickers, 'symbol', symbols)
-
     async def fetch_tickers(self, symbols=None, params={}):
         response = await self.publicGetMdata(self.extend({
             'cmd': 'marketAll',
         }, params))
-        return self.parse_tickers(response['result'], symbols)
+        tickers = response['result']
+        result = {}
+        for t in range(0, len(tickers)):
+            ticker = self.parse_ticker(tickers[t])
+            symbol = ticker['symbol']
+            if symbols and(not(symbol in list(symbols.keys()))):
+                continue
+            result[symbol] = ticker
+        return result
 
     def parse_trade(self, trade, market=None):
         timestamp = trade['time']
@@ -473,15 +470,14 @@ class bibox (Exchange):
         await self.load_markets()
         currency = self.currency(code)
         response = await self.privatePostTransfer({
-            'cmd': 'transfer/transferIn',
+            'cmd': 'transfer/transferOutInfo',
             'body': self.extend({
                 'coin_symbol': currency['id'],
             }, params),
         })
-        address = self.safe_string(response, 'result')
         result = {
             'info': response,
-            'address': address,
+            'address': None,  # POINTLESS?
         }
         return result
 
@@ -542,19 +538,12 @@ class bibox (Exchange):
                     # operation failednot  Orders have been completed or revoked
                     # e.g. trying to cancel a filled order
                     raise OrderNotFound(message)
-                elif code == '2067':
-                    # https://github.com/ccxt/ccxt/issues/2338
-                    #  {"error": {"code": "2067", "msg": "暂不支持市价单"}, "cmd": "orderpending/trade"}
-                    # "Does not support market orders"
-                    raise InvalidOrder(message)
                 elif code == '2068':
                     # \u4e0b\u5355\u6570\u91cf\u4e0d\u80fd\u4f4e\u4e8e
                     # The number of orders can not be less than
                     raise InvalidOrder(message)
                 elif code == '3012':
-                    raise AuthenticationError(message)  # invalid apiKey
-                elif code == '3024':
-                    raise PermissionDenied(message)  # insufficient apiKey permissions
+                    raise AuthenticationError(message)  # invalid api key
                 elif code == '3025':
                     raise AuthenticationError(message)  # signature failed
                 elif code == '4000':

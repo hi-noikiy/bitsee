@@ -177,7 +177,6 @@ class luno extends Exchange {
         $symbol = null;
         if ($market)
             $symbol = $market['symbol'];
-        $last = floatval ($ticker['last_trade']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -185,14 +184,12 @@ class luno extends Exchange {
             'high' => null,
             'low' => null,
             'bid' => floatval ($ticker['bid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['ask']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last_trade']),
             'change' => null,
             'percentage' => null,
             'average' => null,

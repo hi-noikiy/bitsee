@@ -88,7 +88,6 @@ class mercado (Exchange):
         }, params))
         ticker = response['ticker']
         timestamp = int(ticker['date']) * 1000
-        last = float(ticker['last'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -96,14 +95,12 @@ class mercado (Exchange):
             'high': float(ticker['high']),
             'low': float(ticker['low']),
             'bid': float(ticker['buy']),
-            'bidVolume': None,
             'ask': float(ticker['sell']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last']),
             'change': None,
             'percentage': None,
             'average': None,

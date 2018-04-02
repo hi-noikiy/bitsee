@@ -13,31 +13,21 @@ const log       = require ('ololog')
 
 module.exports = async (exchange) => {
 
-    const randomSymbols = exchange.symbols.sort (() => 0.5 - Math.random ()).slice (0, 2)
-    const customExchangeParams = ([
-        'yobit',
-        'tidex',
-        'cryptopia',
-        'ccex',
-        'liqui',
-    ]).reduce ((params, id) => ({ ...params, [id]: [randomSymbols], }), {})
-
-    const args = (exchange.id in customExchangeParams) ? customExchangeParams[exchange.id] : []
     const method = 'fetchOrderBooks'
 
     if (exchange.has[method]) {
 
         // log ('fetching order books...')
 
-        let orderbooks = await exchange[method] (...args)
+        let orderbooks = await exchange[method] ()
 
         // log.green (orderbooks)
 
-        Object.entries (orderbooks).forEach (([symbol, orderbook]) => {
-            testOrderBook (exchange, orderbook, method, symbol)
-        })
+        // Object.values (orderbooks).forEach (orderbook => {
+        //     testOrderBook (exchange, orderbook, method) //, symbol)
+        // })
 
-        // return orderbooks
+        return orderbooks
 
     } else {
 

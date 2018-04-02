@@ -116,11 +116,22 @@ class bitlish (Exchange):
                     ],
                 },
             },
-            'commonCurrencies': {
-                'DSH': 'DASH',
-                'XDG': 'DOGE',
-            },
         })
+
+    def common_currency_code(self, currency):
+        if not self.substituteCommonCurrencyCodes:
+            return currency
+        if currency == 'XBT':
+            return 'BTC'
+        if currency == 'BCC':
+            return 'BCH'
+        if currency == 'DRK':
+            return 'DASH'
+        if currency == 'DSH':
+            currency = 'DASH'
+        if currency == 'XDG':
+            currency = 'DOGE'
+        return currency
 
     async def fetch_markets(self):
         markets = await self.publicGetPairs()
@@ -155,10 +166,8 @@ class bitlish (Exchange):
             'symbol': symbol,
             'high': self.safe_float(ticker, 'max'),
             'low': self.safe_float(ticker, 'min'),
-            'bid': self.safe_float(ticker, 'bid'),
-            'bidVolume': None,
-            'ask': self.safe_float(ticker, 'ask'),
-            'askVolume': None,
+            'bid': None,
+            'ask': None,
             'vwap': None,
             'open': self.safe_float(ticker, 'first'),
             'close': last,

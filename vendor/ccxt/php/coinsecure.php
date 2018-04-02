@@ -215,7 +215,6 @@ class coinsecure extends Exchange {
         }
         $quoteVolume = floatval ($ticker['fiatvolume']) / 100;
         $vwap = $quoteVolume / $baseVolume;
-        $last = floatval ($ticker['lastPrice']) / 100;
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -223,14 +222,12 @@ class coinsecure extends Exchange {
             'high' => floatval ($ticker['high']) / 100,
             'low' => floatval ($ticker['low']) / 100,
             'bid' => floatval ($ticker['bid']) / 100,
-            'bidVolume' => null,
             'ask' => floatval ($ticker['ask']) / 100,
-            'askVolume' => null,
             'vwap' => $vwap,
             'open' => floatval ($ticker['open']) / 100,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['lastPrice']) / 100,
             'change' => null,
             'percentage' => null,
             'average' => null,

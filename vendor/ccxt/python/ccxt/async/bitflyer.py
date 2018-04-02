@@ -20,11 +20,8 @@ class bitflyer (Exchange):
             'has': {
                 'CORS': False,
                 'withdraw': True,
-                'fetchMyTrades': True,
                 'fetchOrders': True,
                 'fetchOrder': True,
-                'fetchOpenOrders': 'emulated',
-                'fetchClosedOrders': 'emulated',
             },
             'urls': {
                 'logo': 'https://user-images.githubusercontent.com/1294454/28051642-56154182-660e-11e7-9b0d-6042d1e6edd8.jpg',
@@ -150,7 +147,6 @@ class bitflyer (Exchange):
             'product_code': self.market_id(symbol),
         }, params))
         timestamp = self.parse8601(ticker['timestamp'])
-        last = float(ticker['ltp'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -158,14 +154,12 @@ class bitflyer (Exchange):
             'high': None,
             'low': None,
             'bid': float(ticker['best_bid']),
-            'bidVolume': None,
             'ask': float(ticker['best_ask']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['ltp']),
             'change': None,
             'percentage': None,
             'average': None,
@@ -183,8 +177,6 @@ class bitflyer (Exchange):
                 id = side + '_child_order_acceptance_id'
                 if id in trade:
                     order = trade[id]
-        if order is None:
-            order = self.safe_string(trade, 'child_order_acceptance_id')
         timestamp = self.parse8601(trade['exec_date'])
         return {
             'id': str(trade['id']),
@@ -217,7 +209,6 @@ class bitflyer (Exchange):
             'size': amount,
         }
         result = await self.privatePostSendchildorder(self.extend(order, params))
-        # {"status": - 200, "error_message": "Insufficient funds", "data": null}
         return {
             'info': result,
             'id': result['child_order_acceptance_id'],
@@ -302,14 +293,6 @@ class bitflyer (Exchange):
             orders = self.filter_by(orders, 'symbol', symbol)
         return orders
 
-    async def fetch_open_orders(self, symbol=None, since=None, limit=100, params={}):
-        params['child_order_state'] = 'ACTIVE'
-        return self.fetch_orders(symbol, since, limit, params)
-
-    async def fetch_closed_orders(self, symbol=None, since=None, limit=100, params={}):
-        params['child_order_state'] = 'COMPLETED'
-        return self.fetch_orders(symbol, since, limit, params)
-
     async def fetch_order(self, id, symbol=None, params={}):
         if symbol is None:
             raise ExchangeError(self.id + ' fetchOrder() requires a symbol argument')
@@ -319,27 +302,11 @@ class bitflyer (Exchange):
             return ordersById[id]
         raise OrderNotFound(self.id + ' No order found with id ' + id)
 
-    async def fetch_my_trades(self, symbol=None, since=None, limit=None, params={}):
-        if symbol is None:
-            raise ExchangeError(self.id + ' fetchMyTrades requires a symbol argument')
-        await self.load_markets()
-        market = self.market(symbol)
-        request = {
-            'product_code': market['id'],
-        }
-        if limit:
-            request['count'] = limit
-        response = await self.privateGetGetexecutions(self.extend(request, params))
-        return self.parse_trades(response, market, since, limit)
-
-    async def withdraw(self, code, amount, address, tag=None, params={}):
+    async def withdraw(self, currency, amount, address, tag=None, params={}):
         self.check_address(address)
         await self.load_markets()
-        if code != 'JPY' and code != 'USD' and code != 'EUR':
-            raise ExchangeError(self.id + ' allows withdrawing JPY, USD, EUR only, ' + code + ' is not supported')
-        currency = self.currency(code)
         response = await self.privatePostWithdraw(self.extend({
-            'currency_code': currency['id'],
+            'currency_code': currency,
             'amount': amount,
             # 'bank_account_id': 1234,
         }, params))

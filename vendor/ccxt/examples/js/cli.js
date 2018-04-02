@@ -37,7 +37,6 @@ const scrapeCloudflareHttpHeaderCookie = (url) =>
 
 			if (error) {
 
-                log.red ('Cloudscraper error')
 				reject (error)
 
 			} else {
@@ -94,7 +93,7 @@ async function main () {
     } else {
 
         let args = params.map (param => {
-            if (param[0] === '{' || param[0] === '[')
+            if (param[0] === '{')
                 return JSON.parse (param)
             return param.match (/[a-zA-Z]/g) ? param : parseFloat (param)
         })

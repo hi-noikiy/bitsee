@@ -120,7 +120,6 @@ module.exports = class lakebtc extends Exchange {
         let symbol = undefined;
         if (typeof market !== 'undefined')
             symbol = market['symbol'];
-        let last = this.safeFloat (ticker, 'last');
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -128,14 +127,12 @@ module.exports = class lakebtc extends Exchange {
             'high': this.safeFloat (ticker, 'high'),
             'low': this.safeFloat (ticker, 'low'),
             'bid': this.safeFloat (ticker, 'bid'),
-            'bidVolume': undefined,
             'ask': this.safeFloat (ticker, 'ask'),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': this.safeFloat (ticker, 'last'),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,

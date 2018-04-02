@@ -3,7 +3,7 @@
 //  ---------------------------------------------------------------------------
 
 const Exchange = require ('./base/Exchange');
-const { ExchangeError, NotSupported } = require ('./base/errors');
+const { ExchangeError } = require ('./base/errors');
 
 //  ---------------------------------------------------------------------------
 
@@ -28,8 +28,7 @@ module.exports = class coinfloor extends Exchange {
             },
             'requiredCredentials': {
                 'apiKey': true,
-                'secret': false,
-                'password': true,
+                'secret': true,
                 'uid': true,
             },
             'api': {
@@ -98,7 +97,6 @@ module.exports = class coinfloor extends Exchange {
         if (typeof vwap !== 'undefined') {
             quoteVolume = baseVolume * vwap;
         }
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -106,14 +104,12 @@ module.exports = class coinfloor extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['ask']),
-            'askVolume': undefined,
             'vwap': vwap,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,
@@ -172,55 +168,6 @@ module.exports = class coinfloor extends Exchange {
         return await this.privatePostIdCancelOrder ({ 'id': id });
     }
 
-    parseOrder (order, market = undefined) {
-        let timestamp = this.parseDate (order['datetime']);
-        let datetime = this.iso8601 (timestamp);
-        let price = this.safeFloat (order, 'price');
-        let amount = this.safeFloat (order, 'amount');
-        let cost = price * amount;
-        let side = undefined;
-        let status = this.safeString (order, 'status');
-        if (order['type'] === 0)
-            side = 'buy';
-        else if (order['type'] === 1)
-            side = 'sell';
-        let symbol = undefined;
-        if (typeof market !== 'undefined')
-            symbol = market['symbol'];
-        let id = order['id'].toString ();
-        return {
-            'info': order,
-            'id': id,
-            'datetime': datetime,
-            'timestamp': timestamp,
-            'status': status,
-            'symbol': symbol,
-            'type': 'limit',
-            'side': side,
-            'price': price,
-            'amount': amount,
-            'filled': undefined,
-            'remaining': undefined,
-            'cost': cost,
-            'fee': undefined,
-        };
-    }
-
-    async fetchOpenOrders (symbol = undefined, since = undefined, limit = undefined, params = {}) {
-        if (!symbol)
-            throw new NotSupported (this.id + ' fetchOpenOrders requires a symbol param');
-        await this.loadMarkets ();
-        let market = this.market (symbol);
-        let orders = await this.privatePostIdOpenOrders ({
-            'id': market['id'],
-        });
-        for (let i = 0; i < orders.length; i++) {
-            // Coinfloor open orders would always be limit orders
-            orders[i] = this.extend (orders[i], { 'status': 'open' });
-        }
-        return this.parseOrders (orders, market, since, limit);
-    }
-
     sign (path, api = 'public', method = 'GET', params = {}, headers = undefined, body = undefined) {
         // curl -k -u '[User ID]/[API key]:[Passphrase]' https://webapi.coinfloor.co.uk:8090/bist/XBT/GBP/balance/
         let url = this.urls['api'] + '/' + this.implodeParams (path, params);
@@ -233,7 +180,7 @@ module.exports = class coinfloor extends Exchange {
             let nonce = this.nonce ();
             body = this.urlencode (this.extend ({ 'nonce': nonce }, query));
             let auth = this.uid + '/' + this.apiKey + ':' + this.password;
-            let signature = this.decode (this.stringToBase64 (this.encode (auth)));
+            let signature = this.stringToBase64 (auth);
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Basic ' + signature,

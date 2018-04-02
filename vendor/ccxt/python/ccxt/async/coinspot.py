@@ -85,7 +85,10 @@ class coinspot (Exchange):
         orderbook = await self.privatePostOrders(self.extend({
             'cointype': market['id'],
         }, params))
-        return self.parse_order_book(orderbook, None, 'buyorders', 'sellorders', 'rate', 'amount')
+        result = self.parse_order_book(orderbook, None, 'buyorders', 'sellorders', 'rate', 'amount')
+        result['bids'] = self.sort_by(result['bids'], 0, True)
+        result['asks'] = self.sort_by(result['asks'], 0)
+        return result
 
     async def fetch_ticker(self, symbol, params={}):
         response = await self.publicGetLatest(params)
@@ -93,7 +96,6 @@ class coinspot (Exchange):
         id = id.lower()
         ticker = response['prices'][id]
         timestamp = self.milliseconds()
-        last = float(ticker['last'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -101,14 +103,12 @@ class coinspot (Exchange):
             'high': None,
             'low': None,
             'bid': float(ticker['bid']),
-            'bidVolume': None,
             'ask': float(ticker['ask']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['last']),
             'change': None,
             'percentage': None,
             'average': None,

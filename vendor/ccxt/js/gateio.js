@@ -31,10 +31,7 @@ module.exports = class gateio extends Exchange {
                 },
                 'www': 'https://gate.io/',
                 'doc': 'https://gate.io/api2',
-                'fees': [
-                    'https://gate.io/fee',
-                    'https://support.gate.io/hc/en-us/articles/115003577673',
-                ],
+                'fees': 'https://gate.io/fee',
             },
             'api': {
                 'public': {
@@ -65,14 +62,6 @@ module.exports = class gateio extends Exchange {
                         'tradeHistory',
                         'withdraw',
                     ],
-                },
-            },
-            'fees': {
-                'trading': {
-                    'tierBased': true,
-                    'percentage': true,
-                    'maker': 0.002,
-                    'taker': 0.002,
                 },
             },
         });
@@ -156,7 +145,9 @@ module.exports = class gateio extends Exchange {
         let orderbook = await this.publicGetOrderBookId (this.extend ({
             'id': this.marketId (symbol),
         }, params));
-        return this.parseOrderBook (orderbook);
+        let result = this.parseOrderBook (orderbook);
+        result['asks'] = this.sortBy (result['asks'], 0);
+        return result;
     }
 
     parseTicker (ticker, market = undefined) {
@@ -164,7 +155,6 @@ module.exports = class gateio extends Exchange {
         let symbol = undefined;
         if (market)
             symbol = market['symbol'];
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -172,14 +162,12 @@ module.exports = class gateio extends Exchange {
             'high': parseFloat (ticker['high24hr']),
             'low': parseFloat (ticker['low24hr']),
             'bid': parseFloat (ticker['highestBid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['lowestAsk']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': parseFloat (ticker['percentChange']),
             'percentage': undefined,
             'average': undefined,
@@ -331,18 +319,9 @@ module.exports = class gateio extends Exchange {
 
     async request (path, api = 'public', method = 'GET', params = {}, headers = undefined, body = undefined) {
         let response = await this.fetch2 (path, api, method, params, headers, body);
-        if ('result' in response) {
-            let result = response['result'];
-            let message = this.id + ' ' + this.json (response);
-            if (typeof result === 'undefined')
-                throw new ExchangeError (message);
-            if (typeof result === 'string') {
-                if (result !== 'true')
-                    throw new ExchangeError (message);
-            } else if (!result) {
-                throw new ExchangeError (message);
-            }
-        }
+        if ('result' in response)
+            if (response['result'] !== 'true')
+                throw new ExchangeError (this.id + ' ' + this.json (response));
         return response;
     }
 };

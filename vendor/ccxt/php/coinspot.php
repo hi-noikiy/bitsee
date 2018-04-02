@@ -84,7 +84,10 @@ class coinspot extends Exchange {
         $orderbook = $this->privatePostOrders (array_merge (array (
             'cointype' => $market['id'],
         ), $params));
-        return $this->parse_order_book($orderbook, null, 'buyorders', 'sellorders', 'rate', 'amount');
+        $result = $this->parse_order_book($orderbook, null, 'buyorders', 'sellorders', 'rate', 'amount');
+        $result['bids'] = $this->sort_by($result['bids'], 0, true);
+        $result['asks'] = $this->sort_by($result['asks'], 0);
+        return $result;
     }
 
     public function fetch_ticker ($symbol, $params = array ()) {
@@ -93,7 +96,6 @@ class coinspot extends Exchange {
         $id = strtolower ($id);
         $ticker = $response['prices'][$id];
         $timestamp = $this->milliseconds ();
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -101,14 +103,12 @@ class coinspot extends Exchange {
             'high' => null,
             'low' => null,
             'bid' => floatval ($ticker['bid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['ask']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,

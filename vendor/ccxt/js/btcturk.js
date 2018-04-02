@@ -92,7 +92,6 @@ module.exports = class btcturk extends Exchange {
         if (market)
             symbol = market['symbol'];
         let timestamp = parseInt (ticker['timestamp']) * 1000;
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -100,14 +99,12 @@ module.exports = class btcturk extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['ask']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': parseFloat (ticker['open']),
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': parseFloat (ticker['average']),

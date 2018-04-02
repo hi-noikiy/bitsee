@@ -56,40 +56,55 @@ class tidex (liqui):
                     'maker': 0.1 / 100,
                 },
             },
-            'commonCurrencies': {
-                'MGO': 'WMGO',
-                'EMGO': 'MGO',
-            },
         })
+
+    def common_currency_code(self, currency):
+        if not self.substituteCommonCurrencyCodes:
+            return currency
+        if currency == 'XBT':
+            return 'BTC'
+        if currency == 'BCC':
+            return 'BCH'
+        if currency == 'DRK':
+            return 'DASH'
+        # they misspell DASH as DSH?(may not be True)
+        if currency == 'DSH':
+            return 'DASH'
+        # their MGO stands for MGO on WAVES(aka WMGO), see issue  #1487
+        if currency == 'MGO':
+            return 'WMGO'
+        # the MGO on ETH is called EMGO on Tidex
+        if currency == 'EMGO':
+            return 'MGO'
+        return currency
 
     async def fetch_currencies(self, params={}):
         currencies = await self.webGetCurrency(params)
         result = {}
         for i in range(0, len(currencies)):
             currency = currencies[i]
-            id = currency['symbol']
-            precision = currency['amountPoint']
-            code = id.upper()
-            code = self.common_currency_code(code)
-            active = currency['visible'] is True
+            id = currency['Symbol']
+            precision = currency['AmountPoint']
+            code = self.common_currency_code(id)
+            active = currency['Visible'] is True
             status = 'ok'
             if not active:
                 status = 'disabled'
-            canWithdraw = currency['withdrawEnable'] is True
-            canDeposit = currency['depositEnable'] is True
+            canWithdraw = currency['WithdrawEnable'] is True
+            canDeposit = currency['DepositEnable'] is True
             if not canWithdraw or not canDeposit:
                 active = False
             result[code] = {
                 'id': id,
                 'code': code,
-                'name': currency['name'],
+                'name': currency['Name'],
                 'active': active,
                 'status': status,
                 'precision': precision,
                 'funding': {
                     'withdraw': {
                         'active': canWithdraw,
-                        'fee': currency['withdrawFee'],
+                        'fee': currency['WithdrawFee'],
                     },
                     'deposit': {
                         'active': canDeposit,
@@ -110,11 +125,11 @@ class tidex (liqui):
                         'max': None,
                     },
                     'withdraw': {
-                        'min': currency['withdrawMinAmout'],
+                        'min': currency['WithdrawMinAmout'],
                         'max': None,
                     },
                     'deposit': {
-                        'min': currency['depositMinAmount'],
+                        'min': currency['DepositMinAmount'],
                         'max': None,
                     },
                 },

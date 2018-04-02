@@ -85,7 +85,6 @@ class mixcoins extends Exchange {
         ), $params));
         $ticker = $response['result'];
         $timestamp = $this->milliseconds ();
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -93,14 +92,12 @@ class mixcoins extends Exchange {
             'high' => floatval ($ticker['high']),
             'low' => floatval ($ticker['low']),
             'bid' => floatval ($ticker['buy']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['sell']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,

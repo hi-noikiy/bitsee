@@ -120,9 +120,6 @@ class bitz extends Exchange {
                 'amount' => 8,
                 'price' => 8,
             ),
-            'options' => array (
-                'lastNonceTimestamp' => 0,
-            ),
         ));
     }
 
@@ -180,7 +177,6 @@ class bitz extends Exchange {
     public function parse_ticker ($ticker, $market = null) {
         $timestamp = $ticker['date'] * 1000;
         $symbol = $market['symbol'];
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -188,14 +184,12 @@ class bitz extends Exchange {
             'high' => floatval ($ticker['high']),
             'low' => floatval ($ticker['low']),
             'bid' => floatval ($ticker['buy']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['sell']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,
@@ -356,13 +350,8 @@ class bitz extends Exchange {
     }
 
     public function nonce () {
-        $currentTimestamp = $this->seconds ();
-        if ($currentTimestamp > $this->options['lastNonceTimestamp']) {
-            $this->options['lastNonceTimestamp'] = $currentTimestamp;
-            $this->options['lastNonce'] = 100000;
-        }
-        $this->options['lastNonce'] .= 1;
-        return $this->options['lastNonce'];
+        $milliseconds = $this->milliseconds ();
+        return (fmod ($milliseconds, 1000000));
     }
 
     public function sign ($path, $api = 'public', $method = 'GET', $params = array (), $headers = null, $body = null) {

@@ -18,7 +18,7 @@ class livecoin extends Exchange {
                 'CORS' => false,
                 'fetchTickers' => true,
                 'fetchCurrencies' => true,
-                'fetchTradingFees' => true,
+                'fetchFees' => true,
                 'fetchOrders' => true,
                 'fetchOpenOrders' => true,
                 'fetchClosedOrders' => true,
@@ -81,11 +81,11 @@ class livecoin extends Exchange {
                     'taker' => 0.18 / 100,
                 ),
             ),
-            'commonCurrencies' => array (
-                'CRC' => 'CryCash',
-                'XBT' => 'Bricktox',
-            ),
         ));
+    }
+
+    public function common_currency_code ($currency) {
+        return $currency;
     }
 
     public function fetch_markets () {
@@ -97,9 +97,7 @@ class livecoin extends Exchange {
             $market = $markets[$p];
             $id = $market['symbol'];
             $symbol = $id;
-            list ($baseId, $quoteId) = explode ('/', $symbol);
-            $base = $this->common_currency_code($baseId);
-            $quote = $this->common_currency_code($quoteId);
+            list ($base, $quote) = explode ('/', $symbol);
             $coinRestrictions = $this->safe_value($restrictionsById, $symbol);
             $precision = array (
                 'price' => 5,
@@ -125,9 +123,6 @@ class livecoin extends Exchange {
                 'symbol' => $symbol,
                 'base' => $base,
                 'quote' => $quote,
-                'baseId' => $baseId,
-                'quoteId' => $quoteId,
-                'active' => true,
                 'precision' => $precision,
                 'limits' => $limits,
                 'info' => $market,
@@ -241,6 +236,13 @@ class livecoin extends Exchange {
         return $this->parse_balance($result);
     }
 
+    public function fetch_fees ($params = array ()) {
+        $tradingFees = $this->fetch_trading_fees($params);
+        return array_merge ($tradingFees, array (
+            'withdraw' => array (),
+        ));
+    }
+
     public function fetch_trading_fees ($params = array ()) {
         $this->load_markets();
         $response = $this->privateGetExchangeCommissionCommonInfo ($params);
@@ -273,7 +275,6 @@ class livecoin extends Exchange {
         $vwap = floatval ($ticker['vwap']);
         $baseVolume = floatval ($ticker['volume']);
         $quoteVolume = $baseVolume * $vwap;
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -281,14 +282,12 @@ class livecoin extends Exchange {
             'high' => floatval ($ticker['high']),
             'low' => floatval ($ticker['low']),
             'bid' => floatval ($ticker['best_bid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['best_ask']),
-            'askVolume' => null,
             'vwap' => floatval ($ticker['vwap']),
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,
@@ -411,11 +410,12 @@ class livecoin extends Exchange {
     public function fetch_orders ($symbol = null, $since = null, $limit = null, $params = array ()) {
         $this->load_markets();
         $market = null;
-        $request = array ();
-        if ($symbol !== null) {
+        if ($symbol)
             $market = $this->market ($symbol);
-            $request['currencyPair'] = $market['id'];
-        }
+        $pair = $market ? $market['id'] : null;
+        $request = array ();
+        if ($pair)
+            $request['currencyPair'] = $pair;
         if ($since !== null)
             $request['issuedFrom'] = intval ($since);
         if ($limit !== null)
@@ -492,14 +492,10 @@ class livecoin extends Exchange {
         // Sometimes the $response with be array ( key => null ) for all keys.
         // An example is if you attempt to withdraw more than is allowed when $withdrawal fees are considered.
         $this->load_markets();
-        $this->check_address($address);
-        $wallet = $address;
-        if ($tag !== null)
-            $wallet .= '::' . $tag;
         $withdrawal = array (
             'amount' => $amount,
             'currency' => $this->common_currency_code($currency),
-            'wallet' => $wallet,
+            'wallet' => $this->check_address($address),
         );
         $response = $this->privatePostPaymentOutCoin (array_merge ($withdrawal, $params));
         return array (

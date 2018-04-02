@@ -156,9 +156,6 @@ module.exports = class okcoinusd extends Exchange {
             'ETC/USD': true,
             'ETH/USD': true,
             'LTC/USD': true,
-            'XRP/USD': true,
-            'EOS/USD': true,
-            'BTG/USD': true,
         };
         for (let i = 0; i < markets.length; i++) {
             let id = markets[i]['symbol'];
@@ -237,7 +234,13 @@ module.exports = class okcoinusd extends Exchange {
         }
         method += 'Depth';
         let orderbook = await this[method] (this.extend (request, params));
-        return this.parseOrderBook (orderbook);
+        let timestamp = this.milliseconds ();
+        return {
+            'bids': orderbook['bids'],
+            'asks': this.sortBy (orderbook['asks'], 0),
+            'timestamp': timestamp,
+            'datetime': this.iso8601 (timestamp),
+        };
     }
 
     parseTicker (ticker, market = undefined) {
@@ -252,7 +255,6 @@ module.exports = class okcoinusd extends Exchange {
         }
         if (market)
             symbol = market['symbol'];
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -260,14 +262,12 @@ module.exports = class okcoinusd extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['buy']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['sell']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,
@@ -290,14 +290,8 @@ module.exports = class okcoinusd extends Exchange {
         }
         method += 'Ticker';
         let response = await this[method] (this.extend (request, params));
-        let ticker = this.safeValue (response, 'ticker');
-        if (typeof ticker === 'undefined')
-            throw new ExchangeError (this.id + ' fetchTicker returned an empty response: ' + this.json (response));
-        let timestamp = this.safeInteger (response, 'date');
-        if (typeof timestamp !== 'undefined') {
-            timestamp *= 1000;
-            ticker = this.extend (ticker, { 'timestamp': timestamp });
-        }
+        let timestamp = parseInt (response['date']) * 1000;
+        let ticker = this.extend (response['ticker'], { 'timestamp': timestamp });
         return this.parseTicker (ticker, market);
     }
 

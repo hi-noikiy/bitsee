@@ -72,20 +72,44 @@ class cryptopia extends Exchange {
                     ),
                 ),
             ),
-            'commonCurrencies' => array (
-                'ACC' => 'AdCoin',
-                'BAT' => 'BatCoin',
-                'BLZ' => 'BlazeCoin',
-                'CC' => 'CCX',
-                'CMT' => 'Comet',
-                'FCN' => 'Facilecoin',
-                'NET' => 'NetCoin',
-                'BTG' => 'Bitgem',
-                'FUEL' => 'FC2', // FuelCoin != FUEL
-                'QBT' => 'Cubits',
-                'WRC' => 'WarCoin',
-            ),
         ));
+    }
+
+    public function common_currency_code ($currency) {
+        $currencies = array (
+            'ACC' => 'AdCoin',
+            'BAT' => 'BatCoin',
+            'BLZ' => 'BlazeCoin',
+            'CC' => 'CCX',
+            'CMT' => 'Comet',
+            'FCN' => 'Facilecoin',
+            'NET' => 'NetCoin',
+            'BTG' => 'Bitgem',
+            'FUEL' => 'FC2', // FuelCoin != FUEL
+            'QBT' => 'Cubits',
+            'WRC' => 'WarCoin',
+        );
+        if (is_array ($currencies) && array_key_exists ($currency, $currencies))
+            return $currencies[$currency];
+        return $currency;
+    }
+
+    public function currency_id ($currency) {
+        $currencies = array (
+            'AdCoin' => 'ACC',
+            'BatCoin' => 'BAT',
+            'BlazeCoin' => 'BLZ',
+            'CCX' => 'CC',
+            'Comet' => 'CMT',
+            'Cubits' => 'QBT',
+            'Facilecoin' => 'FCN',
+            'NetCoin' => 'NET',
+            'Bitgem' => 'BTG',
+            'FC2' => 'FUEL',
+        );
+        if (is_array ($currencies) && array_key_exists ($currency, $currencies))
+            return $currencies[$currency];
+        return $currency;
     }
 
     public function fetch_markets () {
@@ -210,9 +234,7 @@ class cryptopia extends Exchange {
             'high' => floatval ($ticker['High']),
             'low' => floatval ($ticker['Low']),
             'bid' => floatval ($ticker['BidPrice']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['AskPrice']),
-            'askVolume' => null,
             'vwap' => $vwap,
             'open' => $open,
             'close' => $last,
@@ -251,7 +273,7 @@ class cryptopia extends Exchange {
             $symbol = $market['symbol'];
             $result[$symbol] = $this->parse_ticker($ticker, $market);
         }
-        return $this->filter_by_array($result, 'symbol', $symbols);
+        return $result;
     }
 
     public function parse_trade ($trade, $market = null) {
@@ -305,7 +327,7 @@ class cryptopia extends Exchange {
         if ($since !== null) {
             $elapsed = $this->milliseconds () - $since;
             $hour = 1000 * 60 * 60;
-            $hours = intval ((int) ceil ($elapsed / $hour));
+            $hours = intval ($elapsed / $hour);
         }
         $request = array (
             'id' => $market['id'],
@@ -582,28 +604,28 @@ class cryptopia extends Exchange {
         return $result;
     }
 
-    public function fetch_deposit_address ($code, $params = array ()) {
-        $currency = $this->currency ($code);
+    public function fetch_deposit_address ($currency, $params = array ()) {
+        $currencyId = $this->currency_id ($currency);
         $response = $this->privatePostGetDepositAddress (array_merge (array (
-            'Currency' => $currency['id'],
+            'Currency' => $currencyId,
         ), $params));
         $address = $this->safe_string($response['Data'], 'BaseAddress');
         if (!$address)
             $address = $this->safe_string($response['Data'], 'Address');
         $this->check_address($address);
         return array (
-            'currency' => $code,
+            'currency' => $currency,
             'address' => $address,
             'status' => 'ok',
             'info' => $response,
         );
     }
 
-    public function withdraw ($code, $amount, $address, $tag = null, $params = array ()) {
-        $currency = $this->currency ($code);
+    public function withdraw ($currency, $amount, $address, $tag = null, $params = array ()) {
         $this->check_address($address);
+        $currencyId = $this->currency_id ($currency);
         $request = array (
-            'Currency' => $currency['id'],
+            'Currency' => $currencyId,
             'Amount' => $amount,
             'Address' => $address, // Address must exist in you AddressBook in security settings
         );

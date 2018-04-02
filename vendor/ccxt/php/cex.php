@@ -18,8 +18,7 @@ class cex extends Exchange {
                 'fetchTickers' => true,
                 'fetchOHLCV' => true,
                 'fetchOpenOrders' => true,
-                'fetchClosedOrders' => true,
-                'fetchDepositAddress' => true,
+                'fetchOrders' => true,
             ),
             'timeframes' => array (
                 '1m' => '1m',
@@ -236,14 +235,12 @@ class cex extends Exchange {
             'high' => $high,
             'low' => $low,
             'bid' => $bid,
-            'bidVolume' => null,
             'ask' => $ask,
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
+            'close' => null,
+            'first' => null,
             'last' => $last,
-            'previousClose' => null,
             'change' => null,
             'percentage' => null,
             'average' => null,
@@ -335,16 +332,7 @@ class cex extends Exchange {
     }
 
     public function parse_order ($order, $market = null) {
-        // Depending on the call, 'time' can be a unix int, unix string or ISO string
-        // Yes, really
-        $timestamp = $order['time'];
-        if (gettype ($order['time']) == 'string' && mb_strpos ($order['time'], 'T') !== false) {
-            // ISO8601 string
-            $timestamp = $this->parse8601 ($timestamp);
-        } else {
-            // either integer or string integer
-            $timestamp = intval ($timestamp);
-        }
+        $timestamp = intval ($order['time']);
         $symbol = null;
         if (!$market) {
             $symbol = $order['symbol1'] . '/' . $order['symbol2'];
@@ -441,18 +429,6 @@ class cex extends Exchange {
         return $this->parse_orders($orders, $market, $since, $limit);
     }
 
-    public function fetch_closed_orders ($symbol = null, $since = null, $limit = null, $params = array ()) {
-        $this->load_markets();
-        $method = 'privatePostArchivedOrdersPair';
-        if ($symbol === null) {
-            throw new NotSupported ($this->id . ' fetchClosedOrders requires a $symbol argument');
-        }
-        $market = $this->market ($symbol);
-        $request = array ( 'pair' => $market['id'] );
-        $response = $this->$method (array_merge ($request, $params));
-        return $this->parse_orders($response, $market, $since, $limit);
-    }
-
     public function fetch_order ($id, $symbol = null, $params = array ()) {
         $this->load_markets();
         $response = $this->privatePostGetOrder (array_merge (array (
@@ -504,27 +480,5 @@ class cex extends Exchange {
                 throw new ExchangeError ($this->id . ' ' . $this->json ($response));
         }
         return $response;
-    }
-
-    public function fetch_deposit_address ($code, $params = array ()) {
-        if ($code === 'XRP') {
-            // https://github.com/ccxt/ccxt/pull/2327#issuecomment-375204856
-            throw new NotSupported ($this->id . ' fetchDepositAddress does not support XRP addresses yet (awaiting docs from CEX.io)');
-        }
-        $this->load_markets();
-        $currency = $this->currency ($code);
-        $request = array (
-            'currency' => $currency['id'],
-        );
-        $response = $this->privatePostGetAddress (array_merge ($request, $params));
-        $address = $this->safe_string($response, 'data');
-        $this->check_address($address);
-        return array (
-            'currency' => $code,
-            'address' => $address,
-            'tag' => null,
-            'status' => 'ok',
-            'info' => $response,
-        );
     }
 }

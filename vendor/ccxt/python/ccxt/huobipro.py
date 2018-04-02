@@ -4,18 +4,9 @@
 # https://github.com/ccxt/ccxt/blob/master/CONTRIBUTING.md#how-to-contribute-code
 
 from ccxt.base.exchange import Exchange
-
-# -----------------------------------------------------------------------------
-
-try:
-    basestring  # Python 3
-except NameError:
-    basestring = str  # Python 2
 import hashlib
 import math
-import json
 from ccxt.base.errors import ExchangeError
-from ccxt.base.errors import InvalidOrder
 
 
 class huobipro (Exchange):
@@ -30,10 +21,9 @@ class huobipro (Exchange):
             'version': 'v1',
             'accounts': None,
             'accountsById': None,
-            'hostname': 'api.huobipro.com',
+            'hostname': 'api.huobi.pro',
             'has': {
                 'CORS': False,
-                'fetchTradingLimits': True,
                 'fetchOHCLV': True,
                 'fetchOrders': True,
                 'fetchOrder': True,
@@ -54,10 +44,10 @@ class huobipro (Exchange):
             },
             'urls': {
                 'logo': 'https://user-images.githubusercontent.com/1294454/27766569-15aa7b9a-5edd-11e7-9e7f-44791f4ee49c.jpg',
-                'api': 'https://api.huobipro.com',
-                'www': 'https://www.huobipro.com',
+                'api': 'https://api.huobi.pro',
+                'www': 'https://www.huobi.pro',
                 'doc': 'https://github.com/huobiapi/API_Docs/wiki/REST_api_reference',
-                'fees': 'https://www.huobipro.com/about/fee/',
+                'fees': 'https://www.huobi.pro/about/fee/',
             },
             'api': {
                 'market': {
@@ -75,7 +65,6 @@ class huobipro (Exchange):
                         'common/symbols',  # 查询系统支持的所有交易对
                         'common/currencys',  # 查询系统支持的所有币种
                         'common/timestamp',  # 查询系统当前时间
-                        'common/exchange',  # order limits
                     ],
                 },
                 'private': {
@@ -111,15 +100,14 @@ class huobipro (Exchange):
                     'taker': 0.002,
                 },
             },
-            'exceptions': {
-                'order-limitorder-amount-min-error': InvalidOrder,  # limit order amount error, min: `0.001`
-            },
         })
 
-    def parse_markets(self, markets):
+    def fetch_markets(self):
+        response = self.publicGetCommonSymbols()
+        markets = response['data']
         numMarkets = len(markets)
         if numMarkets < 1:
-            raise ExchangeError(self.id + ' publicGetCommonSymbols returned empty response: ' + self.json(markets))
+            raise ExchangeError(self.id + ' publicGetCommonSymbols returned empty response: ' + self.json(response))
         result = []
         for i in range(0, len(markets)):
             market = markets[i]
@@ -164,55 +152,6 @@ class huobipro (Exchange):
                 'info': market,
             })
         return result
-
-    def load_trading_limits(self, symbols=None, reload=False, params={}):
-        if reload or not('limitsLoaded' in list(self.options.keys())):
-            response = self.fetch_trading_limits(symbols)
-            limits = response['limits']
-            keys = list(limits.keys())
-            for i in range(0, len(keys)):
-                symbol = keys[i]
-                self.markets[symbol] = self.extend(self.markets[symbol], {
-                    'limits': limits[symbol],
-                })
-        return self.markets
-
-    def fetch_trading_limits(self, symbols=None, params={}):
-        #  by default it will try load withdrawal fees of all currencies(with separate requests)
-        #  however if you define codes = ['ETH', 'BTC'] in args it will only load those
-        self.load_markets()
-        info = {}
-        limits = {}
-        if symbols is None:
-            symbols = self.symbols
-        for i in range(0, len(symbols)):
-            symbol = symbols[i]
-            market = self.market(symbol)
-            response = self.publicGetCommonExchange(self.extend({
-                'symbol': market['id'],
-            }))
-            limits = self.parse_trading_limits(response)
-            info[symbol] = response
-            limits[symbol] = limits
-        return {
-            'limits': limits,
-            'info': info,
-        }
-
-    def parse_trading_limits(self, response, symbol=None, params={}):
-        data = response['data']
-        if data is None:
-            return None
-        return {
-            'amount': {
-                'min': data['limit-order-must-greater-than'],
-                'max': data['limit-order-must-less-than'],
-            },
-        }
-
-    def fetch_markets(self):
-        response = self.publicGetCommonSymbols()
-        return self.parse_markets(response['data'])
 
     def parse_ticker(self, ticker, market=None):
         symbol = None
@@ -262,7 +201,6 @@ class huobipro (Exchange):
             'open': open,
             'close': close,
             'last': close,
-            'previousClose': None,
             'change': change,
             'percentage': percentage,
             'average': average,
@@ -281,10 +219,7 @@ class huobipro (Exchange):
         if 'tick' in response:
             if not response['tick']:
                 raise ExchangeError(self.id + ' fetchOrderBook() returned empty response: ' + self.json(response))
-            orderbook = response['tick']
-            timestamp = orderbook['ts']
-            orderbook['nonce'] = orderbook['version']
-            return self.parse_order_book(orderbook, timestamp)
+            return self.parse_order_book(response['tick'], response['tick']['ts'])
         raise ExchangeError(self.id + ' fetchOrderBook() returned unrecognized response: ' + self.json(response))
 
     def fetch_ticker(self, symbol, params={}):
@@ -401,11 +336,11 @@ class huobipro (Exchange):
         else:
             raise ExchangeError(self.id + ' fetchOrders() requires a type param or status param for spot market ' + symbol + '(0 or "open" for unfilled or partial filled orders, 1 or "closed" for filled orders)')
         if (status == 0) or (status == 'open'):
-            status = 'pre-submitted,submitted,partial-filled'
+            status = 'submitted,partial-filled'
         elif (status == 1) or (status == 'closed'):
-            status = 'filled,partial-canceled,canceled'
+            status = 'filled,partial-canceled'
         else:
-            status = 'pre-submitted,submitted,partial-filled,filled,partial-canceled,canceled'
+            raise ExchangeError(self.id + ' fetchOrders() wrong type param or status param for spot market ' + symbol + '(0 or "open" for unfilled or partial filled orders, 1 or "closed" for filled orders)')
         response = self.privateGetOrderOrders(self.extend({
             'symbol': market['id'],
             'states': status,
@@ -517,13 +452,10 @@ class huobipro (Exchange):
             'info': response,
         }
 
-    def fee_to_precision(self, currency, fee):
-        return float(self.decimalToPrecision(fee, 0, self.currencies[currency]['precision']))
-
     def calculate_fee(self, symbol, type, side, amount, price, takerOrMaker='taker', params={}):
         market = self.markets[symbol]
         rate = market[takerOrMaker]
-        cost = amount * rate
+        cost = float(self.cost_to_precision(symbol, amount * rate))
         key = 'quote'
         if side == 'sell':
             cost *= price
@@ -533,7 +465,7 @@ class huobipro (Exchange):
             'type': takerOrMaker,
             'currency': market[key],
             'rate': rate,
-            'cost': float(self.fee_to_precision(market[key], cost)),
+            'cost': float(self.fee_to_precision(symbol, cost)),
         }
 
     def withdraw(self, currency, amount, address, tag=None, params={}):
@@ -593,23 +525,9 @@ class huobipro (Exchange):
         url = self.urls['api'] + url
         return {'url': url, 'method': method, 'body': body, 'headers': headers}
 
-    def handle_errors(self, httpCode, reason, url, method, headers, body):
-        if not isinstance(body, basestring):
-            return  # fallback to default error handler
-        if len(body) < 2:
-            return  # fallback to default error handler
-        if (body[0] == '{') or (body[0] == '['):
-            response = json.loads(body)
-            if 'status' in response:
-                #
-                #     {"status":"error","err-code":"order-limitorder-amount-min-error","err-msg":"limit order amount error, min: `0.001`","data":null}
-                #
-                status = self.safe_string(response, 'status')
-                if status == 'error':
-                    code = self.safe_string(response, 'err-code')
-                    feedback = self.id + ' ' + self.json(response)
-                    message = self.safe_string(response, 'err-msg', feedback)
-                    exceptions = self.exceptions
-                    if code in exceptions:
-                        raise exceptions[code](message)
-                    raise ExchangeError(message)
+    def request(self, path, api='public', method='GET', params={}, headers=None, body=None):
+        response = self.fetch2(path, api, method, params, headers, body)
+        if 'status' in response:
+            if response['status'] == 'error':
+                raise ExchangeError(self.id + ' ' + self.json(response))
+        return response

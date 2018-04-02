@@ -537,15 +537,19 @@ module.exports = class coinexchange extends Exchange {
                 'amount': 8,
                 'price': 8,
             },
-            'commonCurrencies': {
-                'BON': 'BonPeKaO',
-                'ETN': 'Ethernex',
-                'GDC': 'GoldenCryptoCoin',
-                'HNC': 'Huncoin',
-                'MARS': 'MarsBux',
-                'RUB': 'RubbleCoin',
-            },
         });
+    }
+
+    commonCurrencyCode (currency) {
+        let substitutions = {
+            'BON': 'BonPeKaO',
+            'ETN': 'Ethernex',
+            'HNC': 'Huncoin',
+            'MARS': 'MarsBux',
+        };
+        if (currency in substitutions)
+            return substitutions[currency];
+        return currency;
     }
 
     async fetchCurrencies (params = {}) {
@@ -629,7 +633,6 @@ module.exports = class coinexchange extends Exchange {
         if (market)
             symbol = market['symbol'];
         let timestamp = this.milliseconds ();
-        let last = this.safeFloat (ticker, 'LastPrice');
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -637,14 +640,12 @@ module.exports = class coinexchange extends Exchange {
             'high': this.safeFloat (ticker, 'HighPrice'),
             'low': this.safeFloat (ticker, 'LowPrice'),
             'bid': this.safeFloat (ticker, 'BidPrice'),
-            'bidVolume': undefined,
             'ask': this.safeFloat (ticker, 'AskPrice'),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': this.safeFloat (ticker, 'LastPrice'),
             'change': this.safeFloat (ticker, 'Change'),
             'percentage': undefined,
             'average': undefined,

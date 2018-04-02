@@ -88,7 +88,6 @@ module.exports = class foxbit extends Exchange {
         let timestamp = this.milliseconds ();
         let lowercaseQuote = market['quote'].toLowerCase ();
         let quoteVolume = 'vol_' + lowercaseQuote;
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -96,14 +95,12 @@ module.exports = class foxbit extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['buy']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['sell']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,

@@ -121,9 +121,6 @@ module.exports = class bitz extends Exchange {
                 'amount': 8,
                 'price': 8,
             },
-            'options': {
-                'lastNonceTimestamp': 0,
-            },
         });
     }
 
@@ -181,7 +178,6 @@ module.exports = class bitz extends Exchange {
     parseTicker (ticker, market = undefined) {
         let timestamp = ticker['date'] * 1000;
         let symbol = market['symbol'];
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -189,14 +185,12 @@ module.exports = class bitz extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['buy']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['sell']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,
@@ -357,13 +351,8 @@ module.exports = class bitz extends Exchange {
     }
 
     nonce () {
-        let currentTimestamp = this.seconds ();
-        if (currentTimestamp > this.options['lastNonceTimestamp']) {
-            this.options['lastNonceTimestamp'] = currentTimestamp;
-            this.options['lastNonce'] = 100000;
-        }
-        this.options['lastNonce'] += 1;
-        return this.options['lastNonce'];
+        let milliseconds = this.milliseconds ();
+        return (milliseconds % 1000000);
     }
 
     sign (path, api = 'public', method = 'GET', params = {}, headers = undefined, body = undefined) {

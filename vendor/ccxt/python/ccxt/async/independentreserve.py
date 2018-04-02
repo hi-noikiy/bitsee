@@ -128,7 +128,6 @@ class independentreserve (Exchange):
         symbol = None
         if market:
             symbol = market['symbol']
-        last = ticker['LastPrice']
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -136,14 +135,12 @@ class independentreserve (Exchange):
             'high': ticker['DayHighestPrice'],
             'low': ticker['DayLowestPrice'],
             'bid': ticker['CurrentHighestBidPrice'],
-            'bidVolume': None,
             'ask': ticker['CurrentLowestOfferPrice'],
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': ticker['LastPrice'],
             'change': None,
             'percentage': None,
             'average': ticker['DayAvgPrice'],

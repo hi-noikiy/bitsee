@@ -90,7 +90,6 @@ class itbit (Exchange):
         vwap = float(ticker['vwap24h'])
         baseVolume = float(ticker['volume24h'])
         quoteVolume = baseVolume * vwap
-        last = float(ticker['lastPrice'])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -98,14 +97,12 @@ class itbit (Exchange):
             'high': float(ticker['high24h']),
             'low': float(ticker['low24h']),
             'bid': self.safe_float(ticker, 'bid'),
-            'bidVolume': None,
             'ask': self.safe_float(ticker, 'ask'),
-            'askVolume': None,
             'vwap': vwap,
             'open': float(ticker['openToday']),
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': float(ticker['lastPrice']),
             'change': None,
             'percentage': None,
             'average': None,

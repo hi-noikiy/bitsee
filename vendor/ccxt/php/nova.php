@@ -98,7 +98,6 @@ class nova extends Exchange {
         ), $params));
         $ticker = $response['markets'][0];
         $timestamp = $this->milliseconds ();
-        $last = floatval ($ticker['last_price']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -106,14 +105,12 @@ class nova extends Exchange {
             'high' => floatval ($ticker['high24h']),
             'low' => floatval ($ticker['low24h']),
             'bid' => $this->safe_float($ticker, 'bid'),
-            'bidVolume' => null,
             'ask' => $this->safe_float($ticker, 'ask'),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last_price']),
             'change' => floatval ($ticker['change24h']),
             'percentage' => null,
             'average' => null,

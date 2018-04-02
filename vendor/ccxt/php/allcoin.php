@@ -68,42 +68,16 @@ class allcoin extends okcoinusd {
                 $market = $markets[$k]['Market'];
                 $base = $market['Primary'];
                 $quote = $market['Secondary'];
-                $baseId = strtolower ($base);
-                $quoteId = strtolower ($quote);
-                $id = $baseId . '_' . $quoteId;
+                $id = strtolower ($base) . '_' . strtolower ($quote);
                 $symbol = $base . '/' . $quote;
-                $active = $market['TradeEnabled'] && $market['BuyEnabled'] && $market['SellEnabled'];
                 $result[] = array (
                     'id' => $id,
                     'symbol' => $symbol,
                     'base' => $base,
                     'quote' => $quote,
-                    'baseId' => $baseId,
-                    'quoteId' => $quoteId,
-                    'active' => $active,
                     'type' => 'spot',
                     'spot' => true,
                     'future' => false,
-                    'maker' => $market['AskFeeRate'], // BidFeeRate 0, AskFeeRate 0.002, we use just the AskFeeRate here
-                    'taker' => $market['AskFeeRate'], // BidFeeRate 0, AskFeeRate 0.002, we use just the AskFeeRate here
-                    'precision' => array (
-                        'amount' => $market['PrimaryDigits'],
-                        'price' => $market['SecondaryDigits'],
-                    ),
-                    'limits' => array (
-                        'amount' => array (
-                            'min' => $market['MinTradeAmount'],
-                            'max' => $market['MaxTradeAmount'],
-                        ),
-                        'price' => array (
-                            'min' => $market['MinOrderPrice'],
-                            'max' => $market['MaxOrderPrice'],
-                        ),
-                        'cost' => array (
-                            'min' => null,
-                            'max' => null,
-                        ),
-                    ),
                     'info' => $market,
                 );
             }

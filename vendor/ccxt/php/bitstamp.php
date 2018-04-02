@@ -67,7 +67,6 @@ class bitstamp extends Exchange {
                         'xrp_address/',
                         'transfer-to-main/',
                         'transfer-from-main/',
-                        'withdrawal-requests/',
                         'withdrawal/open/',
                         'withdrawal/status/',
                         'withdrawal/cancel/',
@@ -213,7 +212,6 @@ class bitstamp extends Exchange {
         $vwap = floatval ($ticker['vwap']);
         $baseVolume = floatval ($ticker['volume']);
         $quoteVolume = $baseVolume * $vwap;
-        $last = floatval ($ticker['last']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -221,14 +219,12 @@ class bitstamp extends Exchange {
             'high' => floatval ($ticker['high']),
             'low' => floatval ($ticker['low']),
             'bid' => floatval ($ticker['bid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['ask']),
-            'askVolume' => null,
             'vwap' => $vwap,
             'open' => floatval ($ticker['open']),
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last']),
             'change' => null,
             'percentage' => null,
             'average' => null,
@@ -246,12 +242,9 @@ class bitstamp extends Exchange {
             'tid',
             'type',
             'order_id',
-            'side',
         ));
         $currencyIds = is_array ($trade) ? array_keys ($trade) : array ();
         $numCurrencyIds = is_array ($currencyIds) ? count ($currencyIds) : 0;
-        if ($numCurrencyIds > 2)
-            throw new ExchangeError ($this->id . ' getMarketFromTrade too many keys => ' . $this->json ($currencyIds) . ' in the $trade => ' . $this->json ($trade));
         if ($numCurrencyIds === 2) {
             $marketId = $currencyIds[0] . $currencyIds[1];
             if (is_array ($this->markets_by_id) && array_key_exists ($marketId, $this->markets_by_id))
@@ -345,7 +338,7 @@ class bitstamp extends Exchange {
         $market = $this->market ($symbol);
         $response = $this->publicGetTransactionsPair (array_merge (array (
             'pair' => $market['id'],
-            'time' => 'hour',
+            'time' => 'minute',
         ), $params));
         return $this->parse_trades($response, $market, $since, $limit);
     }
@@ -561,14 +554,13 @@ class bitstamp extends Exchange {
         $method .= $v1 ? 'Deposit' : '';
         $method .= 'Address';
         $response = $this->$method ($params);
-        $address = $v1 ? $response : $this->safe_string($response, 'address');
-        $tag = $v1 ? null : $this->safe_string($response, 'destination_tag');
+        $address = $this->safe_string($response, 'address');
         $this->check_address($address);
         return array (
             'currency' => $code,
             'status' => 'ok',
             'address' => $address,
-            'tag' => $tag,
+            'tag' => $this->safe_string($response, 'destination_tag'),
             'info' => $response,
         );
     }

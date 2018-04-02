@@ -74,7 +74,6 @@ class hitbtc extends Exchange {
                     ),
                 ),
             ),
-            // hardcoded fees are deprecated and should only be used when there's no other way to get fee info
             'fees' => array (
                 'trading' => array (
                     'tierBased' => false,
@@ -479,14 +478,20 @@ class hitbtc extends Exchange {
                     ),
                 ),
             ),
-            'commonCurrencies' => array (
-                'XBT' => 'BTC',
-                'DRK' => 'DASH',
-                'CAT' => 'BitClave',
-                'USD' => 'USDT',
-                'EMGO' => 'MGO',
-            ),
         ));
+    }
+
+    public function common_currency_code ($currency) {
+        $currencies = array (
+            'XBT' => 'BTC',
+            'DRK' => 'DASH',
+            'CAT' => 'BitClave',
+            'USD' => 'USDT',
+            'EMGO' => 'MGO',
+        );
+        if (is_array ($currencies) && array_key_exists ($currency, $currencies))
+            return $currencies[$currency];
+        return $currency;
     }
 
     public function fetch_markets () {
@@ -575,7 +580,6 @@ class hitbtc extends Exchange {
         $symbol = null;
         if ($market)
             $symbol = $market['symbol'];
-        $last = $this->safe_float($ticker, 'last');
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -583,14 +587,12 @@ class hitbtc extends Exchange {
             'high' => $this->safe_float($ticker, 'high'),
             'low' => $this->safe_float($ticker, 'low'),
             'bid' => $this->safe_float($ticker, 'bid'),
-            'bidVolume' => null,
             'ask' => $this->safe_float($ticker, 'ask'),
-            'askVolume' => null,
             'vwap' => null,
             'open' => $this->safe_float($ticker, 'open'),
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => $this->safe_float($ticker, 'last'),
             'change' => null,
             'percentage' => null,
             'average' => null,

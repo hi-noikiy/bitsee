@@ -73,20 +73,44 @@ module.exports = class cryptopia extends Exchange {
                     ],
                 },
             },
-            'commonCurrencies': {
-                'ACC': 'AdCoin',
-                'BAT': 'BatCoin',
-                'BLZ': 'BlazeCoin',
-                'CC': 'CCX',
-                'CMT': 'Comet',
-                'FCN': 'Facilecoin',
-                'NET': 'NetCoin',
-                'BTG': 'Bitgem',
-                'FUEL': 'FC2', // FuelCoin != FUEL
-                'QBT': 'Cubits',
-                'WRC': 'WarCoin',
-            },
         });
+    }
+
+    commonCurrencyCode (currency) {
+        const currencies = {
+            'ACC': 'AdCoin',
+            'BAT': 'BatCoin',
+            'BLZ': 'BlazeCoin',
+            'CC': 'CCX',
+            'CMT': 'Comet',
+            'FCN': 'Facilecoin',
+            'NET': 'NetCoin',
+            'BTG': 'Bitgem',
+            'FUEL': 'FC2', // FuelCoin != FUEL
+            'QBT': 'Cubits',
+            'WRC': 'WarCoin',
+        };
+        if (currency in currencies)
+            return currencies[currency];
+        return currency;
+    }
+
+    currencyId (currency) {
+        const currencies = {
+            'AdCoin': 'ACC',
+            'BatCoin': 'BAT',
+            'BlazeCoin': 'BLZ',
+            'CCX': 'CC',
+            'Comet': 'CMT',
+            'Cubits': 'QBT',
+            'Facilecoin': 'FCN',
+            'NetCoin': 'NET',
+            'Bitgem': 'BTG',
+            'FC2': 'FUEL',
+        };
+        if (currency in currencies)
+            return currencies[currency];
+        return currency;
     }
 
     async fetchMarkets () {
@@ -211,9 +235,7 @@ module.exports = class cryptopia extends Exchange {
             'high': parseFloat (ticker['High']),
             'low': parseFloat (ticker['Low']),
             'bid': parseFloat (ticker['BidPrice']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['AskPrice']),
-            'askVolume': undefined,
             'vwap': vwap,
             'open': open,
             'close': last,
@@ -252,7 +274,7 @@ module.exports = class cryptopia extends Exchange {
             let symbol = market['symbol'];
             result[symbol] = this.parseTicker (ticker, market);
         }
-        return this.filterByArray (result, 'symbol', symbols);
+        return result;
     }
 
     parseTrade (trade, market = undefined) {
@@ -306,7 +328,7 @@ module.exports = class cryptopia extends Exchange {
         if (typeof since !== 'undefined') {
             let elapsed = this.milliseconds () - since;
             let hour = 1000 * 60 * 60;
-            hours = parseInt (Math.ceil (elapsed / hour));
+            hours = parseInt (elapsed / hour);
         }
         let request = {
             'id': market['id'],
@@ -583,28 +605,28 @@ module.exports = class cryptopia extends Exchange {
         return result;
     }
 
-    async fetchDepositAddress (code, params = {}) {
-        let currency = this.currency (code);
+    async fetchDepositAddress (currency, params = {}) {
+        let currencyId = this.currencyId (currency);
         let response = await this.privatePostGetDepositAddress (this.extend ({
-            'Currency': currency['id'],
+            'Currency': currencyId,
         }, params));
         let address = this.safeString (response['Data'], 'BaseAddress');
         if (!address)
             address = this.safeString (response['Data'], 'Address');
         this.checkAddress (address);
         return {
-            'currency': code,
+            'currency': currency,
             'address': address,
             'status': 'ok',
             'info': response,
         };
     }
 
-    async withdraw (code, amount, address, tag = undefined, params = {}) {
-        let currency = this.currency (code);
+    async withdraw (currency, amount, address, tag = undefined, params = {}) {
         this.checkAddress (address);
+        let currencyId = this.currencyId (currency);
         let request = {
-            'Currency': currency['id'],
+            'Currency': currencyId,
             'Amount': amount,
             'Address': address, // Address must exist in you AddressBook in security settings
         };

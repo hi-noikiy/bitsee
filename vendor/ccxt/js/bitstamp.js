@@ -68,7 +68,6 @@ module.exports = class bitstamp extends Exchange {
                         'xrp_address/',
                         'transfer-to-main/',
                         'transfer-from-main/',
-                        'withdrawal-requests/',
                         'withdrawal/open/',
                         'withdrawal/status/',
                         'withdrawal/cancel/',
@@ -214,7 +213,6 @@ module.exports = class bitstamp extends Exchange {
         let vwap = parseFloat (ticker['vwap']);
         let baseVolume = parseFloat (ticker['volume']);
         let quoteVolume = baseVolume * vwap;
-        let last = parseFloat (ticker['last']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -222,14 +220,12 @@ module.exports = class bitstamp extends Exchange {
             'high': parseFloat (ticker['high']),
             'low': parseFloat (ticker['low']),
             'bid': parseFloat (ticker['bid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['ask']),
-            'askVolume': undefined,
             'vwap': vwap,
             'open': parseFloat (ticker['open']),
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last']),
             'change': undefined,
             'percentage': undefined,
             'average': undefined,
@@ -247,12 +243,9 @@ module.exports = class bitstamp extends Exchange {
             'tid',
             'type',
             'order_id',
-            'side',
         ]);
         let currencyIds = Object.keys (trade);
         let numCurrencyIds = currencyIds.length;
-        if (numCurrencyIds > 2)
-            throw new ExchangeError (this.id + ' getMarketFromTrade too many keys: ' + this.json (currencyIds) + ' in the trade: ' + this.json (trade));
         if (numCurrencyIds === 2) {
             let marketId = currencyIds[0] + currencyIds[1];
             if (marketId in this.markets_by_id)
@@ -346,7 +339,7 @@ module.exports = class bitstamp extends Exchange {
         let market = this.market (symbol);
         let response = await this.publicGetTransactionsPair (this.extend ({
             'pair': market['id'],
-            'time': 'hour',
+            'time': 'minute',
         }, params));
         return this.parseTrades (response, market, since, limit);
     }
@@ -562,14 +555,13 @@ module.exports = class bitstamp extends Exchange {
         method += v1 ? 'Deposit' : '';
         method += 'Address';
         let response = await this[method] (params);
-        let address = v1 ? response : this.safeString (response, 'address');
-        let tag = v1 ? undefined : this.safeString (response, 'destination_tag');
+        let address = this.safeString (response, 'address');
         this.checkAddress (address);
         return {
             'currency': code,
             'status': 'ok',
             'address': address,
-            'tag': tag,
+            'tag': this.safeString (response, 'destination_tag'),
             'info': response,
         };
     }

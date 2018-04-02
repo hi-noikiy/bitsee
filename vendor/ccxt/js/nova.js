@@ -99,7 +99,6 @@ module.exports = class nova extends Exchange {
         }, params));
         let ticker = response['markets'][0];
         let timestamp = this.milliseconds ();
-        let last = parseFloat (ticker['last_price']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -107,14 +106,12 @@ module.exports = class nova extends Exchange {
             'high': parseFloat (ticker['high24h']),
             'low': parseFloat (ticker['low24h']),
             'bid': this.safeFloat (ticker, 'bid'),
-            'bidVolume': undefined,
             'ask': this.safeFloat (ticker, 'ask'),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last_price']),
             'change': parseFloat (ticker['change24h']),
             'percentage': undefined,
             'average': undefined,

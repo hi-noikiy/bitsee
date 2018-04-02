@@ -182,7 +182,6 @@ class braziliex extends Exchange {
         $symbol = $market['symbol'];
         $timestamp = $ticker['date'];
         $ticker = $ticker['ticker'];
-        $last = $this->safe_float($ticker, 'last');
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -190,14 +189,12 @@ class braziliex extends Exchange {
             'high' => $this->safe_float($ticker, 'highestBid24'),
             'low' => $this->safe_float($ticker, 'lowestAsk24'),
             'bid' => $this->safe_float($ticker, 'highestBid'),
-            'bidVolume' => null,
             'ask' => $this->safe_float($ticker, 'lowestAsk'),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => $this->safe_float($ticker, 'last'),
             'change' => $this->safe_float($ticker, 'percentChange'),
             'percentage' => null,
             'average' => null,

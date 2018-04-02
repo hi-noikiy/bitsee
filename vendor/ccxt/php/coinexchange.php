@@ -536,15 +536,19 @@ class coinexchange extends Exchange {
                 'amount' => 8,
                 'price' => 8,
             ),
-            'commonCurrencies' => array (
-                'BON' => 'BonPeKaO',
-                'ETN' => 'Ethernex',
-                'GDC' => 'GoldenCryptoCoin',
-                'HNC' => 'Huncoin',
-                'MARS' => 'MarsBux',
-                'RUB' => 'RubbleCoin',
-            ),
         ));
+    }
+
+    public function common_currency_code ($currency) {
+        $substitutions = array (
+            'BON' => 'BonPeKaO',
+            'ETN' => 'Ethernex',
+            'HNC' => 'Huncoin',
+            'MARS' => 'MarsBux',
+        );
+        if (is_array ($substitutions) && array_key_exists ($currency, $substitutions))
+            return $substitutions[$currency];
+        return $currency;
     }
 
     public function fetch_currencies ($params = array ()) {
@@ -628,7 +632,6 @@ class coinexchange extends Exchange {
         if ($market)
             $symbol = $market['symbol'];
         $timestamp = $this->milliseconds ();
-        $last = $this->safe_float($ticker, 'LastPrice');
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -636,14 +639,12 @@ class coinexchange extends Exchange {
             'high' => $this->safe_float($ticker, 'HighPrice'),
             'low' => $this->safe_float($ticker, 'LowPrice'),
             'bid' => $this->safe_float($ticker, 'BidPrice'),
-            'bidVolume' => null,
             'ask' => $this->safe_float($ticker, 'AskPrice'),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => $this->safe_float($ticker, 'LastPrice'),
             'change' => $this->safe_float($ticker, 'Change'),
             'percentage' => null,
             'average' => null,

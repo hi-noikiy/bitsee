@@ -49,6 +49,10 @@ class cobinhood (Exchange):
                     'web': 'https://api.cobinhood.com/v1',
                     'ws': 'wss://feed.cobinhood.com',
                 },
+                'test': {
+                    'web': 'https://sandbox-api.cobinhood.com',
+                    'ws': 'wss://sandbox-feed.cobinhood.com',
+                },
                 'www': 'https://cobinhood.com',
                 'doc': 'https://cobinhood.github.io/api-public',
             },
@@ -78,7 +82,6 @@ class cobinhood (Exchange):
                 },
                 'public': {
                     'get': [
-                        'market/tickers',
                         'market/currencies',
                         'market/trading_pairs',
                         'market/orderbooks/{trading_pair_id}',
@@ -221,35 +224,35 @@ class cobinhood (Exchange):
         return result
 
     def parse_ticker(self, ticker, market=None):
-        if market is None:
-            marketId = self.safe_string(ticker, 'trading_pair_id')
-            market = self.find_market(marketId)
-        symbol = None
-        if market is not None:
-            symbol = market['symbol']
-        timestamp = self.safe_integer(ticker, 'timestamp')
-        last = self.safe_float(ticker, 'last_trade_price')
+        symbol = market['symbol']
+        timestamp = None
+        if 'timestamp' in ticker:
+            timestamp = ticker['timestamp']
+        else:
+            timestamp = self.milliseconds()
+        info = ticker
+        # from fetchTicker
+        if 'info' in ticker:
+            info = ticker['info']
         return {
             'symbol': symbol,
             'timestamp': timestamp,
             'datetime': self.iso8601(timestamp),
-            'high': float(ticker['24h_high']),
-            'low': float(ticker['24h_low']),
+            'high': float(ticker['high_24hr']),
+            'low': float(ticker['low_24hr']),
             'bid': float(ticker['highest_bid']),
-            'bidVolume': None,
             'ask': float(ticker['lowest_ask']),
-            'askVolume': None,
             'vwap': None,
             'open': None,
-            'close': last,
-            'last': last,
-            'previousClose': None,
+            'close': None,
+            'first': None,
+            'last': self.safe_float(ticker, 'last_price'),
             'change': self.safe_float(ticker, 'percentChanged24hr'),
             'percentage': None,
             'average': None,
-            'baseVolume': float(ticker['24h_volume']),
+            'baseVolume': float(ticker['base_volume']),
             'quoteVolume': self.safe_float(ticker, 'quote_volume'),
-            'info': ticker,
+            'info': info,
         }
 
     async def fetch_ticker(self, symbol, params={}):
@@ -259,16 +262,31 @@ class cobinhood (Exchange):
             'trading_pair_id': market['id'],
         }, params))
         ticker = response['result']['ticker']
+        ticker = {
+            'last_price': ticker['last_trade_price'],
+            'highest_bid': ticker['highest_bid'],
+            'lowest_ask': ticker['lowest_ask'],
+            'base_volume': ticker['24h_volume'],
+            'high_24hr': ticker['24h_high'],
+            'low_24hr': ticker['24h_low'],
+            'timestamp': ticker['timestamp'],
+            'info': response,
+        }
         return self.parse_ticker(ticker, market)
 
     async def fetch_tickers(self, symbols=None, params={}):
         await self.load_markets()
-        response = await self.publicGetMarketTickers(params)
-        tickers = response['result']['tickers']
-        result = []
-        for i in range(0, len(tickers)):
-            result.append(self.parse_ticker(tickers[i]))
-        return self.index_by(result, 'symbol')
+        response = await self.publicGetMarketStats(params)
+        tickers = response['result']
+        ids = list(tickers.keys())
+        result = {}
+        for i in range(0, len(ids)):
+            id = ids[i]
+            market = self.markets_by_id[id]
+            symbol = market['symbol']
+            ticker = tickers[id]
+            result[symbol] = self.parse_ticker(ticker, market)
+        return result
 
     async def fetch_order_book(self, symbol, limit=None, params={}):
         await self.load_markets()
@@ -370,12 +388,10 @@ class cobinhood (Exchange):
 
     def parse_order(self, order, market=None):
         symbol = None
-        if market is None:
-            marketId = self.safe_string(order, 'trading_pair')
-            if marketId is None:
-                marketId = self.safe_string(order, 'trading_pair_id')
+        if not market:
+            marketId = order['trading_pair']
             market = self.markets_by_id[marketId]
-        if market is not None:
+        if market:
             symbol = market['symbol']
         timestamp = order['timestamp']
         price = float(order['price'])
@@ -454,7 +470,7 @@ class cobinhood (Exchange):
             'order_id': id,
         }, params))
         market = None if (symbol is None) else self.market(symbol)
-        return self.parse_trades(response['result']['trades'], market)
+        return self.parse_trades(response['result'], market)
 
     async def create_deposit_address(self, code, params={}):
         await self.load_markets()
@@ -477,10 +493,7 @@ class cobinhood (Exchange):
         response = await self.privateGetWalletDepositAddresses(self.extend({
             'currency': currency['id'],
         }, params))
-        addresses = self.safe_value(response['result'], 'deposit_addresses', [])
-        address = None
-        if len(addresses) > 0:
-            address = self.safe_string(addresses[0], 'address')
+        address = self.safe_string(response['result']['deposit_addresses'], 'address')
         self.check_address(address)
         return {
             'currency': code,

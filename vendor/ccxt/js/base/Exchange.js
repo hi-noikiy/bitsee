@@ -97,7 +97,6 @@ module.exports = class Exchange {
                 'fetchTicker': true,
                 'fetchTickers': false,
                 'fetchTrades': true,
-                'fetchTradingFees': false,
                 'withdraw': false,
             },
             'urls': {
@@ -140,11 +139,6 @@ module.exports = class Exchange {
             // still, some exchanges report number of open orders together with balance
             // if you set the following flag to 'true' ccxt will leave 'used' funds undefined in case of discrepancy
             'dontGetUsedBalanceFromStaleCache': false,
-            'commonCurrencies': { // gets extended/overwritten in subclasses
-                'XBT': 'BTC',
-                'BCC': 'BCH',
-                'DRK': 'DASH',
-            },
         } // return
     } // describe ()
 
@@ -271,7 +265,7 @@ module.exports = class Exchange {
     }
 
     checkRequiredCredentials () {
-        Object.keys (this.requiredCredentials).forEach ((key) => {
+        Object.keys (this.requiredCredentials).map (key => {
             if (this.requiredCredentials[key] && !this[key])
                 throw new AuthenticationError (this.id + ' requires `' + key + '`')
         })
@@ -430,13 +424,13 @@ module.exports = class Exchange {
 
             if (e instanceof SyntaxError) {
 
-                let ExceptionClass = ExchangeNotAvailable
+                let error = ExchangeNotAvailable
                 let details = 'not accessible from this location at the moment'
                 if (maintenance)
                     details = 'offline, on maintenance or unreachable from this location at the moment'
                 if (ddosProtection)
-                    ExceptionClass = DDoSProtection
-                throw new ExceptionClass ([ this.id, method, url, response.status, title, details ].join (' '))
+                    error = DDoSProtection
+                throw new error ([ this.id, method, url, response.status, title, details ].join (' '))
             }
 
             throw e
@@ -487,7 +481,7 @@ module.exports = class Exchange {
 
     handleRestResponse (response, url, method = 'GET', requestHeaders = undefined, requestBody = undefined) {
 
-        return response.text ().then ((responseBody) => {
+        return response.text ().then (responseBody => {
 
             let jsonRequired = this.parseJsonResponse && !this.skipJsonOnStatusCodes.includes (response.status)
             let json = jsonRequired ? this.parseJson (response, responseBody, url, method) : undefined
@@ -571,15 +565,6 @@ module.exports = class Exchange {
         throw new NotSupported (this.id + ' fetchBidsAsks not supported yet')
     }
 
-    async fetchOHLCVC (symbol, timeframe = '1m', since = undefined, limits = undefined, params = {}) {
-        if (!this.has['fetchTrades'])
-            throw new NotSupported (this.id + ' fetchOHLCV() not supported yet')
-        await this.loadMarkets ()
-        let trades = await this.fetchTrades (symbol, since, limits, params)
-        let ohlcvc = buildOHLCVC (trades, timeframe, since, limits)
-        return ohlcvc
-    }
-
     async fetchOHLCV (symbol, timeframe = '1m', since = undefined, limits = undefined, params = {}) {
         if (!this.has['fetchTrades'])
             throw new NotSupported (this.id + ' fetchOHLCV() not supported yet')
@@ -647,23 +632,19 @@ module.exports = class Exchange {
     commonCurrencyCode (currency) {
         if (!this.substituteCommonCurrencyCodes)
             return currency
-        return this.safeString (this.commonCurrencies, currency, currency)
-    }
-
-    currencyId (commonCode) {
-        let currencyIds = {}
-        let distinct = Object.keys (this.commonCurrencies)
-        for (let i = 0; i < distinct.length; i++) {
-            let k = distinct[i]
-            currencyIds[this.commonCurrencies[k]] = k
-        }
-        return this.safeString (currencyIds, commonCode, commonCode)
+        if (currency === 'XBT')
+            return 'BTC'
+        if (currency === 'BCC')
+            return 'BCH'
+        if (currency === 'DRK')
+            return 'DASH'
+        return currency
     }
 
     currency (code) {
 
         if (typeof this.currencies === 'undefined')
-            throw new ExchangeError (this.id + ' currencies not loaded')
+            return new ExchangeError (this.id + ' currencies not loaded')
 
         if ((typeof code === 'string') && (code in this.currencies))
             return this.currencies[code]
@@ -674,7 +655,7 @@ module.exports = class Exchange {
     findMarket (string) {
 
         if (typeof this.markets === 'undefined')
-            throw new ExchangeError (this.id + ' markets not loaded')
+            return new ExchangeError (this.id + ' markets not loaded')
 
         if (typeof string === 'string') {
 
@@ -702,7 +683,7 @@ module.exports = class Exchange {
     market (symbol) {
 
         if (typeof this.markets === 'undefined')
-            throw new ExchangeError (this.id + ' markets not loaded')
+            return new ExchangeError (this.id + ' markets not loaded')
 
         if ((typeof symbol === 'string') && (symbol in this.markets))
             return this.markets[symbol]
@@ -767,12 +748,12 @@ module.exports = class Exchange {
     }
 
     parseOrderBook (orderbook, timestamp = undefined, bidsKey = 'bids', asksKey = 'asks', priceKey = 0, amountKey = 1) {
+        timestamp = timestamp || this.milliseconds ();
         return {
             'bids': sortBy ((bidsKey in orderbook) ? this.parseBidsAsks (orderbook[bidsKey], priceKey, amountKey) : [], 0, true),
             'asks': sortBy ((asksKey in orderbook) ? this.parseBidsAsks (orderbook[asksKey], priceKey, amountKey) : [], 0),
             'timestamp': timestamp,
-            'datetime': (typeof timestamp !== 'undefined') ? this.iso8601 (timestamp) : undefined,
-            'nonce': undefined,
+            'datetime': this.iso8601 (timestamp),
         }
     }
 
@@ -795,7 +776,7 @@ module.exports = class Exchange {
 
         const currencies = Object.keys (this.omit (balance, 'info'));
 
-        currencies.forEach ((currency) => {
+        currencies.forEach (currency => {
 
             if (typeof balance[currency].used === 'undefined') {
                 // exchange reports only 'free' balance -> try to derive 'used' funds from open orders cache
@@ -815,7 +796,7 @@ module.exports = class Exchange {
                 }
             }
 
-            [ 'free', 'used', 'total' ].forEach ((account) => {
+            [ 'free', 'used', 'total' ].forEach (account => {
                 balance[account] = balance[account] || {}
                 balance[account][currency] = balance[currency][account]
             })
@@ -856,31 +837,14 @@ module.exports = class Exchange {
 
         // single-pass filter for both symbol and since
         if (symbolIsDefined || sinceIsDefined)
-            array = Object.values (array).filter (entry =>
+            array = array.filter (entry =>
                 ((symbolIsDefined ? (entry.symbol === symbol)  : true) &&
                  (sinceIsDefined  ? (entry.timestamp >= since) : true)))
 
         if (typeof limit !== 'undefined')
-            array = Object.values (array).slice (0, limit)
+            array = array.slice (0, limit)
 
         return array
-    }
-
-    filterByArray (objects, key, values = undefined, indexed = true) {
-
-        objects = Object.values (objects)
-
-        // return all of them if no values were passed
-        if (typeof values === 'undefined')
-            return indexed ? indexBy (objects, key) : objects
-
-        let result = []
-        for (let i = 0; i < objects.length; i++) {
-            if (values.includes (objects[i][key]))
-                result.push (objects[i])
-        }
-
-        return indexed ? indexBy (result, key) : result
     }
 
     parseTrades (trades, market = undefined, since = undefined, limit = undefined) {

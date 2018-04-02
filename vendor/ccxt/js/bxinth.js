@@ -68,10 +68,6 @@ module.exports = class bxinth extends Exchange {
                     'maker': 0.25 / 100,
                 },
             },
-            'commonCurrencies': {
-                'DAS': 'DASH',
-                'DOG': 'DOGE',
-            },
         });
     }
 
@@ -96,6 +92,15 @@ module.exports = class bxinth extends Exchange {
             });
         }
         return result;
+    }
+
+    commonCurrencyCode (currency) {
+        // why would they use three letters instead of four for currency codes
+        if (currency === 'DAS')
+            return 'DASH';
+        if (currency === 'DOG')
+            return 'DOGE';
+        return currency;
     }
 
     async fetchBalance (params = {}) {
@@ -131,7 +136,6 @@ module.exports = class bxinth extends Exchange {
         let symbol = undefined;
         if (market)
             symbol = market['symbol'];
-        let last = parseFloat (ticker['last_price']);
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -139,14 +143,12 @@ module.exports = class bxinth extends Exchange {
             'high': undefined,
             'low': undefined,
             'bid': parseFloat (ticker['orderbook']['bids']['highbid']),
-            'bidVolume': undefined,
             'ask': parseFloat (ticker['orderbook']['asks']['highbid']),
-            'askVolume': undefined,
             'vwap': undefined,
             'open': undefined,
-            'close': last,
-            'last': last,
-            'previousClose': undefined,
+            'close': undefined,
+            'first': undefined,
+            'last': parseFloat (ticker['last_price']),
             'change': parseFloat (ticker['change']),
             'percentage': undefined,
             'average': undefined,

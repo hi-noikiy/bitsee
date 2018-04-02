@@ -29,6 +29,30 @@ module.exports = class kuna extends acx {
                 'doc': 'https://kuna.io/documents/api',
                 'fees': 'https://kuna.io/documents/api',
             },
+            'api': {
+                'public': {
+                    'get': [
+                        'tickers', // all of them at once
+                        'tickers/{market}',
+                        'order_book',
+                        'order_book/{market}',
+                        'trades',
+                        'trades/{market}',
+                        'timestamp',
+                    ],
+                },
+                'private': {
+                    'get': [
+                        'members/me',
+                        'orders',
+                        'trades/my',
+                    ],
+                    'post': [
+                        'orders',
+                        'order/delete',
+                    ],
+                },
+            },
             'fees': {
                 'trading': {
                     'taker': 0.25 / 100,
@@ -110,7 +134,6 @@ module.exports = class kuna extends acx {
     }
 
     async fetchOrderBook (symbol, limit = undefined, params = {}) {
-        await this.loadMarkets ();
         let market = this.market (symbol);
         let orderBook = await this.publicGetOrderBook (this.extend ({
             'market': market['id'],
@@ -125,7 +148,6 @@ module.exports = class kuna extends acx {
     async fetchOpenOrders (symbol = undefined, since = undefined, limit = undefined, params = {}) {
         if (!symbol)
             throw new ExchangeError (this.id + ' fetchOpenOrders requires a symbol argument');
-        await this.loadMarkets ();
         let market = this.market (symbol);
         let orders = await this.privateGetOrders (this.extend ({
             'market': market['id'],
@@ -155,7 +177,6 @@ module.exports = class kuna extends acx {
     }
 
     async fetchTrades (symbol, since = undefined, limit = undefined, params = {}) {
-        await this.loadMarkets ();
         let market = this.market (symbol);
         let response = await this.publicGetTrades (this.extend ({
             'market': market['id'],
@@ -194,7 +215,6 @@ module.exports = class kuna extends acx {
     async fetchMyTrades (symbol = undefined, since = undefined, limit = undefined, params = {}) {
         if (!symbol)
             throw new ExchangeError (this.id + ' fetchOpenOrders requires a symbol argument');
-        await this.loadMarkets ();
         let market = this.market (symbol);
         let response = await this.privateGetTradesMy ({ 'market': market['id'] });
         return this.parseMyTrades (response, market);

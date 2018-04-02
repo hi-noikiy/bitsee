@@ -67,10 +67,6 @@ class bxinth extends Exchange {
                     'maker' => 0.25 / 100,
                 ),
             ),
-            'commonCurrencies' => array (
-                'DAS' => 'DASH',
-                'DOG' => 'DOGE',
-            ),
         ));
     }
 
@@ -95,6 +91,15 @@ class bxinth extends Exchange {
             );
         }
         return $result;
+    }
+
+    public function common_currency_code ($currency) {
+        // why would they use three letters instead of four for $currency codes
+        if ($currency === 'DAS')
+            return 'DASH';
+        if ($currency === 'DOG')
+            return 'DOGE';
+        return $currency;
     }
 
     public function fetch_balance ($params = array ()) {
@@ -130,7 +135,6 @@ class bxinth extends Exchange {
         $symbol = null;
         if ($market)
             $symbol = $market['symbol'];
-        $last = floatval ($ticker['last_price']);
         return array (
             'symbol' => $symbol,
             'timestamp' => $timestamp,
@@ -138,14 +142,12 @@ class bxinth extends Exchange {
             'high' => null,
             'low' => null,
             'bid' => floatval ($ticker['orderbook']['bids']['highbid']),
-            'bidVolume' => null,
             'ask' => floatval ($ticker['orderbook']['asks']['highbid']),
-            'askVolume' => null,
             'vwap' => null,
             'open' => null,
-            'close' => $last,
-            'last' => $last,
-            'previousClose' => null,
+            'close' => null,
+            'first' => null,
+            'last' => floatval ($ticker['last_price']),
             'change' => floatval ($ticker['change']),
             'percentage' => null,
             'average' => null,
