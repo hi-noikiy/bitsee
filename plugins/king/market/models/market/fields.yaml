@@ -10,7 +10,7 @@ fields:
         imageWidth: 200
         imageHeight: 200
     icon:
-        label: '图标'
+        label: '币种图标'
         type: fileupload
         mode: image
         imageHeight: 260
@@ -41,7 +41,10 @@ fields:
         size: large
     volume:
         label: '交易量'
-        placeholder: '交易量'  
+        placeholder: '交易量' 
+    position:
+        label: '全球排名' 
+        placeholder: '全球排名'
     coins:
         label: '支持币种'
         type: relation
