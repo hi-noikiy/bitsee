@@ -36,7 +36,7 @@ class Currency
         date_default_timezone_set ('UTC');
         $backend = "\\ccxt\\".$backend;
         $exchange = new $backend();
-        $currencys = $exchange->publicGetCommonCurrencys()['data'];
+        $currencys = $exchange->webGetMarketsCurrencies()['data'];
         $result = [];
         foreach ($currencys as $currency) { 
             $result[] = $currency['symbol'];
@@ -51,7 +51,7 @@ class Currency
         date_default_timezone_set ('UTC');
         $backend = "\\ccxt\\".$backend;
         $exchange = new $backend();
-        $currencys = $exchange->publicGetCommonCurrencys()['data'];
+        $currencys = $exchange->webGetMarketsCurrencies()['data'];
         $result = [];
         foreach ($currencys as $currency) { 
             $result[] = $currency['symbol'];
