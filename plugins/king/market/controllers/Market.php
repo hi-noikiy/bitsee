@@ -42,8 +42,6 @@ class Market extends Controller
 
         $symbols = Currency::$backend($backend);
 
-        return $symbols;
-
         foreach($symbols as $symbol){
 
             $coin = Coin::where('base',$symbol)->first();

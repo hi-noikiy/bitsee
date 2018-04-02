@@ -36,10 +36,18 @@ class Currency
         date_default_timezone_set ('UTC');
         $backend = "\\ccxt\\".$backend;
         $exchange = new $backend();
-        $currencys = $exchange->webGetMarketsCurrencies()['data'];
+        $markets = $exchange->loadMarkets ();
         $result = [];
-        foreach ($currencys as $currency) { 
-            $result[] = $currency['symbol'];
+        foreach ($markets as $market) { 
+            $flag =1;
+            foreach ($result as $item){
+                if ($item == $market['base']){
+                    $flag = 0;
+                }
+            }
+            if($flag){
+                $result[] = $market['base'];
+            }
         }
 
         return $result;
@@ -51,10 +59,18 @@ class Currency
         date_default_timezone_set ('UTC');
         $backend = "\\ccxt\\".$backend;
         $exchange = new $backend();
-        $currencys = $exchange->webGetMarketsCurrencies()['data'];
+        $markets = $exchange->loadMarkets ();
         $result = [];
-        foreach ($currencys as $currency) { 
-            $result[] = $currency['symbol'];
+        foreach ($markets as $market) { 
+            $flag =1;
+            foreach ($result as $item){
+                if ($item == $market['base']){
+                    $flag = 0;
+                }
+            }
+            if($flag){
+                $result[] = $market['base'];
+            }
         }
 
         return $result;
