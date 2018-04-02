@@ -42,6 +42,8 @@ class Market extends Controller
 
         $symbols = Currency::$backend($backend);
 
+        return $symbols;
+
         foreach($symbols as $symbol){
 
             $coin = Coin::where('base',$symbol)->first();
@@ -73,7 +75,9 @@ class Market extends Controller
 
         $backend = "\\ccxt\\".$model->backend;
 
-        $exchange = new $backend();
+        $exchange = new $backend(array (
+            'enableRateLimit' => true,
+        ));
 
         if (!method_exists($exchange,'loadMarkets')) {
                 Flash::error('不存在 loadMarkets 函数');
