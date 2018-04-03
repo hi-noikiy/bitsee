@@ -10,7 +10,7 @@ fields:
         imageWidth: 200
         imageHeight: 200
     icon:
-        label: '币种图标'
+        label: '交易所图标'
         type: fileupload
         mode: image
         imageHeight: 260
