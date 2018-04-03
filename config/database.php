@@ -1,6 +1,6 @@
 <?php
 
-$develop = env('BITSEEENV', 'develop');
+$develop = 'develop';//env('BITSEEENV', 'develop');
 
 return [
 
