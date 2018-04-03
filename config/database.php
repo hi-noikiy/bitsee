@@ -68,8 +68,8 @@ return [
 
         'mysqlapp' => [
             'driver' => 'mysql',
-            'host' => ($develop=='production')?env('MYCAT_APP_SERVICE_HOST'):env('OCTOBER_DB_HOST', '127.0.0.1'),
-            'port' => ($develop=='production')?env('MYCAT_APP_SERVICE_PORT'):env('OCTOBER_DB_PORT', '3306'),
+            'host' => ($develop=='production')?env('MYSQL_APP_MASTER_SERVICE_HOST'):env('OCTOBER_DB_HOST', '127.0.0.1'),
+            'port' => ($develop=='production')?env('MYCAT_APP_MASTER_SERVICE_PORT'):env('OCTOBER_DB_PORT', '3306'),
             'database' => 'app',
             'username' => 'root',
             'password' => 'bitsee',
