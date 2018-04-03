@@ -56,8 +56,8 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => ($develop=='production')?env('MYCAT_SERVICE_HOST'):env('OCTOBER_DB_HOST', 'mysql'),
-            'port'      => ($develop=='production')?env('MYCAT_SERVICE_PORT'):env('OCTOBER_DB_PORT', 3306),
+            'host'      => ($develop=='production')?env('MYCAT_SERVICE_HOST'):'172.104.112.35',
+            'port'      => ($develop=='production')?env('MYCAT_SERVICE_PORT'):3306,
             'database'  => env('OCTOBER_DB_NAME', 'october_cms'),
             'username'  => env('OCTOBER_DB_USER', 'root'),
             'password'  => env('OCTOBER_DB_PASSWORD', ''),
