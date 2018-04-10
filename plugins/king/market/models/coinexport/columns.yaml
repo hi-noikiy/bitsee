@@ -1,0 +1,15 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+    id: ID
+    base: base
+    content: content
+    content_html: content_html
+    platform: platform
+    type: type
+    auth: auth
+    supply: supply
+    created_at: created_at
+    updated_at: updated_at

@@ -1,0 +1,35 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+import:
+    # Page title
+    title: 导入币种
+
+    # Import List Column configuration
+    list: $/king/market/models/coinimport/columns.yaml
+
+    # Import Form Field configuration
+    form: $/king/market/models/coinimport/fields.yaml
+
+    # Import Model class
+    modelClass: King\Market\Models\CoinImport
+
+    # Redirect when finished
+    redirect: king/market/coin
+
+export:
+    # Page title
+    title: 导出币种
+
+    # Output file name
+    fileName: coins.csv
+
+    # Export List Column configuration
+    list: $/king/market/models/coinexport/columns.yaml
+
+    # Export Model class
+    modelClass: King\Market\Models\CoinExport
+
+    # Redirect when finished
+    redirect: king/market/coin
