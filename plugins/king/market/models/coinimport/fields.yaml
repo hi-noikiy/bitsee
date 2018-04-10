@@ -1,0 +1,8 @@
+fields:
+
+    update_existing:
+        label: Update existing posts
+        comment: Check this box to update posts that have exactly the same ID, title or slug.
+        type: checkbox
+        default: true
+        span: left
