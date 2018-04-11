@@ -5,12 +5,15 @@
 columns:
     id: ID
     base: base
+    name: 币种
     content: content
     content_html: content_html
     platform: platform
     type: type
     auth: auth
     supply: supply
+    team: team
+    team_html: team_html
     created_at: created_at
     updated_at: updated_at
 
