@@ -67,6 +67,7 @@ class Coin extends Controller
 
                     Log::info('base:  '. $coin->base);
                     Log::info('icon:  '. $coin->icon);
+                    Log::info('icons:  '. $data['icon']);
                     Log::info('///////////');
     
                     $coin->save();//forceSave();
