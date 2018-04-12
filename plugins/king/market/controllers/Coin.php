@@ -41,7 +41,7 @@ class Coin extends Controller
                 try {
     
                     if (!$title = array_get($data, 'base')) {
-                        $this->logSkipped($row, 'Missing base');
+                        Flash::error($row.'  Missing base');
                         continue;
                     }
     
@@ -78,7 +78,6 @@ class Coin extends Controller
                     }
                 }
                 catch (Exception $ex) {
-                    $this->logError($row, $ex->getMessage());
                     Flash::error($row.':   '.$ex->getMessage());
                     $errornum++;
                 }
