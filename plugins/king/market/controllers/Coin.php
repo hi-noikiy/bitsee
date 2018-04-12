@@ -33,7 +33,7 @@ class Coin extends Controller
 
     public function onUpdateIcons()
     {
-        $coins = CoinModel::with('icon')->all();
+        $coins = CoinModel::with('icon')->get();
         DB::beginTransaction();
         try{
             foreach($coins as $coin) {
@@ -41,7 +41,7 @@ class Coin extends Controller
                 $file = File::fromFile('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
                 
                 if($file) {
-                    
+
                     if($coin->icon) {
 
                         $coin->icon->delete();
