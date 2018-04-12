@@ -6,7 +6,7 @@ use King\Market\Models\Market;
 use Flash;
 use Log;
 
-use King\Market\Models\Coin;
+use King\Market\Models\Coin as CoinModel;
 
 use Vdomah\Excel\Classes\Excel;
 
@@ -48,7 +48,7 @@ class Coin extends Controller
                     /*
                      * Find or create
                      */
-                    $coin = Coin::make();
+                    $coin = CoinModel::make();
     
                     if ($this->update_existing) {
                         $coin = $this->findDuplicateCoin($data) ?: $coin;
@@ -92,11 +92,11 @@ class Coin extends Controller
     protected function findDuplicateCoin($data)
     {
         if ($id = array_get($data, 'id')) {
-            return Coin::find($id);
+            return CoinModel::find($id);
         }
 
         $base = array_get($data, 'base');
-        $coin = Coin::where('base', $base);
+        $coin = CoinModel::where('base', $base);
 
         return $coin->first();
     }
