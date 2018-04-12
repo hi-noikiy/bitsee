@@ -6,6 +6,8 @@ use King\Market\Models\Market;
 use Flash;
 use Log;
 
+use King\Market\Models\Coin;
+
 use Vdomah\Excel\Classes\Excel;
 
 class Coin extends Controller
@@ -32,15 +34,71 @@ class Coin extends Controller
         Excel::excel()->load(base_path() . '/storage/app/media/coins.xlsx', function($reader) {
 
             $results = $reader->all()->toArray();
-            foreach($results as $result){
-                Log::info($result['base']);
-                Log::info($result['content_html']);
-                Log::info($result['content']);
-                Log::info($result['name']);
+            $updatenum = 0;
+            $insertnum = 0;
+            $errornum = 0;
+            foreach ($results as $row => $data) {
+                try {
+    
+                    if (!$title = array_get($data, 'base')) {
+                        $this->logSkipped($row, 'Missing base');
+                        continue;
+                    }
+    
+                    /*
+                     * Find or create
+                     */
+                    $coin = Coin::make();
+    
+                    if ($this->update_existing) {
+                        $coin = $this->findDuplicateCoin($data) ?: $coin;
+                    }
+    
+                    $coinExists = $coin->exists;
+    
+                    /*
+                     * Set attributes
+                     */
+                    $except = ['id','ID'];
+    
+                    foreach (array_except($data, $except) as $attribute => $value) {
+                        $coin->{$attribute} = $value ?: null;
+                    }
+    
+                    $coin->save();//forceSave();
+    
+                    /*
+                     * Log results
+                     */
+                    if ($coinExists) {
+                        $updatenum++;
+                    }
+                    else {
+                        $insertnum++;
+                    }
+                }
+                catch (Exception $ex) {
+                    $this->logError($row, $ex->getMessage());
+                    Flash::error($row.':   '.$ex->getMessage());
+                    $errornum++;
+                }
             }
+            Flash::success('insert:  '.$insertnum.'update: '.$updatenum,'error:  '.$errornum);
         });
 
 
+    }
+
+    protected function findDuplicateCoin($data)
+    {
+        if ($id = array_get($data, 'id')) {
+            return Coin::find($id);
+        }
+
+        $base = array_get($data, 'base');
+        $coin = Coin::where('base', $base);
+
+        return $coin->first();
     }
 
 }
