@@ -27,7 +27,7 @@ class Coin extends Controller
         BackendMenu::setContext('King.Market', 'Market', 'coin');
     }
 
-    public function onUpdateCoins($recordId)
+    public function onUpdateCoins()
     {
         Excel::load('base_path() . /storage/app/media/coins.xlsx', function($reader) {
 
