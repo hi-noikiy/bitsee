@@ -4,6 +4,9 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use King\Market\Models\Market;
 use Flash;
+use Log;
+
+use Vdomah\Excel\Classes\Excel;
 
 class Coin extends Controller
 {
@@ -24,5 +27,17 @@ class Coin extends Controller
         BackendMenu::setContext('King.Market', 'Market', 'coin');
     }
 
+    public function onUpdateCoins($recordId)
+    {
+        Excel::load('base_path() . /storage/app/media/coins.xlsx', function($reader) {
+
+            $results = $reader->all();
+            foreach($results as $result){
+                Log::info('ggg:   ',$result)
+            }
+        });
+
+
+    }
 
 }
