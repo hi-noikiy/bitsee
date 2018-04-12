@@ -50,9 +50,9 @@ class Coin extends Controller
                      */
                     $coin = CoinModel::make();
     
-                    if ($this->update_existing) {
-                        $coin = $this->findDuplicateCoin($data) ?: $coin;
-                    }
+                    //if ($this->update_existing) {
+                    $coin = $this->findDuplicateCoin($data) ?: $coin;
+                    //}
     
                     $coinExists = $coin->exists;
     
