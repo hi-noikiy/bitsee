@@ -35,6 +35,7 @@ class Coin extends Controller
     {
         $coins = CoinModel::with('icon')->get();
         DB::beginTransaction();
+        Log::info('TTTTTT', $coins->toArray());
         try{
             foreach($coins as $coin) {
 
