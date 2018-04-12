@@ -5,6 +5,8 @@ use Backend\Classes\Controller;
 use King\Market\Models\Market;
 use Flash;
 use Log;
+use System\Models\File;
+use DB;
 
 use King\Market\Models\Coin as CoinModel;
 
@@ -27,6 +29,37 @@ class Coin extends Controller
         parent::__construct();
 
         BackendMenu::setContext('King.Market', 'Market', 'coin');
+    }
+
+    public function onUpdateIcons()
+    {
+        $coins = CoinModel::with('icon')->all();
+        DB::beginTransaction();
+        try{
+            foreach($coins as $coin) {
+
+                if($coin->icon) {
+
+                    $coin->icon->delete();
+
+                }
+                $file = File::fromFile('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
+                
+                if($file) {
+                    $file->attachment_type = 'King\Market\Models\Coin';
+                    $file->attachment_id = $coin->id;
+                    $file->field = 'icon';
+                    $file->is_public = 1;
+                    $file->save();
+                }
+
+                
+            }
+        }catch(\Exception $e){
+            DB::rollback();
+        }
+        DB::commit();
+
     }
 
     public function onUpdateCoins()
