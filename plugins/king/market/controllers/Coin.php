@@ -39,8 +39,10 @@ class Coin extends Controller
             foreach($coins as $coin) {
 
                 $file = File::fromFile('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
-                
+                Log::info("GGGGGGGGEE");
                 if($file) {
+                    Log::info('HHHHHHHHH');
+                    Log::info($coin->icon_url);
 
                     if($coin->icon) {
 
