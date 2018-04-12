@@ -31,7 +31,7 @@ class Coin extends Controller
     {
         Excel::excel()->load(base_path() . '/storage/app/media/coins.xlsx', function($reader) {
 
-            $results = $reader->all();
+            $results = $reader->all()->toArray();
             foreach($results as $result){
                 Log::info('ggg:   ',$result);
             }
