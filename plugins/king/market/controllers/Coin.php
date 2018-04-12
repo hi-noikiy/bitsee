@@ -29,7 +29,7 @@ class Coin extends Controller
 
     public function onUpdateCoins()
     {
-        Excel::load('base_path() . /storage/app/media/coins.xlsx', function($reader) {
+        Excel::load(base_path() . '/storage/app/media/coins.xlsx', function($reader) {
 
             $results = $reader->all();
             foreach($results as $result){
