@@ -6,6 +6,7 @@ columns:
     id: ID
     base: base
     content: content
+    name: 币种
     content_html: content_html
     platform: platform
     type: type
