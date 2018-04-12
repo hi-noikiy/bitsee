@@ -12,6 +12,7 @@ columns:
     type: type
     auth: auth
     supply: supply
+    url: 官网
     team: team
     team_html: team_html
     created_at: created_at
