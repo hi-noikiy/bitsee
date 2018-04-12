@@ -17,5 +17,5 @@ columns:
     team_html: team_html
     created_at: created_at
     updated_at: updated_at
-    icon: icon
+    icon_url: icon_url
 

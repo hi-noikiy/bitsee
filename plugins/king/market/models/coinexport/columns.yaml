@@ -15,4 +15,4 @@ columns:
     url: url
     created_at: created_at
     updated_at: updated_at
-    icon: icon
+    icon_url: icon_url
