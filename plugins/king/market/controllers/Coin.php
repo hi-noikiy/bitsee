@@ -38,14 +38,16 @@ class Coin extends Controller
         try{
             foreach($coins as $coin) {
 
-                if($coin->icon) {
-
-                    $coin->icon->delete();
-
-                }
                 $file = File::fromFile('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
                 
                 if($file) {
+                    
+                    if($coin->icon) {
+
+                        $coin->icon->delete();
+    
+                    }
+
                     $file->attachment_type = 'King\Market\Models\Coin';
                     $file->attachment_id = $coin->id;
                     $file->field = 'icon';
