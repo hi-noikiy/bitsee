@@ -64,11 +64,6 @@ class Coin extends Controller
                     foreach (array_except($data, $except) as $attribute => $value) {
                         $coin->{$attribute} = $value ?: null;
                     }
-
-                    Log::info('base:  '. $coin->base);
-                    Log::info('icon:  '. $coin->icon_url);
-                    Log::info('icons:  '. $data['icon_url']);
-                    Log::info('///////////');
     
                     $coin->save();//forceSave();
     
