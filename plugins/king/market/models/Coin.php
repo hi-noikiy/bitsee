@@ -22,9 +22,10 @@ class Coin extends Model
      * Validation
      */
     public $rules = [
-        'name' => 'required',
-        'slug' => 'required|between:3,64|unique:symbols',
-        'code' => 'nullable|unique:symbols',
+        'base' => 'required',
+        //'name' => 'required',
+        //'slug' => 'required|between:3,64|unique:symbols',
+        //'code' => 'nullable|unique:symbols',
     ];
 
     protected $fillable = [

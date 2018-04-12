@@ -59,7 +59,7 @@ class CoinImport extends ImportModel
                     $coin->{$attribute} = $value ?: null;
                 }
 
-                $coin->forceSave();
+                $coin->save();//forceSave();
 
                 /*
                  * Log results
