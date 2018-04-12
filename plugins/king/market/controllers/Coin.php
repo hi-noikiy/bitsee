@@ -33,7 +33,7 @@ class Coin extends Controller
 
             $results = $reader->all();
             foreach($results as $result){
-                Log::info('ggg:   ',$result)
+                Log::info('ggg:   ',$result);
             }
         });
 
