@@ -6,13 +6,13 @@ columns:
     id: ID
     base: base
     content: content
-    name: 币种
+    name: name
     content_html: content_html
     platform: platform
     type: type
     auth: auth
     supply: supply
-    url: 官网
+    url: url
     created_at: created_at
     updated_at: updated_at
     icon_url: icon
