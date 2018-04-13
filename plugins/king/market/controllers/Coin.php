@@ -41,7 +41,7 @@ class Coin extends Controller
 
                 Log::info("GGGGGGGGEE00000");
 
-                $file = new File()
+                $file = new File();
 
                 $file = $file->fromFile('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
                 Log::info("GGGGGGGGEE");
