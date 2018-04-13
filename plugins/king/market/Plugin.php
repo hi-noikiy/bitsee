@@ -1,16 +1,13 @@
 <?php namespace King\Market;
 
 use System\Classes\PluginBase;
-
-use King\Market\Models\SymbolApp;
-
 use Backend;
 
 use RainLab\Blog\Controllers\Posts as PostsController;
 
 use RainLab\Blog\Models\Post as PostModel;
 
-use RainLab\
+use King\Market\Models\SymbolApp;
 
 use Event;
 
