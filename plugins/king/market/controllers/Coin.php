@@ -34,26 +34,30 @@ class Coin extends Controller
     public function onUpdateIcons()
     {
         $coins = CoinModel::with('icon')->get();
-        DB::beginTransaction();
-        Log::info('TTTTTT', $coins->toArray());
-        try{
-            foreach($coins as $coin) {
+        $numadd = 0;
+        $numupdate = 0;
+        $numfilenotexist = 0;
+        $numerror = 0;
+        foreach($coins as $coin) {
 
-                Log::info("GGGGGGGGEE00000");
+            $file = new File();
 
-                $file = new File();
-                
+            try{
                 $file = $file->fromFile('./storage/app/media/coins/'.$coin->icon_url);
-                
-                Log::info("GGGGGGGGEE");
-                if($file) {
-                    Log::info('HHHHHHHHH');
-                    Log::info($coin->icon_url);
+            }catch(\Exception $ex){
+                $numfilenotexist++;
+                continue;
+            }
+            if($file) {
 
+                $flag = 0;
+                DB::beginTransaction();
+                try{
                     if($coin->icon) {
 
                         $coin->icon->delete();
-    
+                        $flag = 1;
+
                     }
 
                     $file->attachment_type = 'King\Market\Models\Coin';
@@ -61,17 +65,27 @@ class Coin extends Controller
                     $file->field = 'icon';
                     $file->is_public = 1;
                     $file->save();
+                    DB::commit();
+                    if($flag) {
+                        $numupdate++;
+                    }else{
+                        $numadd++;
+                    }
+                }catch(\Exception $ex){
+                    $numerror++;
+                    DB::rollback();
                 }
 
-                
+            
             }
-        }catch(\Exception $ex){
-            Flash::error($ex->getMessage());
-            Log::info($ex->getMessage());
-            DB::rollback();
-        }
-        DB::commit();
 
+            
+        }
+        if($numerror){
+            Flash::error('insert:  '.$numadd.'  update: '.$numupdate.'  error:  '.$numerror.'  notexist '.$numfilenotexist);
+        }else{
+            Flash::success('insert:  '.$numadd.'  update: '.$numupdate.'  error:  '.$numerror.'  notexist '.$numfilenotexist);
+        }
     }
 
     public function onUpdateCoins()
