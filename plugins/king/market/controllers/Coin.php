@@ -149,10 +149,10 @@ class Coin extends Controller
 
     protected function findDuplicateCoin($data)
     {
-        if ($id = array_get($data, 'id')) {
-            return CoinModel::find($id);
-        }
-
+        // if ($id = array_get($data, 'id')) {
+        //     return CoinModel::find($id);
+        // }
+        // 忽略 id 以 base 为准
         $base = array_get($data, 'base');
         $coin = CoinModel::where('base', $base);
 
