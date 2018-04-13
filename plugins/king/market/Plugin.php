@@ -7,6 +7,10 @@ use RainLab\Blog\Controllers\Posts as PostsController;
 
 use RainLab\Blog\Models\Post as PostModel;
 
+use Event;
+
+use Log;
+
 class Plugin extends PluginBase
 {
     public function registerComponents()
@@ -85,6 +89,11 @@ class Plugin extends PluginBase
                     'span'   => 'left'
                 ]
             ]);
+        });
+        Event::listen('list.Switch', function (&$modelClass, &$symbol, &$fieldvalue) {
+            Log::info('HHHHHHH----------');
+            Log::info($modelClass);
+
         });
     }
 }

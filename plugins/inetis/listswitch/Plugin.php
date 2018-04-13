@@ -95,6 +95,12 @@ class Plugin extends PluginBase
 
                 $item->save();
 
+                $symbol = $item->symbol;
+
+                $fieldvalue = $item->{$field};
+
+                Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue]);
+
                 return $controller->listRefresh($controller->primaryDefinition);
             });
         });
