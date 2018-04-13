@@ -97,6 +97,7 @@ class Plugin extends PluginBase
         Event::listen('list.Switch', function (&$modelClass, &$symbol, &$fieldvalue) {
             Log::info('HHHHHHH----------');
             Log::info($modelClass);
+            Log::info($fieldvalue);
             if ($modelClass == 'King\Market\Models\Symbol') {
                 $symbolapp = SymbolApp::where('symbol',$symbol)->first();
 
