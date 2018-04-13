@@ -64,7 +64,7 @@ class Coin extends Controller
             }
         }catch(\Exception $e){
             Flash::error($ex->getMessage());
-            Log::info($ex->getMessage())
+            Log::info($ex->getMessage());
             DB::rollback();
         }
         DB::commit();
