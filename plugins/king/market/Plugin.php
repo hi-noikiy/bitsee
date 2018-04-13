@@ -13,6 +13,8 @@ use Event;
 
 use Log;
 
+use Flash;
+
 class Plugin extends PluginBase
 {
     public function registerComponents()
@@ -101,6 +103,7 @@ class Plugin extends PluginBase
                 if($symbolapp){
                     $symbolapp->published = $fieldvalue;
                     $symbolapp->save();
+                    Flash::success('app update success');
                 }
 
             }
