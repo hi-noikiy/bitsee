@@ -39,6 +39,8 @@ class Coin extends Controller
         try{
             foreach($coins as $coin) {
 
+                Log::info("GGGGGGGGEE00000");
+
                 $file = File::fromFile('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
                 Log::info("GGGGGGGGEE");
                 if($file) {
@@ -61,6 +63,8 @@ class Coin extends Controller
                 
             }
         }catch(\Exception $e){
+            Flash::error($ex->getMessage());
+            Log::info($ex->getMessage())
             DB::rollback();
         }
         DB::commit();
