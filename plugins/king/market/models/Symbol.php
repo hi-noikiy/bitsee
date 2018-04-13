@@ -22,9 +22,7 @@ class Symbol extends Model
      * Validation
      */
     public $rules = [
-        'symbol' => 'required',
-        'slug' => 'required|between:3,64|unique:symbols',
-        'code' => 'nullable|unique:symbols',
+        'symbol' => 'required'
     ];
 
     /**
@@ -32,8 +30,8 @@ class Symbol extends Model
      */
     public $translatable = [
         'name',
-        'description',
-        ['slug', 'index' => true]
+        'description'
+        //['slug', 'index' => true]
     ];
 
     protected $guarded = [];
