@@ -4,6 +4,7 @@ use Backend\Classes\Controller;
 use Event;
 use Flash;
 use System\Classes\PluginBase;
+use Log;
 
 /**
  * listSwitch Plugin Information File
@@ -93,7 +94,13 @@ class Plugin extends PluginBase
                 $item = $model::find($id);
                 $item->{$field} = !$item->{$field};
 
+
+
                 $item->save();
+
+                Log::info('YYYYYYYYYYYY');
+                Log::info($item->{$field});
+                Log::info($item->symbol);
 
                 $symbol = $item->symbol;
 
