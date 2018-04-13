@@ -44,6 +44,7 @@ class Coin extends Controller
                 $file = new File();
 
                 $tmp = is_file('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
+                Log::info('/root/bitsee-docker/octobercms/storage/app/media/coins/'.$coin->icon_url);
                 if($tmp){
                     Log::info('HHHHHHHHH44444');
                 }else{
