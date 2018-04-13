@@ -1,11 +1,16 @@
 <?php namespace King\Market;
 
 use System\Classes\PluginBase;
+
+use King\Market\Models\SymbolApp;
+
 use Backend;
 
 use RainLab\Blog\Controllers\Posts as PostsController;
 
 use RainLab\Blog\Models\Post as PostModel;
+
+use RainLab\
 
 use Event;
 
@@ -93,6 +98,15 @@ class Plugin extends PluginBase
         Event::listen('list.Switch', function (&$modelClass, &$symbol, &$fieldvalue) {
             Log::info('HHHHHHH----------');
             Log::info($modelClass);
+            if ($modelClass == 'King\Market\Models\Symbol') {
+                $symbolapp = SymbolApp::where('symbol',$symbol)->first();
+
+                if($symbolapp){
+                    $symbolapp->published = $fieldvalue;
+                    $symbolapp->save();
+                }
+
+            }
 
         });
     }
