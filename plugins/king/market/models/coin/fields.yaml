@@ -61,7 +61,10 @@ fields:
         label: 团队
         type: King\Market\FormWidgets\BlogMarkdown
         cssClass: field-slim blog-post-preview
-        mode: split   
+        mode: split  
+    follow:
+        label: 关注数
+        span: left 
     status:
         label: 币种状态
         type: dropdown
