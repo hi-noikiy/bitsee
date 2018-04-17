@@ -65,6 +65,9 @@ fields:
     follow:
         label: 关注数
         span: left 
+    abstract:
+        label: 一句话介绍
+        span: left
     status:
         label: 币种状态
         type: dropdown
