@@ -5,6 +5,7 @@ use Event;
 use Flash;
 use System\Classes\PluginBase;
 use Log;
+use King\Market\Models\Market;
 
 /**
  * listSwitch Plugin Information File
@@ -104,12 +105,15 @@ class Plugin extends PluginBase
 
                 $symbol = $item->symbol;
 
-                $market = $item->backend;
+                $market_id = $item->market_id;
 
+                $market = Market::find($market_id);
+
+                $backend = $market->backend; 
 
                 $fieldvalue = $item->{$field};
 
-                Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue, &$market]);
+                Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue, &$backend]);
 
                 return $controller->listRefresh($controller->primaryDefinition);
             });
