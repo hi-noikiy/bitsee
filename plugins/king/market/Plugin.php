@@ -98,6 +98,7 @@ class Plugin extends PluginBase
             Log::info('HHHHHHH----------');
             Log::info($modelClass);
             Log::info($fieldvalue);
+            Log::info($market);
             if ($modelClass == 'King\Market\Models\Symbol') {
                 $symbolapp = SymbolApp::where('symbol',$symbol)->where('market',$market)->first();
 
