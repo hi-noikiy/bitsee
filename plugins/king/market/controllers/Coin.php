@@ -122,7 +122,7 @@ class Coin extends Controller
     
                     foreach (array_except($data, $except) as $attribute => $value) {
                         if ($attribute == 'begin' || $attribute == 'end') {
-                            $value = date('Y-m-d H:i:s',($value == '未知')?strtotime('1970-01-01') : strtotime($value));
+                            $value = date('Y-m-d H:i:s',($value == '未知')?strtotime('1980-01-01') : strtotime($value));
                         }
                         $coin->{$attribute} = $value ?: null;
                     }
