@@ -104,9 +104,12 @@ class Plugin extends PluginBase
 
                 $symbol = $item->symbol;
 
+                $market = $item->backend;
+
+
                 $fieldvalue = $item->{$field};
 
-                Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue]);
+                Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue, &$market]);
 
                 return $controller->listRefresh($controller->primaryDefinition);
             });

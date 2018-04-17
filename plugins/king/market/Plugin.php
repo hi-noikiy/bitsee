@@ -94,12 +94,12 @@ class Plugin extends PluginBase
                 ]
             ]);
         });
-        Event::listen('list.Switch', function (&$modelClass, &$symbol, &$fieldvalue) {
+        Event::listen('list.Switch', function (&$modelClass, &$symbol, &$fieldvalue, &$market) {
             Log::info('HHHHHHH----------');
             Log::info($modelClass);
             Log::info($fieldvalue);
             if ($modelClass == 'King\Market\Models\Symbol') {
-                $symbolapp = SymbolApp::where('symbol',$symbol)->first();
+                $symbolapp = SymbolApp::where('symbol',$symbol)->where('market',$market)->first();
 
                 if($symbolapp){
                     $symbolapp->published = $fieldvalue;
