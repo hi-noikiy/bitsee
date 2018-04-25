@@ -280,9 +280,9 @@ class Coin extends Controller
             # code...
             foreach ($markets as $market) {
                 # code...
-                Log::info($coin->base);
+
                 $symbol = Symbol::where('base',$coin->base)->where('market_id',$market->id)->first();
-                if ($symbol->exists) {
+                if ($symbol&&$symbol->exists) {
 
                     $market->coins()->detach($coin->id);
                     $market->coins()->attach($coin->id);
