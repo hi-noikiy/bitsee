@@ -12,6 +12,7 @@ use King\Market\Models\Coin as CoinModel;
 
 use King\Market\Models\Member;
 
+use King\Market\Models\Symbol;
 
 use Vdomah\Excel\Classes\Excel;
 
@@ -269,6 +270,27 @@ class Coin extends Controller
         });
 
 
+    }
+
+    public function onUpdateCoinMarket()
+    {
+        $coins = CoinModel::all();
+        $markets = Market::all(); 
+        foreach ($coins as $coin) {
+            # code...
+            foreach ($markets as $market) {
+                # code...
+                $symbol = Symbol::where('base',$coin->base)->where('market_id',$market->id)->first();
+                if ($symbol->exists) {
+
+                    $market->coins()->detach($coin->id);
+                    $market->coins()->attach($coin->id);
+
+                }
+            }
+        
+
+        }
     }
 
     protected function findDuplicateCoin($data)
