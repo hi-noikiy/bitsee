@@ -38,6 +38,10 @@ class Member extends Model
         'coin' => 'King\Market\Models\Coin'
     ];
 
+    public $attachOne = [
+        'icon' => \System\Models\File::class
+    ];
+    
     public function beforeValidate()
     {
         // Generate a URL slug for this model
