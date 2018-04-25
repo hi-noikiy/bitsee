@@ -57,6 +57,10 @@ fields:
         label: end
         type: datepicker
         mode: datetime
+    members:
+        label: "团队成员"
+        type: partial
+        path: field_members
     team:
         label: 团队
         type: King\Market\FormWidgets\BlogMarkdown
