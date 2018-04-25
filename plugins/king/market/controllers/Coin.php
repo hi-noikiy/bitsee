@@ -291,7 +291,7 @@ class Coin extends Controller
         // 忽略 id 以 base 为准
         $name = array_get($data, 'name');
         $base = array_get($data, 'base');
-        $member = Member::where('base', $base)->where('name',$name)->first();
+        $member = Member::where('base', $base)->where('name',$name);
 
         return $member->first();
     }
