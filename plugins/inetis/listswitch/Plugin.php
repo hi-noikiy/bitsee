@@ -95,6 +95,8 @@ class Plugin extends PluginBase
                 $item = $model::find($id);
                 $item->{$field} = !$item->{$field};
 
+                Log::info($modelClass);
+
 
 
                 $item->save();
