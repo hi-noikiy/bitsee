@@ -43,6 +43,12 @@ class Coin extends Model
         'icon' => \System\Models\File::class,
         'team_icon' => \System\Models\File::class,
     ];
+
+    public $hasMany = [
+        'members' => \King\Market\Models\Member::class
+    ];
+
+
     
     public function beforeValidate()
     {

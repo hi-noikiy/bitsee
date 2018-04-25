@@ -1,0 +1,13 @@
+columns:
+    id:
+        label: 'id'
+        type: text
+        searchable: true
+    name:
+        label: 姓名
+        type: text
+        searchable: true      
+    work:
+        label: 职位
+        type: text
+        searchable: true             

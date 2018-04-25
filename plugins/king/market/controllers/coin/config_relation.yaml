@@ -1,0 +1,13 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+members:
+    label: Members
+    manage:
+        form: $/king/market/models/member/fields.yaml
+        list: $/king/market/models/member/columns.yaml
+    view:
+        list: $/king/market/models/member/columns.yaml
+        toolbarButtons: create|delete
+        recordsPerPage: 25
