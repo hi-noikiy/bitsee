@@ -13,7 +13,6 @@ use DB;
 class Member extends Model
 {
     use \October\Rain\Database\Traits\Validation;
-    use \October\Rain\Database\Traits\NestedTree;
 
     public $table = 'team_members';
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
