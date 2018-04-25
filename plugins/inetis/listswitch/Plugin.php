@@ -101,22 +101,26 @@ class Plugin extends PluginBase
 
                 $item->save();
 
-                Log::info('YYYYYYYYYYYY');
-                Log::info($item->{$field});
-                Log::info($item->symbol);
+                if ($modelClass == 'RainLab\Blog\Models\Post'){
 
-                $symbol = $item->symbol;
+                } else {
 
-                $market_id = $item->market_id;
+                    Log::info('YYYYYYYYYYYY');
+                    Log::info($item->{$field});
+                    Log::info($item->symbol);
 
-                $market = Market::find($market_id);
+                    $symbol = $item->symbol;
 
-                $backend = $market->backend; 
+                    $market_id = $item->market_id;
 
-                $fieldvalue = $item->{$field};
+                    $market = Market::find($market_id);
 
-                Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue, &$backend]);
+                    $backend = $market->backend; 
 
+                    $fieldvalue = $item->{$field};
+
+                    Event::fire('list.Switch',[&$modelClass, &$symbol, &$fieldvalue, &$backend]);
+                }
                 return $controller->listRefresh($controller->primaryDefinition);
             });
         });
