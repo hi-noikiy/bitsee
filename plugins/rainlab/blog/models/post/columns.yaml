@@ -20,6 +20,13 @@ columns:
         select: name
         searchable: true
         sortable: false
+    
+    series:
+        label: 类别
+        relation: series
+        select: title
+        searchable: true
+        sortable: true
 
     created_at:
         label: rainlab.blog::lang.post.created
