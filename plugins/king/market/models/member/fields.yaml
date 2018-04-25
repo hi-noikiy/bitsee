@@ -12,3 +12,5 @@ fields:
     work:
         label: '描述'
         span: left
+    avatar:
+        label: '原始链接'

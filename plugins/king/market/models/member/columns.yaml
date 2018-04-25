@@ -10,4 +10,6 @@ columns:
     work:
         label: 职位
         type: text
-        searchable: true             
+        searchable: true      
+    avatar:
+        label: '原始链接'       
