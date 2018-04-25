@@ -5,8 +5,8 @@
 fields:
 
     name:
-        label: 币对
-        placeholder: 输入币对
+        label: 姓名
+        placeholder: 输入姓名
         span: left
 
     work:
