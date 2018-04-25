@@ -12,6 +12,3 @@ fields:
     work:
         label: '描述'
         span: left
-    coin:
-        label: 币种
-        relation: coin
